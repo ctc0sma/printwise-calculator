@@ -29,9 +29,9 @@ const Login = () => {
         <CardContent>
           <Auth
             supabaseClient={supabase}
-            providers={["google"]} // Only enable Google as an auth provider
-            magicLink={false} // Disable magic link
-            email={false} // Disable email/password sign-in
+            providers={["google"]} // Explicitly only enable Google as an auth provider
+            view="sign_in" // Ensure we are on the sign-in view
+            showLinks={false} // Disable all other links like "Sign up" or "Forgot password"
             appearance={{
               theme: ThemeSupa,
               variables: {
