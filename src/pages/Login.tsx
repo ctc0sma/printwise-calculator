@@ -6,16 +6,16 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "@/context/SessionContext";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"; // Added CardFooter
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import { Button } from "@/components/ui/button"; // Import Button component
+import { Button } from "@/components/ui/button";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { session, isGuest, signInAsGuest } = useSession(); // Get isGuest and signInAsGuest from context
+  const { session, isGuest, signInAsGuest } = useSession();
 
   useEffect(() => {
-    if (session || isGuest) { // Redirect if authenticated or is a guest
+    if (session || isGuest) {
       navigate("/");
     }
   }, [session, isGuest, navigate]);
@@ -29,7 +29,9 @@ const Login = () => {
         <CardContent>
           <Auth
             supabaseClient={supabase}
-            providers={["google"]} // Enable Google as an auth provider
+            providers={["google"]} // Only enable Google as an auth provider
+            magicLink={false} // Disable magic link
+            email={false} // Disable email/password sign-in
             appearance={{
               theme: ThemeSupa,
               variables: {
@@ -79,7 +81,7 @@ const Login = () => {
                 },
               },
             }}
-            theme="dark" // Use dark theme for Supabase Auth UI
+            theme="dark"
           />
         </CardContent>
         <CardFooter className="flex justify-center pt-4">
