@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSettings, PRINTER_PROFILES, MATERIAL_PROFILES } from "@/context/SettingsContext";
+import { useSettings, PRINTER_PROFILES, MATERIAL_PROFILES, COUNTRY_ELECTRICITY_COSTS } from "@/context/SettingsContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -32,6 +32,16 @@ const Settings = () => {
       ? printCalculatorSettings.materialCostPerKg
       : 0
   );
+  const [customElectricityCost, setCustomElectricityCost] = useState<number>(
+    printCalculatorSettings.selectedCountry === "Custom Country"
+      ? printCalculatorSettings.electricityCostPerKWh
+      : 0
+  );
+  const [customCurrency, setCustomCurrency] = useState<string>(
+    printCalculatorSettings.selectedCountry === "Custom Country"
+      ? printCalculatorSettings.currency
+      : "$"
+  );
 
   // Update customPrinterPower when the context's printerPowerWatts changes and it's a custom profile
   useEffect(() => {
@@ -47,9 +57,17 @@ const Settings = () => {
     }
   }, [printCalculatorSettings.selectedFilamentProfile, printCalculatorSettings.materialCostPerKg]);
 
+  // Update customElectricityCost and customCurrency when the context's values change and it's a custom country
+  useEffect(() => {
+    if (printCalculatorSettings.selectedCountry === "Custom Country") {
+      setCustomElectricityCost(printCalculatorSettings.electricityCostPerKWh);
+      setCustomCurrency(printCalculatorSettings.currency);
+    }
+  }, [printCalculatorSettings.selectedCountry, printCalculatorSettings.electricityCostPerKWh, printCalculatorSettings.currency]);
+
 
   const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string | number) => {
-    if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType") {
+    if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType" || key === "selectedCountry") {
       updatePrintCalculatorSettings({ [key]: value as string });
     } else {
       const numValue = parseFloat(value as string);
@@ -81,6 +99,24 @@ const Settings = () => {
     }
   };
 
+  const handleCountryChange = (countryName: string) => {
+    const selectedCountryData = COUNTRY_ELECTRICITY_COSTS.find(c => c.name === countryName);
+    if (selectedCountryData) {
+      updatePrintCalculatorSettings({
+        selectedCountry: countryName,
+        electricityCostPerKWh: selectedCountryData.costPerKWh,
+        currency: selectedCountryData.currency,
+      });
+    } else {
+      // If "Custom Country" is selected, set defaults for custom input
+      updatePrintCalculatorSettings({
+        selectedCountry: "Custom Country",
+        electricityCostPerKWh: customElectricityCost,
+        currency: customCurrency,
+      });
+    }
+  };
+
   const handleCustomPrinterPowerChange = (value: string) => {
     const numValue = parseFloat(value);
     setCustomPrinterPower(isNaN(numValue) ? 0 : numValue);
@@ -97,6 +133,21 @@ const Settings = () => {
     }
   };
 
+  const handleCustomElectricityCostChange = (value: string) => {
+    const numValue = parseFloat(value);
+    setCustomElectricityCost(isNaN(numValue) ? 0 : numValue);
+    if (printCalculatorSettings.selectedCountry === "Custom Country") {
+      updatePrintCalculatorSettings({ electricityCostPerKWh: isNaN(numValue) ? 0 : numValue });
+    }
+  };
+
+  const handleCustomCurrencyChange = (value: string) => {
+    setCustomCurrency(value);
+    if (printCalculatorSettings.selectedCountry === "Custom Country") {
+      updatePrintCalculatorSettings({ currency: value });
+    }
+  };
+
   const handleSave = () => {
     toast.success("Settings saved successfully!");
   };
@@ -107,6 +158,8 @@ const Settings = () => {
   const materialCostLabel = printCalculatorSettings.printType === 'filament' ? "Material Cost per Kg" : "Material Cost per Liter";
   const customMaterialCostLabel = printCalculatorSettings.printType === 'filament' ? "Custom Material Cost per Kg" : "Custom Material Cost per Liter";
   const objectWeightVolumeLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
+
+  const isCustomCountry = printCalculatorSettings.selectedCountry === "Custom Country";
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
@@ -243,16 +296,70 @@ const Settings = () => {
               />
             </div>
             <div>
-              <Label htmlFor="electricityCostPerKWh">Electricity Cost per kWh ({printCalculatorSettings.currency})</Label>
-              <Input
-                id="electricityCostPerKWh"
-                type="number"
-                value={printCalculatorSettings.electricityCostPerKWh}
-                onChange={(e) => handleSettingChange("electricityCostPerKWh", e.target.value)}
-                min="0"
-                step="0.01"
-              />
+              <Label htmlFor="country">Country</Label>
+              <Select
+                value={printCalculatorSettings.selectedCountry}
+                onValueChange={handleCountryChange}
+              >
+                <SelectTrigger id="country">
+                  <SelectValue placeholder="Select country" />
+                </SelectTrigger>
+                <SelectContent>
+                  {COUNTRY_ELECTRICITY_COSTS.map((country) => (
+                    <SelectItem key={country.name} value={country.name}>
+                      {country.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+            {isCustomCountry ? (
+              <>
+                <div>
+                  <Label htmlFor="customElectricityCostPerKWh">Custom Electricity Cost per kWh ({printCalculatorSettings.currency})</Label>
+                  <Input
+                    id="customElectricityCostPerKWh"
+                    type="number"
+                    value={customElectricityCost}
+                    onChange={(e) => handleCustomElectricityCostChange(e.target.value)}
+                    min="0"
+                    step="0.01"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="customCurrency">Custom Currency Symbol</Label>
+                  <Input
+                    id="customCurrency"
+                    type="text"
+                    value={customCurrency}
+                    onChange={(e) => handleCustomCurrencyChange(e.target.value)}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <Label htmlFor="electricityCostPerKWh">Electricity Cost per kWh ({printCalculatorSettings.currency})</Label>
+                  <Input
+                    id="electricityCostPerKWh"
+                    type="number"
+                    value={printCalculatorSettings.electricityCostPerKWh}
+                    readOnly
+                    className="bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="currency">Currency Symbol</Label>
+                  <Input
+                    id="currency"
+                    type="text"
+                    value={printCalculatorSettings.currency}
+                    readOnly
+                    className="bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
+                  />
+                </div>
+              </>
+            )}
           </div>
           <div className="space-y-4">
             <h3 className="text-xl font-semibold mb-2 invisible md:visible">_</h3> {/* Placeholder for alignment */}
@@ -329,23 +436,6 @@ const Settings = () => {
                 min="0"
                 step="0.01"
               />
-            </div>
-            <div>
-              <Label htmlFor="currency">Currency Symbol</Label>
-              <Select
-                value={printCalculatorSettings.currency}
-                onValueChange={(value) => handleSettingChange("currency", value)}
-              >
-                <SelectTrigger id="currency">
-                  <SelectValue placeholder="Select currency" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="$">Dollar ($)</SelectItem>
-                  <SelectItem value="€">Euro (€)</SelectItem>
-                  <SelectItem value="£">Pound (£)</SelectItem>
-                  <SelectItem value="¥">Yen (¥)</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
           </div>
         </CardContent>

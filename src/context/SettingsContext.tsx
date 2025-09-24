@@ -20,6 +20,7 @@ interface PrintCalculatorSettings {
   printType: 'filament' | 'resin'; // New: Type of printing
   supportMaterialCost: number; // New: Cost for support material (e.g., per print or fixed)
   postProcessingMaterialCost: number; // New: Cost for post-processing materials (e.g., fixed per print)
+  selectedCountry: string; // New: Selected country for electricity cost
 }
 
 // Predefined printer profiles for the dropdown
@@ -53,17 +54,28 @@ export const MATERIAL_PROFILES = [
   { name: "Custom Resin", costPerKg: 0, type: 'resin' }, // Placeholder for custom input (cost per Liter)
 ];
 
+// Predefined country electricity costs
+export const COUNTRY_ELECTRICITY_COSTS = [
+  { name: "United States", costPerKWh: 0.17, currency: "$" },
+  { name: "Canada", costPerKWh: 0.13, currency: "$" },
+  { name: "United Kingdom", costPerKWh: 0.34, currency: "£" },
+  { name: "Germany", costPerKWh: 0.40, currency: "€" },
+  { name: "Australia", costPerKWh: 0.25, currency: "$" },
+  { name: "Japan", costPerKWh: 0.27, currency: "¥" },
+  { name: "Custom Country", costPerKWh: 0.15, currency: "$" }, // Default custom value
+];
+
 // Default settings as a constant
 const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
   materialCostPerKg: MATERIAL_PROFILES.find(p => p.name === "PLA")?.costPerKg || 0, // Default to PLA cost
   objectWeightGrams: 100,
   printTimeHours: 5,
-  electricityCostPerKWh: 0.15,
+  electricityCostPerKWh: COUNTRY_ELECTRICITY_COSTS.find(c => c.name === "United States")?.costPerKWh || 0.15, // Default to US cost
   printerPowerWatts: PRINTER_PROFILES.find(p => p.name === "Ender 3")?.powerWatts || 0, // Default to Ender 3 power
   laborHourlyRate: 25,
   designSetupFee: 5,
   profitMarginPercentage: 20,
-  currency: "$",
+  currency: COUNTRY_ELECTRICITY_COSTS.find(c => c.name === "United States")?.currency || "$", // Default to US currency
   printerDepreciationHourly: 1.5,
   failedPrintRatePercentage: 5,
   selectedPrinterProfile: "Ender 3", // Default to a filament printer
@@ -71,6 +83,7 @@ const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
   printType: 'filament', // Default print type
   supportMaterialCost: 0, // Default support material cost
   postProcessingMaterialCost: 0, // Default post-processing material cost
+  selectedCountry: "United States", // Default country
 };
 
 interface SettingsContextType {
@@ -152,6 +165,19 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
           updatedSettings.materialCostPerKg = selectedMaterial.costPerKg;
         } else if (selectedMaterial && (selectedMaterial.name === "Custom Filament" || selectedMaterial.name === "Custom Resin") && newSettings.materialCostPerKg === undefined) {
           updatedSettings.materialCostPerKg = (prevSettings.selectedFilamentProfile === "Custom Filament" || prevSettings.selectedFilamentProfile === "Custom Resin") ? prevSettings.materialCostPerKg : 0;
+        }
+      }
+
+      // Handle country change
+      if (newSettings.selectedCountry !== undefined && newSettings.selectedCountry !== prevSettings.selectedCountry) {
+        const selectedCountryData = COUNTRY_ELECTRICITY_COSTS.find(c => c.name === newSettings.selectedCountry);
+        if (selectedCountryData) {
+          updatedSettings.electricityCostPerKWh = selectedCountryData.costPerKWh;
+          updatedSettings.currency = selectedCountryData.currency;
+        } else {
+          // Fallback for custom country or if not found
+          updatedSettings.electricityCostPerKWh = 0.15; // Default to a common value
+          updatedSettings.currency = "$"; // Default currency
         }
       }
       
