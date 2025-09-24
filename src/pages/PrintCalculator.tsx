@@ -17,7 +17,6 @@ const PrintCalculator = () => {
   const [objectWeightGrams, setObjectWeightGrams] = useState<number>(printCalculatorSettings.objectWeightGrams);
   const [printTimeHours, setPrintTimeHours] = useState<number>(printCalculatorSettings.printTimeHours);
   const [printerPowerWatts, setPrinterPowerWatts] = useState<number>(printCalculatorSettings.printerPowerWatts);
-  const [laborHourlyRate, setLaborHourlyRate] = useState<number>(printCalculatorSettings.laborHourlyRate);
   const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
   const [profitMarginPercentage, setProfitMarginPercentage] = useState<number>(printCalculatorSettings.profitMarginPercentage);
 
@@ -26,7 +25,6 @@ const PrintCalculator = () => {
     setObjectWeightGrams(printCalculatorSettings.objectWeightGrams);
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
     setPrinterPowerWatts(printCalculatorSettings.printerPowerWatts);
-    setLaborHourlyRate(printCalculatorSettings.laborHourlyRate);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
     setProfitMarginPercentage(printCalculatorSettings.profitMarginPercentage);
   }, [printCalculatorSettings]);
@@ -36,7 +34,7 @@ const PrintCalculator = () => {
     const materialCost = objectWeightKg * printCalculatorSettings.materialCostPerKg; // Use from context
     const electricityConsumptionKWh = (printerPowerWatts * printTimeHours) / 1000;
     const electricityCost = electricityConsumptionKWh * printCalculatorSettings.electricityCostPerKWh; // Use from context
-    const laborCost = printTimeHours * laborHourlyRate;
+    const laborCost = printTimeHours * printCalculatorSettings.laborHourlyRate; // Use from context
     const totalBaseCost = materialCost + electricityCost + laborCost + designSetupFee;
     const finalPrice = totalBaseCost * (1 + profitMarginPercentage / 100);
 
@@ -65,7 +63,7 @@ const PrintCalculator = () => {
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            {/* Removed Material Cost per Kg and Electricity Cost per kWh from here */}
+            {/* Removed Material Cost per Kg, Electricity Cost per kWh, and Labor Hourly Rate from here */}
             <div>
               <Label htmlFor="objectWeightGrams">Object Weight (grams)</Label>
               <Input
@@ -98,16 +96,6 @@ const PrintCalculator = () => {
             </div>
           </div>
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="laborHourlyRate">Labor Hourly Rate ($)</Label>
-              <Input
-                id="laborHourlyRate"
-                type="number"
-                value={laborHourlyRate}
-                onChange={(e) => setLaborHourlyRate(parseFloat(e.target.value) || 0)}
-                min="0"
-              />
-            </div>
             <div>
               <Label htmlFor="designSetupFee">Design/Setup Fee ($)</Label>
               <Input
