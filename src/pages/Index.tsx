@@ -11,8 +11,8 @@ const Index = () => {
           Start building your amazing project here!
         </p>
       </div>
-      <div className="flex space-x-4 mb-8"> {/* Added flex container for buttons */}
-        <Link to="/print-calculator">
+      <div className="flex space-x-4 mb-8">
+        <Link to="/"> {/* Link to the calculator, which is now the default route */}
           <Button size="lg" className="text-lg px-8 py-4">Go to 3D Print Calculator</Button>
         </Link>
         <Link to="/settings">
