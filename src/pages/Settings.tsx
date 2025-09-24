@@ -45,7 +45,7 @@ const Settings = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-semibold mb-2">3D Print Calculator Defaults</h3>
             <div>
-              <Label htmlFor="materialCostPerKg">Material Cost per Kg ($)</Label>
+              <Label htmlFor="materialCostPerKg">Material Cost per Kg ({printCalculatorSettings.currency})</Label>
               <Input
                 id="materialCostPerKg"
                 type="number"
@@ -75,7 +75,7 @@ const Settings = () => {
               />
             </div>
             <div>
-              <Label htmlFor="electricityCostPerKWh">Electricity Cost per kWh ($)</Label>
+              <Label htmlFor="electricityCostPerKWh">Electricity Cost per kWh ({printCalculatorSettings.currency})</Label>
               <Input
                 id="electricityCostPerKWh"
                 type="number"
@@ -85,9 +85,6 @@ const Settings = () => {
                 step="0.01"
               />
             </div>
-          </div>
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold mb-2 invisible md:visible">_</h3> {/* Placeholder for alignment */}
             <div>
               <Label htmlFor="printerPowerWatts">Printer Power (Watts)</Label>
               <Input
@@ -98,8 +95,11 @@ const Settings = () => {
                 min="0"
               />
             </div>
+          </div>
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold mb-2 invisible md:visible">_</h3> {/* Placeholder for alignment */}
             <div>
-              <Label htmlFor="laborHourlyRate">Labor Hourly Rate ($)</Label>
+              <Label htmlFor="laborHourlyRate">Labor Hourly Rate ({printCalculatorSettings.currency})</Label>
               <Input
                 id="laborHourlyRate"
                 type="number"
@@ -109,7 +109,7 @@ const Settings = () => {
               />
             </div>
             <div>
-              <Label htmlFor="designSetupFee">Design/Setup Fee ($)</Label>
+              <Label htmlFor="designSetupFee">Design/Setup Fee ({printCalculatorSettings.currency})</Label>
               <Input
                 id="designSetupFee"
                 type="number"
@@ -126,6 +126,28 @@ const Settings = () => {
                 value={printCalculatorSettings.profitMarginPercentage}
                 onChange={(e) => handleSettingChange("profitMarginPercentage", e.target.value)}
                 min="0"
+              />
+            </div>
+            <div>
+              <Label htmlFor="printerDepreciationHourly">Printer Depreciation/Maintenance Hourly Rate ({printCalculatorSettings.currency})</Label>
+              <Input
+                id="printerDepreciationHourly"
+                type="number"
+                value={printCalculatorSettings.printerDepreciationHourly}
+                onChange={(e) => handleSettingChange("printerDepreciationHourly", e.target.value)}
+                min="0"
+                step="0.01"
+              />
+            </div>
+            <div>
+              <Label htmlFor="failedPrintRatePercentage">Failed Print Rate (%)</Label>
+              <Input
+                id="failedPrintRatePercentage"
+                type="number"
+                value={printCalculatorSettings.failedPrintRatePercentage}
+                onChange={(e) => handleSettingChange("failedPrintRatePercentage", e.target.value)}
+                min="0"
+                max="100"
               />
             </div>
             <div>

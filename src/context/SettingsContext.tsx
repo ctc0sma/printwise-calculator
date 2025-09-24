@@ -11,7 +11,9 @@ interface PrintCalculatorSettings {
   laborHourlyRate: number;
   designSetupFee: number;
   profitMarginPercentage: number;
-  currency: string; // Added currency setting
+  currency: string;
+  printerDepreciationHourly: number; // New: Cost per hour for printer wear and tear
+  failedPrintRatePercentage: number; // New: Percentage of prints that fail, impacting overall cost
 }
 
 interface SettingsContextType {
@@ -28,7 +30,9 @@ const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
   laborHourlyRate: 25,
   designSetupFee: 5,
   profitMarginPercentage: 20,
-  currency: "$", // Default currency
+  currency: "$",
+  printerDepreciationHourly: 1.5, // Default: $1.50 per hour for depreciation/maintenance
+  failedPrintRatePercentage: 5, // Default: 5% failure rate
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
