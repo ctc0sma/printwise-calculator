@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useSettings } from "@/context/SettingsContext"; // Removed direct import of PRINTER_PROFILES, MATERIAL_PROFILES
+import { useSettings } from "@/context/SettingsContext";
 import { Link } from "react-router-dom";
 import { Settings as SettingsIcon } from "lucide-react";
 import {
@@ -16,14 +16,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import PrintSummaryFooter from "@/components/PrintSummaryFooter";
-import { useSession } from "@/context/SessionContext"; // Import useSession
+import { useSession } from "@/context/SessionContext";
 
 const PrintCalculator = () => {
-  const { session, loading, isGuest } = useSession(); // Use session, loading, and isGuest from context
-  const { printCalculatorSettings, updatePrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES } = useSettings(); // Get PRINTER_PROFILES and MATERIAL_PROFILES from useSettings
+  const { session, loading, isGuest } = useSession();
+  const { printCalculatorSettings, updatePrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES } = useSettings();
 
-  // Local states for per-print inputs
-  const [projectName, setProjectName] = useState<string>(printCalculatorSettings.projectName); // New state for project name
+  const [projectName, setProjectName] = useState<string>(printCalculatorSettings.projectName);
   const [objectValue, setObjectValue] = useState<number>(printCalculatorSettings.objectWeightGrams);
   const [printTimeHours, setPrintTimeHours] = useState<number>(printCalculatorSettings.printTimeHours);
   const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
@@ -32,9 +31,8 @@ const PrintCalculator = () => {
   const [shippingCost, setShippingCost] = useState<number>(0);
   const [postProcessingMaterialCost, setPostProcessingMaterialCost] = useState<number>(printCalculatorSettings.postProcessingMaterialCost);
 
-  // Update local states when context defaults change (e.g., after reset in settings)
   useEffect(() => {
-    setProjectName(printCalculatorSettings.projectName); // Update project name from settings
+    setProjectName(printCalculatorSettings.projectName);
     setObjectValue(printCalculatorSettings.objectWeightGrams);
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
@@ -64,29 +62,24 @@ const PrintCalculator = () => {
 
   const calculatePrice = () => {
     const isFilament = printCalculatorSettings.printType === 'filament';
-    const unitConversionFactor = isFilament ? 1000 : 1000; // grams to kg (1000), ml to liter (1000)
+    const unitConversionFactor = isFilament ? 1000 : 1000;
 
-    // Material Cost with Support Material Percentage
     const totalMaterialValue = objectValue * (1 + supportMaterialPercentage / 100);
     const materialCost = (totalMaterialValue / unitConversionFactor) * printCalculatorSettings.materialCostPerKg;
 
     const electricityConsumptionKWh = (printCalculatorSettings.printerPowerWatts * printTimeHours) / 1000;
     const electricityCost = electricityConsumptionKWh * printCalculatorSettings.electricityCostPerKWh;
     
-    // Labor Cost includes print time and post-processing time
     const totalLaborHours = printTimeHours + postProcessingTimeHours;
     const laborCost = totalLaborHours * printCalculatorSettings.laborHourlyRate;
 
-    // Printer Depreciation Cost
     const printerDepreciationCost = printTimeHours * printCalculatorSettings.printerDepreciationHourly;
 
-    // New costs from settings and local state
     const supportMaterialCostFromSettings = printCalculatorSettings.supportMaterialCost;
     const postProcessingMaterialCostFromInput = postProcessingMaterialCost;
 
     let totalBaseCost = materialCost + electricityCost + laborCost + designSetupFee + printerDepreciationCost + supportMaterialCostFromSettings + postProcessingMaterialCostFromInput;
     
-    // Adjust for Failed Print Rate
     if (printCalculatorSettings.failedPrintRatePercentage > 0) {
       totalBaseCost = totalBaseCost / (1 - printCalculatorSettings.failedPrintRatePercentage / 100);
     }
@@ -120,22 +113,23 @@ const PrintCalculator = () => {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
-  // If not loading, and neither authenticated nor a guest, redirect to login.
-  // The SessionContextProvider already handles this, but this explicit check can be useful for clarity.
   if (!session && !isGuest) {
-    return null; // SessionContextProvider will handle the redirect
+    return null;
   }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 pb-[420px]">
       <Card className="w-full max-w-2xl shadow-lg">
-        <CardHeader className="relative">
-          <CardTitle className="text-3xl font-bold text-center">PrintWise Calculator</CardTitle>
-          <Link to="/settings" className="absolute top-4 right-4">
-            <Button variant="outline" size="icon">
-              <SettingsIcon className="h-4 w-4" />
-            </Button>
-          </Link>
+        <CardHeader className="flex flex-row items-center justify-between p-6"> {/* Adjusted to flex row */}
+          <div className="flex-grow"></div> {/* Empty div to push title to center */}
+          <CardTitle className="text-3xl font-bold text-center flex-grow-0">PrintWise Calculator</CardTitle>
+          <div className="flex-grow flex justify-end"> {/* Div to push button to the right */}
+            <Link to="/settings">
+              <Button variant="outline" size="icon">
+                <SettingsIcon className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
@@ -271,26 +265,25 @@ const PrintCalculator = () => {
         postProcessingMaterialCost={calculatedPostProcessingMaterialCost}
         finalPrice={finalPrice}
         currencySymbol={currencySymbol}
-        pdfExportMode={printCalculatorSettings.pdfExportMode} // Pass the new pdfExportMode
+        pdfExportMode={printCalculatorSettings.pdfExportMode}
         companyName={printCalculatorSettings.companyName}
         companyAddress={printCalculatorSettings.companyAddress}
         companyLogoUrl={printCalculatorSettings.companyLogoUrl}
-        // Pass new print details
         printType={printCalculatorSettings.printType}
         selectedPrinterProfile={printCalculatorSettings.selectedPrinterProfile}
         printerPowerWatts={printCalculatorSettings.printerPowerWatts}
         selectedFilamentProfile={printCalculatorSettings.selectedFilamentProfile}
         materialCostPerKg={printCalculatorSettings.materialCostPerKg}
-        objectWeightGrams={objectValue} // Use local state for current object value
-        printTimeHours={printTimeHours} // Use local state for current print time
+        objectWeightGrams={objectValue}
+        printTimeHours={printTimeHours}
         electricityCostPerKWh={printCalculatorSettings.electricityCostPerKWh}
         laborHourlyRate={printCalculatorSettings.laborHourlyRate}
         profitMarginPercentage={printCalculatorSettings.profitMarginPercentage}
         failedPrintRatePercentage={printCalculatorSettings.failedPrintRatePercentage}
-        supportMaterialPercentage={supportMaterialPercentage} // Use local state
-        postProcessingTimeHours={postProcessingTimeHours} // Use local state
+        supportMaterialPercentage={supportMaterialPercentage}
+        postProcessingTimeHours={postProcessingTimeHours}
         selectedCountry={printCalculatorSettings.selectedCountry}
-        projectName={projectName} // Pass the project name
+        projectName={projectName}
       />
     </div>
   );
