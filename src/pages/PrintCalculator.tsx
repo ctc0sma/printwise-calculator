@@ -13,20 +13,18 @@ import { Settings as SettingsIcon } from "lucide-react"; // Import a settings ic
 const PrintCalculator = () => {
   const { printCalculatorSettings } = useSettings();
 
-  const [materialCostPerKg, setMaterialCostPerKg] = useState<number>(printCalculatorSettings.materialCostPerKg);
+  // These states will now be initialized from context and can be changed locally
   const [objectWeightGrams, setObjectWeightGrams] = useState<number>(printCalculatorSettings.objectWeightGrams);
   const [printTimeHours, setPrintTimeHours] = useState<number>(printCalculatorSettings.printTimeHours);
-  const [electricityCostPerKWh, setElectricityCostPerKWh] = useState<number>(printCalculatorSettings.electricityCostPerKWh);
   const [printerPowerWatts, setPrinterPowerWatts] = useState<number>(printCalculatorSettings.printerPowerWatts);
   const [laborHourlyRate, setLaborHourlyRate] = useState<number>(printCalculatorSettings.laborHourlyRate);
   const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
   const [profitMarginPercentage, setProfitMarginPercentage] = useState<number>(printCalculatorSettings.profitMarginPercentage);
 
+  // Update local state if context settings change (e.g., user saves new defaults)
   useEffect(() => {
-    setMaterialCostPerKg(printCalculatorSettings.materialCostPerKg);
     setObjectWeightGrams(printCalculatorSettings.objectWeightGrams);
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
-    setElectricityCostPerKWh(printCalculatorSettings.electricityCostPerKWh);
     setPrinterPowerWatts(printCalculatorSettings.printerPowerWatts);
     setLaborHourlyRate(printCalculatorSettings.laborHourlyRate);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
@@ -35,9 +33,9 @@ const PrintCalculator = () => {
 
   const calculatePrice = () => {
     const objectWeightKg = objectWeightGrams / 1000;
-    const materialCost = objectWeightKg * materialCostPerKg;
+    const materialCost = objectWeightKg * printCalculatorSettings.materialCostPerKg; // Use from context
     const electricityConsumptionKWh = (printerPowerWatts * printTimeHours) / 1000;
-    const electricityCost = electricityConsumptionKWh * electricityCostPerKWh;
+    const electricityCost = electricityConsumptionKWh * printCalculatorSettings.electricityCostPerKWh; // Use from context
     const laborCost = printTimeHours * laborHourlyRate;
     const totalBaseCost = materialCost + electricityCost + laborCost + designSetupFee;
     const finalPrice = totalBaseCost * (1 + profitMarginPercentage / 100);
@@ -57,7 +55,7 @@ const PrintCalculator = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-2xl shadow-lg">
-        <CardHeader className="relative"> {/* Added relative positioning for absolute button */}
+        <CardHeader className="relative">
           <CardTitle className="text-3xl font-bold text-center">3D Print Price Calculator</CardTitle>
           <Link to="/settings" className="absolute top-4 right-4">
             <Button variant="outline" size="icon">
@@ -67,16 +65,7 @@ const PrintCalculator = () => {
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="materialCostPerKg">Material Cost per Kg ($)</Label>
-              <Input
-                id="materialCostPerKg"
-                type="number"
-                value={materialCostPerKg}
-                onChange={(e) => setMaterialCostPerKg(parseFloat(e.target.value) || 0)}
-                min="0"
-              />
-            </div>
+            {/* Removed Material Cost per Kg and Electricity Cost per kWh from here */}
             <div>
               <Label htmlFor="objectWeightGrams">Object Weight (grams)</Label>
               <Input
@@ -98,19 +87,6 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="electricityCostPerKWh">Electricity Cost per kWh ($)</Label>
-              <Input
-                id="electricityCostPerKWh"
-                type="number"
-                value={electricityCostPerKWh}
-                onChange={(e) => setElectricityCostPerKWh(parseFloat(e.target.value) || 0)}
-                min="0"
-                step="0.01"
-              />
-            </div>
-          </div>
-          <div className="space-y-4">
-            <div>
               <Label htmlFor="printerPowerWatts">Printer Power (Watts)</Label>
               <Input
                 id="printerPowerWatts"
@@ -120,6 +96,8 @@ const PrintCalculator = () => {
                 min="0"
               />
             </div>
+          </div>
+          <div className="space-y-4">
             <div>
               <Label htmlFor="laborHourlyRate">Labor Hourly Rate ($)</Label>
               <Input
