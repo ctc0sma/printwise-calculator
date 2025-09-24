@@ -140,6 +140,47 @@ const Settings = () => {
                 </SelectContent>
               </Select>
             </div>
+            <div> {/* Moved Printer Profile here */}
+              <Label htmlFor="printerProfile">Printer Profile</Label>
+              <Select
+                value={printCalculatorSettings.selectedPrinterProfile}
+                onValueChange={handlePrinterProfileChange}
+              >
+                <SelectTrigger id="printerProfile">
+                  <SelectValue placeholder="Select a printer" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredPrinterProfiles.map((profile) => (
+                    <SelectItem key={profile.name} value={profile.name}>
+                      {profile.name} {profile.name !== "Custom Printer" && `(${profile.powerWatts}W)`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {printCalculatorSettings.selectedPrinterProfile === "Custom Printer" ? (
+              <div>
+                <Label htmlFor="customPrinterPowerWatts">Custom Printer Power (Watts)</Label>
+                <Input
+                  id="customPrinterPowerWatts"
+                  type="number"
+                  value={customPrinterPower}
+                  onChange={(e) => handleCustomPrinterPowerChange(e.target.value)}
+                  min="0"
+                />
+              </div>
+            ) : (
+              <div>
+                <Label htmlFor="printerPowerWatts">Printer Power (Watts)</Label>
+                <Input
+                  id="printerPowerWatts"
+                  type="number"
+                  value={printCalculatorSettings.printerPowerWatts}
+                  readOnly
+                  className="bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
+                />
+              </div>
+            )}
             <div>
               <Label htmlFor="materialProfile">Material Profile</Label>
               <Select
@@ -212,47 +253,6 @@ const Settings = () => {
                 step="0.01"
               />
             </div>
-            <div>
-              <Label htmlFor="printerProfile">Printer Profile</Label>
-              <Select
-                value={printCalculatorSettings.selectedPrinterProfile}
-                onValueChange={handlePrinterProfileChange}
-              >
-                <SelectTrigger id="printerProfile">
-                  <SelectValue placeholder="Select a printer" />
-                </SelectTrigger>
-                <SelectContent>
-                  {filteredPrinterProfiles.map((profile) => (
-                    <SelectItem key={profile.name} value={profile.name}>
-                      {profile.name} {profile.name !== "Custom Printer" && `(${profile.powerWatts}W)`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            {printCalculatorSettings.selectedPrinterProfile === "Custom Printer" ? (
-              <div>
-                <Label htmlFor="customPrinterPowerWatts">Custom Printer Power (Watts)</Label>
-                <Input
-                  id="customPrinterPowerWatts"
-                  type="number"
-                  value={customPrinterPower}
-                  onChange={(e) => handleCustomPrinterPowerChange(e.target.value)}
-                  min="0"
-                />
-              </div>
-            ) : (
-              <div>
-                <Label htmlFor="printerPowerWatts">Printer Power (Watts)</Label>
-                <Input
-                  id="printerPowerWatts"
-                  type="number"
-                  value={printCalculatorSettings.printerPowerWatts}
-                  readOnly
-                  className="bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
-                />
-              </div>
-            )}
           </div>
           <div className="space-y-4">
             <h3 className="text-xl font-semibold mb-2 invisible md:visible">_</h3> {/* Placeholder for alignment */}
