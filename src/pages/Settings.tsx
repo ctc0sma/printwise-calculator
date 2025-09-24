@@ -13,7 +13,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+}
+from "@/components/ui/select";
+import { Link } from "react-router-dom"; // Import Link
+import { ArrowLeft } from "lucide-react"; // Import ArrowLeft icon
 
 const Settings = () => {
   const { printCalculatorSettings, updatePrintCalculatorSettings } = useSettings();
@@ -69,8 +72,13 @@ const Settings = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-2xl shadow-lg">
-        <CardHeader>
+        <CardHeader className="relative"> {/* Added relative for absolute positioning of button */}
           <CardTitle className="text-3xl font-bold text-center">Application Settings</CardTitle>
+          <Link to="/" className="absolute top-4 left-4"> {/* Back button */}
+            <Button variant="outline" size="icon">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
