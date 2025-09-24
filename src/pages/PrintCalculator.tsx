@@ -16,22 +16,20 @@ const PrintCalculator = () => {
   // These states will now be initialized from context and can be changed locally
   const [objectWeightGrams, setObjectWeightGrams] = useState<number>(printCalculatorSettings.objectWeightGrams);
   const [printTimeHours, setPrintTimeHours] = useState<number>(printCalculatorSettings.printTimeHours);
-  const [printerPowerWatts, setPrinterPowerWatts] = useState<number>(printCalculatorSettings.printerPowerWatts);
   const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
-  // Removed profitMarginPercentage local state as it will now be read directly from context for calculation
+  // Removed printerPowerWatts, laborHourlyRate, and profitMarginPercentage local states as they will now be read directly from context for calculation
 
   // Update local state if context settings change (e.g., user saves new defaults)
   useEffect(() => {
     setObjectWeightGrams(printCalculatorSettings.objectWeightGrams);
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
-    setPrinterPowerWatts(printCalculatorSettings.printerPowerWatts);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
   }, [printCalculatorSettings]);
 
   const calculatePrice = () => {
     const objectWeightKg = objectWeightGrams / 1000;
     const materialCost = objectWeightKg * printCalculatorSettings.materialCostPerKg; // Use from context
-    const electricityConsumptionKWh = (printerPowerWatts * printTimeHours) / 1000;
+    const electricityConsumptionKWh = (printCalculatorSettings.printerPowerWatts * printTimeHours) / 1000; // Use from context
     const electricityCost = electricityConsumptionKWh * printCalculatorSettings.electricityCostPerKWh; // Use from context
     const laborCost = printTimeHours * printCalculatorSettings.laborHourlyRate; // Use from context
     const totalBaseCost = materialCost + electricityCost + laborCost + designSetupFee;
@@ -62,7 +60,7 @@ const PrintCalculator = () => {
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            {/* Removed Material Cost per Kg, Electricity Cost per kWh, and Labor Hourly Rate from here */}
+            {/* Removed Material Cost per Kg, Electricity Cost per kWh, Labor Hourly Rate, Printer Power (Watts), and Profit Margin (%) from here */}
             <div>
               <Label htmlFor="objectWeightGrams">Object Weight (grams)</Label>
               <Input
@@ -83,16 +81,6 @@ const PrintCalculator = () => {
                 min="0"
               />
             </div>
-            <div>
-              <Label htmlFor="printerPowerWatts">Printer Power (Watts)</Label>
-              <Input
-                id="printerPowerWatts"
-                type="number"
-                value={printerPowerWatts}
-                onChange={(e) => setPrinterPowerWatts(parseFloat(e.target.value) || 0)}
-                min="0"
-              />
-            </div>
           </div>
           <div className="space-y-4">
             <div>
@@ -105,7 +93,6 @@ const PrintCalculator = () => {
                 min="0"
               />
             </div>
-            {/* Removed Profit Margin (%) from here */}
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4 p-6">
