@@ -4,6 +4,7 @@ import { initReactI18next } from "react-i18next";
 // Import translation files
 import enTranslation from "@/locales/en.json";
 import deTranslation from "@/locales/de.json";
+import frTranslation from "@/locales/fr.json"; // Import French translation
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -14,6 +15,9 @@ i18n
       },
       de: {
         translation: deTranslation,
+      },
+      fr: { // Add French resources
+        translation: frTranslation,
       },
     },
     lng: "en", // default language

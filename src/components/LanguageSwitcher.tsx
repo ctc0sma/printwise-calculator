@@ -27,6 +27,7 @@ const LanguageSwitcher = () => {
       <SelectContent>
         <SelectItem value="en">English</SelectItem>
         <SelectItem value="de">Deutsch</SelectItem>
+        <SelectItem value="fr">Français</SelectItem> {/* Add French here */}
         {/* Add more languages here */}
       </SelectContent>
     </Select>
