@@ -11,6 +11,7 @@ interface PrintCalculatorSettings {
   laborHourlyRate: number;
   designSetupFee: number;
   profitMarginPercentage: number;
+  currency: string; // Added currency setting
 }
 
 interface SettingsContextType {
@@ -27,6 +28,7 @@ const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
   laborHourlyRate: 25,
   designSetupFee: 5,
   profitMarginPercentage: 20,
+  currency: "$", // Default currency
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);

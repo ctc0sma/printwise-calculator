@@ -7,16 +7,27 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Settings = () => {
   const { printCalculatorSettings, updatePrintCalculatorSettings } = useSettings();
 
-  const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string) => {
-    const numValue = parseFloat(value);
-    if (!isNaN(numValue) && numValue >= 0) {
-      updatePrintCalculatorSettings({ [key]: numValue });
-    } else if (value === "") {
-      updatePrintCalculatorSettings({ [key]: 0 }); // Allow clearing input to 0
+  const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string | number) => {
+    if (key === "currency") {
+      updatePrintCalculatorSettings({ [key]: value as string });
+    } else {
+      const numValue = parseFloat(value as string);
+      if (!isNaN(numValue) && numValue >= 0) {
+        updatePrintCalculatorSettings({ [key]: numValue });
+      } else if (value === "") {
+        updatePrintCalculatorSettings({ [key]: 0 }); // Allow clearing input to 0
+      }
     }
   };
 
@@ -116,6 +127,23 @@ const Settings = () => {
                 onChange={(e) => handleSettingChange("profitMarginPercentage", e.target.value)}
                 min="0"
               />
+            </div>
+            <div>
+              <Label htmlFor="currency">Currency Symbol</Label>
+              <Select
+                value={printCalculatorSettings.currency}
+                onValueChange={(value) => handleSettingChange("currency", value)}
+              >
+                <SelectTrigger id="currency">
+                  <SelectValue placeholder="Select currency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="$">Dollar ($)</SelectItem>
+                  <SelectItem value="€">Euro (€)</SelectItem>
+                  <SelectItem value="£">Pound (£)</SelectItem>
+                  <SelectItem value="¥">Yen (¥)</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </CardContent>
