@@ -18,7 +18,7 @@ const PrintCalculator = () => {
   const [printTimeHours, setPrintTimeHours] = useState<number>(printCalculatorSettings.printTimeHours);
   const [printerPowerWatts, setPrinterPowerWatts] = useState<number>(printCalculatorSettings.printerPowerWatts);
   const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
-  const [profitMarginPercentage, setProfitMarginPercentage] = useState<number>(printCalculatorSettings.profitMarginPercentage);
+  // Removed profitMarginPercentage local state as it will now be read directly from context for calculation
 
   // Update local state if context settings change (e.g., user saves new defaults)
   useEffect(() => {
@@ -26,7 +26,6 @@ const PrintCalculator = () => {
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
     setPrinterPowerWatts(printCalculatorSettings.printerPowerWatts);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
-    setProfitMarginPercentage(printCalculatorSettings.profitMarginPercentage);
   }, [printCalculatorSettings]);
 
   const calculatePrice = () => {
@@ -36,7 +35,7 @@ const PrintCalculator = () => {
     const electricityCost = electricityConsumptionKWh * printCalculatorSettings.electricityCostPerKWh; // Use from context
     const laborCost = printTimeHours * printCalculatorSettings.laborHourlyRate; // Use from context
     const totalBaseCost = materialCost + electricityCost + laborCost + designSetupFee;
-    const finalPrice = totalBaseCost * (1 + profitMarginPercentage / 100);
+    const finalPrice = totalBaseCost * (1 + printCalculatorSettings.profitMarginPercentage / 100); // Use from context
 
     return {
       materialCost,
@@ -106,16 +105,7 @@ const PrintCalculator = () => {
                 min="0"
               />
             </div>
-            <div>
-              <Label htmlFor="profitMarginPercentage">Profit Margin (%)</Label>
-              <Input
-                id="profitMarginPercentage"
-                type="number"
-                value={profitMarginPercentage}
-                onChange={(e) => setProfitMarginPercentage(parseFloat(e.target.value) || 0)}
-                min="0"
-              />
-            </div>
+            {/* Removed Profit Margin (%) from here */}
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4 p-6">
