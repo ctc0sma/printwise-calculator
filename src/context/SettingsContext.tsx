@@ -33,6 +33,7 @@ export const PRINTER_PROFILES = [
   { name: "Prusa i3 MK3S+", powerWatts: 240, type: 'filament' },
   { name: "Anycubic Kobra 2 Pro", powerWatts: 400, type: 'filament' },
   { name: "Bambu Lab P1P", powerWatts: 350, type: 'filament' },
+  { name: "Bambu Lab X1C", powerWatts: 1000, type: 'filament' }, // Added Bambu Lab X1C
   { name: "Creality K1", powerWatts: 350, type: 'filament' },
   { name: "Ultimaker S5", powerWatts: 500, type: 'filament' }, // Assuming filament for now
   { name: "Raise3D Pro3", powerWatts: 600, type: 'filament' }, // Assuming filament for now
