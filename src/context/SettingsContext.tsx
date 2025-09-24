@@ -70,6 +70,8 @@ export const COUNTRY_ELECTRICITY_COSTS = [
   { name: "India", costPerKWh: 0.07, currency: "₹" },
   { name: "Brazil", costPerKWh: 0.18, currency: "R$" },
   { name: "South Africa", costPerKWh: 0.15, currency: "R" },
+  { name: "Philippines", costPerKWh: 0.20, currency: "₱" }, // Added Philippines
+  { name: "Greece", costPerKWh: 0.27, currency: "€" }, // Added Greece
   { name: "Custom Country", costPerKWh: 0.15, currency: "$" }, // Default custom value
 ];
 
