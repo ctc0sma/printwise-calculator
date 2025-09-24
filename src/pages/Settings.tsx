@@ -180,7 +180,7 @@ const Settings = () => {
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold mb-2">3D Print Calculator Defaults</h3>
+            {/* Removed: <h3 className="text-xl font-semibold mb-2">3D Print Calculator Defaults</h3> */}
             <div>
               <Label htmlFor="printType">Print Type</Label>
               <Select
