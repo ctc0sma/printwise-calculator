@@ -25,14 +25,14 @@ const SettingsHeader = () => {
   };
 
   return (
-    <div className="relative flex flex-row items-center justify-between p-6">
-      <Link to="/" className="absolute top-4 left-4">
+    <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
+      <Link to="/">
         <Button variant="outline" size="icon">
           <ArrowLeft className="h-4 w-4" />
         </Button>
       </Link>
-      <h1 className="text-3xl font-bold text-center flex-grow">Application Settings</h1>
-      <div className="absolute top-4 right-4 flex space-x-2">
+      <h1 className="text-2xl md:text-3xl font-bold text-center flex-grow mx-4">Application Settings</h1>
+      <div className="flex space-x-2">
         <ThemeToggle />
         {isGuest ? (
           <Link to="/login">
