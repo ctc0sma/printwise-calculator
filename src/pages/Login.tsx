@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } => "react-router-dom";
 import { useSession } from "@/context/SessionContext";
 
 const Login = () => {
@@ -26,7 +26,7 @@ const Login = () => {
         </h1>
         <Auth
           supabaseClient={supabase}
-          providers={["google"]} // Enable Google as an auth provider
+          providers={["email", "google"]} // Re-enable email and Google as auth providers
           appearance={{
             theme: ThemeSupa,
             variables: {
@@ -40,8 +40,6 @@ const Login = () => {
           }}
           theme="dark" // Use dark theme for Auth UI
           redirectTo={window.location.origin + "/settings"} // Redirect to settings after login
-          magicLink={false} // Disable magic link (email) sign-in
-          onlyThirdPartyProviders={true} // Explicitly show only third-party providers
         />
       </div>
     </div>
