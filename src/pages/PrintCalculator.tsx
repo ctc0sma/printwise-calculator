@@ -128,7 +128,7 @@ const PrintCalculator = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 pb-72">
       <Card className="w-full max-w-2xl shadow-lg">
         <CardHeader className="relative">
-          <CardTitle className="text-3xl font-bold text-center">3D Print Price Calculator</CardTitle>
+          <CardTitle className="text-3xl font-bold text-center">PrintWise Calculator</CardTitle>
           <Link to="/settings" className="absolute top-4 right-4">
             <Button variant="outline" size="icon">
               <SettingsIcon className="h-4 w-4" />
