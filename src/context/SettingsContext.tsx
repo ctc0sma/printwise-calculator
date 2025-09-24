@@ -63,7 +63,6 @@ const PREDEFINED_PRINTER_PROFILES: PrinterProfile[] = [
   { name: "Anycubic Photon Mono X", powerWatts: 120, type: 'resin' },
   { name: "Prusa XL", powerWatts: 700, type: 'filament' },
   { name: "Elegoo Saturn 2", powerWatts: 150, type: 'resin' },
-  { name: "Custom Printer", powerWatts: 0, type: 'both' }, // Placeholder for custom input
 ];
 
 // Predefined material profiles for the dropdown
@@ -73,9 +72,7 @@ const PREDEFINED_MATERIAL_PROFILES: MaterialProfile[] = [
   { name: "ABS", costPerKg: 30, type: 'filament' },
   { name: "TPU", costPerKg: 35, type: 'filament' },
   { name: "Nylon", costPerKg: 40, type: 'filament' },
-  { name: "Custom Filament", costPerKg: 0, type: 'filament' }, // Placeholder for custom input
   { name: "Resin (Standard)", costPerKg: 50, type: 'resin' }, // Cost per Liter for resin
-  { name: "Custom Resin", costPerKg: 0, type: 'resin' }, // Placeholder for custom input (cost per Liter)
 ];
 
 // Predefined country electricity costs
@@ -226,8 +223,9 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
           updatedSettings.selectedPrinterProfile = defaultPrinterForType.name;
           updatedSettings.printerPowerWatts = defaultPrinterForType.powerWatts;
         } else {
-          updatedSettings.selectedPrinterProfile = "Custom Printer";
-          updatedSettings.printerPowerWatts = 0;
+          // Fallback if no compatible printer is found (shouldn't happen with predefined)
+          updatedSettings.selectedPrinterProfile = combinedPrinterProfiles[0]?.name || "";
+          updatedSettings.printerPowerWatts = combinedPrinterProfiles[0]?.powerWatts || 0;
         }
 
         // Reset material profile to a default compatible with the new print type
@@ -236,28 +234,25 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
           updatedSettings.selectedFilamentProfile = defaultMaterialForType.name;
           updatedSettings.materialCostPerKg = defaultMaterialForType.costPerKg;
         } else {
-          updatedSettings.selectedFilamentProfile = newPrintType === 'filament' ? "Custom Filament" : "Custom Resin";
-          updatedSettings.materialCostPerKg = 0;
+          // Fallback if no compatible material is found (shouldn't happen with predefined)
+          updatedSettings.selectedFilamentProfile = combinedMaterialProfiles[0]?.name || "";
+          updatedSettings.materialCostPerKg = combinedMaterialProfiles[0]?.costPerKg || 0;
         }
       }
 
       // Handle printer profile change (if not already handled by printType change)
       if (newSettings.selectedPrinterProfile !== undefined && newSettings.selectedPrinterProfile !== prevSettings.selectedPrinterProfile) {
         const selectedProfile = combinedPrinterProfiles.find(p => p.name === newSettings.selectedPrinterProfile);
-        if (selectedProfile && selectedProfile.name !== "Custom Printer") {
+        if (selectedProfile) {
           updatedSettings.printerPowerWatts = selectedProfile.powerWatts;
-        } else if (selectedProfile && selectedProfile.name === "Custom Printer" && newSettings.printerPowerWatts === undefined) {
-          updatedSettings.printerPowerWatts = prevSettings.selectedPrinterProfile === "Custom Printer" ? prevSettings.printerPowerWatts : 0;
         }
       }
 
       // Handle material profile change (if not already handled by printType change)
       if (newSettings.selectedFilamentProfile !== undefined && newSettings.selectedFilamentProfile !== prevSettings.selectedFilamentProfile) {
         const selectedMaterial = combinedMaterialProfiles.find(f => f.name === newSettings.selectedFilamentProfile);
-        if (selectedMaterial && (selectedMaterial.name !== "Custom Filament" && selectedMaterial.name !== "Custom Resin")) {
+        if (selectedMaterial) {
           updatedSettings.materialCostPerKg = selectedMaterial.costPerKg;
-        } else if (selectedMaterial && (selectedMaterial.name === "Custom Filament" || selectedMaterial.name === "Custom Resin") && newSettings.materialCostPerKg === undefined) {
-          updatedSettings.materialCostPerKg = (prevSettings.selectedFilamentProfile === "Custom Filament" || prevSettings.selectedFilamentProfile === "Custom Resin") ? prevSettings.materialCostPerKg : 0;
         }
       }
 

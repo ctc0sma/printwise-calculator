@@ -23,17 +23,7 @@ const Settings = () => {
   } = useSettings();
   const { isGuest } = useSession();
 
-  // Local states for custom inputs, managed here and passed down
-  const [customPrinterPower, setCustomPrinterPower] = useState<number>(
-    printCalculatorSettings.selectedPrinterProfile === "Custom Printer"
-      ? printCalculatorSettings.printerPowerWatts
-      : 0
-  );
-  const [customMaterialCost, setCustomMaterialCost] = useState<number>(
-    (printCalculatorSettings.selectedFilamentProfile === "Custom Filament" || printCalculatorSettings.selectedFilamentProfile === "Custom Resin")
-      ? printCalculatorSettings.materialCostPerKg
-      : 0
-  );
+  // Local states for custom electricity cost and currency, managed here and passed down
   const [customElectricityCost, setCustomElectricityCost] = useState<number>(
     printCalculatorSettings.selectedCountry === "Custom Country"
       ? printCalculatorSettings.electricityCostPerKWh
@@ -47,23 +37,13 @@ const Settings = () => {
 
   // Update local states when context defaults change (e.g., after reset)
   useEffect(() => {
-    if (printCalculatorSettings.selectedPrinterProfile === "Custom Printer") {
-      setCustomPrinterPower(printCalculatorSettings.printerPowerWatts);
-    }
-    if (printCalculatorSettings.selectedFilamentProfile === "Custom Filament" || printCalculatorSettings.selectedFilamentProfile === "Custom Resin") {
-      setCustomMaterialCost(printCalculatorSettings.materialCostPerKg);
-    }
     if (printCalculatorSettings.selectedCountry === "Custom Country") {
       setCustomElectricityCost(printCalculatorSettings.electricityCostPerKWh);
       setCustomCurrency(printCalculatorSettings.currency);
     }
   }, [
-    printCalculatorSettings.printerPowerWatts,
-    printCalculatorSettings.materialCostPerKg,
     printCalculatorSettings.electricityCostPerKWh,
     printCalculatorSettings.currency,
-    printCalculatorSettings.selectedPrinterProfile,
-    printCalculatorSettings.selectedFilamentProfile,
     printCalculatorSettings.selectedCountry,
   ]);
 
@@ -77,10 +57,6 @@ const Settings = () => {
             updatePrintCalculatorSettings={updatePrintCalculatorSettings}
             PRINTER_PROFILES={PRINTER_PROFILES}
             MATERIAL_PROFILES={MATERIAL_PROFILES}
-            customPrinterPower={customPrinterPower}
-            setCustomPrinterPower={setCustomPrinterPower}
-            customMaterialCost={customMaterialCost}
-            setCustomMaterialCost={setCustomMaterialCost}
             customElectricityCost={customElectricityCost}
             setCustomElectricityCost={setCustomElectricityCost}
             customCurrency={customCurrency}

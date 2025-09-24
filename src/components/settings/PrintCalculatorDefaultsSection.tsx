@@ -17,10 +17,6 @@ interface PrintCalculatorDefaultsSectionProps {
   updatePrintCalculatorSettings: ReturnType<typeof useSettings>['updatePrintCalculatorSettings'];
   PRINTER_PROFILES: ReturnType<typeof useSettings>['PRINTER_PROFILES'];
   MATERIAL_PROFILES: ReturnType<typeof useSettings>['MATERIAL_PROFILES'];
-  customPrinterPower: number;
-  setCustomPrinterPower: (value: number) => void;
-  customMaterialCost: number;
-  setCustomMaterialCost: (value: number) => void;
   customElectricityCost: number;
   setCustomElectricityCost: (value: number) => void;
   customCurrency: string;
@@ -32,10 +28,6 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
   updatePrintCalculatorSettings,
   PRINTER_PROFILES,
   MATERIAL_PROFILES,
-  customPrinterPower,
-  setCustomPrinterPower,
-  customMaterialCost,
-  setCustomMaterialCost,
   customElectricityCost,
   setCustomElectricityCost,
   customCurrency,
@@ -60,7 +52,7 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
     if (selectedProfile) {
       updatePrintCalculatorSettings({
         selectedPrinterProfile: profileName,
-        printerPowerWatts: selectedProfile.name === "Custom Printer" ? customPrinterPower : selectedProfile.powerWatts,
+        printerPowerWatts: selectedProfile.powerWatts,
       });
     }
   };
@@ -70,7 +62,7 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
     if (selectedMaterial) {
       updatePrintCalculatorSettings({
         selectedFilamentProfile: profileName,
-        materialCostPerKg: (selectedMaterial.name === "Custom Filament" || selectedMaterial.name === "Custom Resin") ? customMaterialCost : selectedMaterial.costPerKg,
+        materialCostPerKg: selectedMaterial.costPerKg,
       });
     }
   };
@@ -93,22 +85,6 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
     }
   };
 
-  const handleCustomPrinterPowerChange = (value: string) => {
-    const numValue = parseFloat(value);
-    setCustomPrinterPower(isNaN(numValue) ? 0 : numValue);
-    if (printCalculatorSettings.selectedPrinterProfile === "Custom Printer") {
-      updatePrintCalculatorSettings({ printerPowerWatts: isNaN(numValue) ? 0 : numValue });
-    }
-  };
-
-  const handleCustomMaterialCostChange = (value: string) => {
-    const numValue = parseFloat(value);
-    setCustomMaterialCost(isNaN(numValue) ? 0 : numValue);
-    if (printCalculatorSettings.selectedFilamentProfile === "Custom Filament" || printCalculatorSettings.selectedFilamentProfile === "Custom Resin") {
-      updatePrintCalculatorSettings({ materialCostPerKg: isNaN(numValue) ? 0 : numValue });
-    }
-  };
-
   const handleCustomElectricityCostChange = (value: string) => {
     const numValue = parseFloat(value);
     setCustomElectricityCost(isNaN(numValue) ? 0 : numValue);
@@ -128,7 +104,6 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
   const filteredMaterialProfiles = MATERIAL_PROFILES.filter(m => m.type === printCalculatorSettings.printType);
 
   const materialCostLabel = printCalculatorSettings.printType === 'filament' ? "Material Cost per Kg" : "Material Cost per Liter";
-  const customMaterialCostLabel = printCalculatorSettings.printType === 'filament' ? "Custom Material Cost per Kg" : "Custom Material Cost per Liter";
   const objectWeightVolumeLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
   const isCustomCountry = printCalculatorSettings.selectedCountry === "Custom Country";
 
@@ -161,35 +136,22 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
           <SelectContent>
             {filteredPrinterProfiles.map((profile) => (
               <SelectItem key={profile.name} value={profile.name}>
-                {profile.name} {profile.name !== "Custom Printer" && `(${profile.powerWatts}W)`}
+                {profile.name} ({profile.powerWatts}W)
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-      {printCalculatorSettings.selectedPrinterProfile === "Custom Printer" ? (
-        <div>
-          <Label htmlFor="customPrinterPowerWatts">Custom Printer Power (Watts)</Label>
-          <Input
-            id="customPrinterPowerWatts"
-            type="number"
-            value={customPrinterPower}
-            onChange={(e) => handleCustomPrinterPowerChange(e.target.value)}
-            min="0"
-          />
-        </div>
-      ) : (
-        <div>
-          <Label htmlFor="printerPowerWatts">Printer Power (Watts)</Label>
-          <Input
-            id="printerPowerWatts"
-            type="number"
-            value={printCalculatorSettings.printerPowerWatts}
-            readOnly
-            className="bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
-          />
-        </div>
-      )}
+      <div>
+        <Label htmlFor="printerPowerWatts">Printer Power (Watts)</Label>
+        <Input
+          id="printerPowerWatts"
+          type="number"
+          value={printCalculatorSettings.printerPowerWatts}
+          onChange={(e) => handleSettingChange("printerPowerWatts", e.target.value)}
+          min="0"
+        />
+      </div>
       <div>
         <Label htmlFor="materialProfile">Material Profile</Label>
         <Select
@@ -202,35 +164,22 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
           <SelectContent>
             {filteredMaterialProfiles.map((profile) => (
               <SelectItem key={profile.name} value={profile.name}>
-                {profile.name} {profile.name.startsWith("Custom") ? "" : `(${printCalculatorSettings.currency}${profile.costPerKg}/${printCalculatorSettings.printType === 'filament' ? 'kg' : 'L'})`}
+                {profile.name} ({printCalculatorSettings.currency}{profile.costPerKg}/{printCalculatorSettings.printType === 'filament' ? 'kg' : 'L'})
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-      {(printCalculatorSettings.selectedFilamentProfile === "Custom Filament" || printCalculatorSettings.selectedFilamentProfile === "Custom Resin") ? (
-        <div>
-          <Label htmlFor="customMaterialCostPerKg">{customMaterialCostLabel} ({printCalculatorSettings.currency})</Label>
-          <Input
-            id="customMaterialCostPerKg"
-            type="number"
-            value={customMaterialCost}
-            onChange={(e) => handleCustomMaterialCostChange(e.target.value)}
-            min="0"
-          />
-        </div>
-      ) : (
-        <div>
-          <Label htmlFor="materialCostPerKg">{materialCostLabel} ({printCalculatorSettings.currency})</Label>
-          <Input
-            id="materialCostPerKg"
-            type="number"
-            value={printCalculatorSettings.materialCostPerKg}
-            onChange={(e) => handleSettingChange("materialCostPerKg", e.target.value)}
-            min="0"
-          />
-        </div>
-      )}
+      <div>
+        <Label htmlFor="materialCostPerKg">{materialCostLabel} ({printCalculatorSettings.currency})</Label>
+        <Input
+          id="materialCostPerKg"
+          type="number"
+          value={printCalculatorSettings.materialCostPerKg}
+          onChange={(e) => handleSettingChange("materialCostPerKg", e.target.value)}
+          min="0"
+        />
+      </div>
       <div>
         <Label htmlFor="objectWeightGrams">{objectWeightVolumeLabel}</Label>
         <Input
