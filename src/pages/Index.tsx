@@ -1,22 +1,8 @@
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useSession } from "@/context/SessionContext"; // Import useSession
-import { useEffect } from "react";
 
 const Index = () => {
-  const { session, loading, isGuest } = useSession(); // Use session, loading, and isGuest from context
-
-  if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-  }
-
-  // If not loading, and neither authenticated nor a guest, redirect to login.
-  // The SessionContextProvider already handles this, but this explicit check can be useful for clarity.
-  if (!session && !isGuest) {
-    return null; // SessionContextProvider will handle the redirect
-  }
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
       <div className="text-center mb-8">

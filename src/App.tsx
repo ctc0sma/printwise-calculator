@@ -7,10 +7,9 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PrintCalculator from "./pages/PrintCalculator";
 import Settings from "./pages/Settings";
-import Login from "./pages/Login"; // Import the new Login page
 import { SettingsProvider } from "./context/SettingsContext";
 import { ThemeProvider } from "./components/ThemeProvider";
-import { SessionContextProvider } from "./context/SessionContext"; // Import SessionContextProvider
+import { SessionContextProvider } from "./context/SessionContext";
 
 const queryClient = new QueryClient();
 
@@ -21,10 +20,9 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <SessionContextProvider> {/* Wrap with SessionContextProvider */}
+          <SessionContextProvider>
             <SettingsProvider>
               <Routes>
-                <Route path="/login" element={<Login />} /> {/* Add Login route */}
                 <Route path="/" element={<PrintCalculator />} />
                 <Route path="/home" element={<Index />} />
                 <Route path="/settings" element={<Settings />} />
