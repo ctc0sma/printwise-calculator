@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useSettings } from "@/context/SettingsContext"; // Import useSettings
+import { useSettings } from "@/context/SettingsContext";
+import { Link } from "react-router-dom"; // Import Link
+import { Settings as SettingsIcon } from "lucide-react"; // Import a settings icon
 
 const PrintCalculator = () => {
-  const { printCalculatorSettings } = useSettings(); // Get settings from context
+  const { printCalculatorSettings } = useSettings();
 
   const [materialCostPerKg, setMaterialCostPerKg] = useState<number>(printCalculatorSettings.materialCostPerKg);
   const [objectWeightGrams, setObjectWeightGrams] = useState<number>(printCalculatorSettings.objectWeightGrams);
@@ -20,7 +22,6 @@ const PrintCalculator = () => {
   const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
   const [profitMarginPercentage, setProfitMarginPercentage] = useState<number>(printCalculatorSettings.profitMarginPercentage);
 
-  // Update local state if context settings change (e.g., user saves new defaults)
   useEffect(() => {
     setMaterialCostPerKg(printCalculatorSettings.materialCostPerKg);
     setObjectWeightGrams(printCalculatorSettings.objectWeightGrams);
@@ -33,23 +34,12 @@ const PrintCalculator = () => {
   }, [printCalculatorSettings]);
 
   const calculatePrice = () => {
-    // Convert weight to kg for material cost calculation
     const objectWeightKg = objectWeightGrams / 1000;
-
-    // 1. Material Cost
     const materialCost = objectWeightKg * materialCostPerKg;
-
-    // 2. Electricity Cost (kWh = (Watts * hours) / 1000)
     const electricityConsumptionKWh = (printerPowerWatts * printTimeHours) / 1000;
     const electricityCost = electricityConsumptionKWh * electricityCostPerKWh;
-
-    // 3. Labor Cost
     const laborCost = printTimeHours * laborHourlyRate;
-
-    // 4. Total Base Cost
     const totalBaseCost = materialCost + electricityCost + laborCost + designSetupFee;
-
-    // 5. Final Price with Profit Margin
     const finalPrice = totalBaseCost * (1 + profitMarginPercentage / 100);
 
     return {
@@ -67,8 +57,13 @@ const PrintCalculator = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-2xl shadow-lg">
-        <CardHeader>
+        <CardHeader className="relative"> {/* Added relative positioning for absolute button */}
           <CardTitle className="text-3xl font-bold text-center">3D Print Price Calculator</CardTitle>
+          <Link to="/settings" className="absolute top-4 right-4">
+            <Button variant="outline" size="icon">
+              <SettingsIcon className="h-4 w-4" />
+            </Button>
+          </Link>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
