@@ -1,21 +1,36 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useSettings } from "@/context/SettingsContext"; // Import useSettings
 
 const PrintCalculator = () => {
-  const [materialCostPerKg, setMaterialCostPerKg] = useState<number>(20); // USD/kg
-  const [objectWeightGrams, setObjectWeightGrams] = useState<number>(100); // grams
-  const [printTimeHours, setPrintTimeHours] = useState<number>(5); // hours
-  const [electricityCostPerKWh, setElectricityCostPerKWh] = useState<number>(0.15); // USD/kWh
-  const [printerPowerWatts, setPrinterPowerWatts] = useState<number>(100); // Watts
-  const [laborHourlyRate, setLaborHourlyRate] = useState<number>(25); // USD/hour
-  const [designSetupFee, setDesignSetupFee] = useState<number>(5); // USD
-  const [profitMarginPercentage, setProfitMarginPercentage] = useState<number>(20); // percentage
+  const { printCalculatorSettings } = useSettings(); // Get settings from context
+
+  const [materialCostPerKg, setMaterialCostPerKg] = useState<number>(printCalculatorSettings.materialCostPerKg);
+  const [objectWeightGrams, setObjectWeightGrams] = useState<number>(printCalculatorSettings.objectWeightGrams);
+  const [printTimeHours, setPrintTimeHours] = useState<number>(printCalculatorSettings.printTimeHours);
+  const [electricityCostPerKWh, setElectricityCostPerKWh] = useState<number>(printCalculatorSettings.electricityCostPerKWh);
+  const [printerPowerWatts, setPrinterPowerWatts] = useState<number>(printCalculatorSettings.printerPowerWatts);
+  const [laborHourlyRate, setLaborHourlyRate] = useState<number>(printCalculatorSettings.laborHourlyRate);
+  const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
+  const [profitMarginPercentage, setProfitMarginPercentage] = useState<number>(printCalculatorSettings.profitMarginPercentage);
+
+  // Update local state if context settings change (e.g., user saves new defaults)
+  useEffect(() => {
+    setMaterialCostPerKg(printCalculatorSettings.materialCostPerKg);
+    setObjectWeightGrams(printCalculatorSettings.objectWeightGrams);
+    setPrintTimeHours(printCalculatorSettings.printTimeHours);
+    setElectricityCostPerKWh(printCalculatorSettings.electricityCostPerKWh);
+    setPrinterPowerWatts(printCalculatorSettings.printerPowerWatts);
+    setLaborHourlyRate(printCalculatorSettings.laborHourlyRate);
+    setDesignSetupFee(printCalculatorSettings.designSetupFee);
+    setProfitMarginPercentage(printCalculatorSettings.profitMarginPercentage);
+  }, [printCalculatorSettings]);
 
   const calculatePrice = () => {
     // Convert weight to kg for material cost calculation

@@ -1,6 +1,6 @@
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import { Link } from "react-router-dom"; // Import Link
-import { Button } from "@/components/ui/button"; // Import Button
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   return (
@@ -11,9 +11,12 @@ const Index = () => {
           Start building your amazing project here!
         </p>
       </div>
-      <div className="mb-8">
+      <div className="flex space-x-4 mb-8"> {/* Added flex container for buttons */}
         <Link to="/print-calculator">
           <Button size="lg" className="text-lg px-8 py-4">Go to 3D Print Calculator</Button>
+        </Link>
+        <Link to="/settings">
+          <Button size="lg" variant="outline" className="text-lg px-8 py-4">Settings</Button>
         </Link>
       </div>
       <MadeWithDyad />
