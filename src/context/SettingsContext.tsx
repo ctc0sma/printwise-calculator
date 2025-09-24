@@ -32,6 +32,10 @@ export const PRINTER_PROFILES = [
   { name: "FlashForge Adventurer 3", powerWatts: 150, type: 'filament' },
   { name: "Elegoo Neptune 4 Pro", powerWatts: 300, type: 'filament' },
   { name: "Formlabs Form 3+", powerWatts: 250, type: 'resin' },
+  { name: "Creality Ender 5 Plus", powerWatts: 450, type: 'filament' },
+  { name: "Anycubic Photon Mono X", powerWatts: 120, type: 'resin' },
+  { name: "Prusa XL", powerWatts: 700, type: 'filament' },
+  { name: "Elegoo Saturn 2", powerWatts: 150, type: 'resin' },
   { name: "Custom Printer", powerWatts: 0, type: 'both' }, // Placeholder for custom input
 ];
 
@@ -134,7 +138,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       // Handle material profile change (if not already handled by printType change)
       if (newSettings.selectedFilamentProfile !== undefined && newSettings.selectedFilamentProfile !== prevSettings.selectedFilamentProfile) {
         const selectedMaterial = MATERIAL_PROFILES.find(f => f.name === newSettings.selectedFilamentProfile);
-        if (selectedMaterial && selectedMaterial.name !== "Custom Filament" && selectedMaterial.name !== "Custom Resin") {
+        if (selectedMaterial && (selectedMaterial.name !== "Custom Filament" && selectedMaterial.name !== "Custom Resin")) {
           updatedSettings.materialCostPerKg = selectedMaterial.costPerKg;
         } else if (selectedMaterial && (selectedMaterial.name === "Custom Filament" || selectedMaterial.name === "Custom Resin") && newSettings.materialCostPerKg === undefined) {
           updatedSettings.materialCostPerKg = (prevSettings.selectedFilamentProfile === "Custom Filament" || prevSettings.selectedFilamentProfile === "Custom Resin") ? prevSettings.materialCostPerKg : 0;
