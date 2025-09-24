@@ -6,18 +6,19 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "@/context/SessionContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"; // Added CardFooter
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import { Button } from "@/components/ui/button"; // Import Button component
 
 const Login = () => {
   const navigate = useNavigate();
-  const { session } = useSession();
+  const { session, isGuest, signInAsGuest } = useSession(); // Get isGuest and signInAsGuest from context
 
   useEffect(() => {
-    if (session) {
-      navigate("/"); // Redirect to home if already logged in
+    if (session || isGuest) { // Redirect if authenticated or is a guest
+      navigate("/");
     }
-  }, [session, navigate]);
+  }, [session, isGuest, navigate]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
@@ -81,6 +82,11 @@ const Login = () => {
             theme="dark" // Use dark theme for Supabase Auth UI
           />
         </CardContent>
+        <CardFooter className="flex justify-center pt-4">
+          <Button variant="outline" onClick={signInAsGuest} className="w-full">
+            Continue as Guest
+          </Button>
+        </CardFooter>
       </Card>
       <MadeWithDyad />
     </div>

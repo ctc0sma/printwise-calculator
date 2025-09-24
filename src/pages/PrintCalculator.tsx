@@ -19,7 +19,7 @@ import PrintSummaryFooter from "@/components/PrintSummaryFooter";
 import { useSession } from "@/context/SessionContext"; // Import useSession
 
 const PrintCalculator = () => {
-  const { session, loading } = useSession(); // Use session and loading from context
+  const { session, loading, isGuest } = useSession(); // Use session, loading, and isGuest from context
   const { printCalculatorSettings, updatePrintCalculatorSettings } = useSettings();
 
   // Local states for per-print inputs
@@ -118,8 +118,11 @@ const PrintCalculator = () => {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
-  // The SessionContextProvider already handles redirects, so no explicit redirect here.
-  // If (!session) { return null; } // Or a loading spinner, if you prefer.
+  // If not loading, and neither authenticated nor a guest, redirect to login.
+  // The SessionContextProvider already handles this, but this explicit check can be useful for clarity.
+  if (!session && !isGuest) {
+    return null; // SessionContextProvider will handle the redirect
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 pb-72">

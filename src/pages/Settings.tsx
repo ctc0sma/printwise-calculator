@@ -22,7 +22,7 @@ import { useSession } from "@/context/SessionContext"; // Import useSession
 import { supabase } from "@/integrations/supabase/client"; // Import supabase client for sign out
 
 const Settings = () => {
-  const { session, loading } = useSession(); // Use session and loading from context
+  const { session, loading, isGuest } = useSession(); // Use session, loading, and isGuest from context
   const { printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings } = useSettings();
   
   const [customPrinterPower, setCustomPrinterPower] = useState<number>(
@@ -160,6 +160,8 @@ const Settings = () => {
     if (error) {
       toast.error("Error signing out: " + error.message);
     } else {
+      // Clear guest status if signing out
+      localStorage.removeItem(LOCAL_STORAGE_GUEST_KEY);
       toast.success("Signed out successfully!");
     }
   };
@@ -177,8 +179,11 @@ const Settings = () => {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
-  // The SessionContextProvider already handles redirects, so no explicit redirect here.
-  // If (!session) { return null; } // Or a loading spinner, if you prefer.
+  // If not loading, and neither authenticated nor a guest, redirect to login.
+  // The SessionContextProvider already handles this, but this explicit check can be useful for clarity.
+  if (!session && !isGuest) {
+    return null; // SessionContextProvider will handle the redirect
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
@@ -192,7 +197,7 @@ const Settings = () => {
           <CardTitle className="text-3xl font-bold text-center flex-grow">Application Settings</CardTitle>
           <div className="absolute top-4 right-4 flex space-x-2">
             <ThemeToggle />
-            {session && (
+            {(session || isGuest) && ( // Show sign out button if authenticated or guest
               <Button variant="outline" onClick={handleSignOut}>
                 Sign Out
               </Button>

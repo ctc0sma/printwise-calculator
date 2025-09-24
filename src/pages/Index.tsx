@@ -5,17 +5,16 @@ import { useSession } from "@/context/SessionContext"; // Import useSession
 import { useEffect } from "react";
 
 const Index = () => {
-  const { session, loading } = useSession(); // Use session and loading from context
-
-  // The SessionContextProvider already handles redirects, but we can add a local check if needed
-  // useEffect(() => {
-  //   if (!loading && !session) {
-  //     // Optionally, do something specific if not logged in, though SessionContextProvider will redirect
-  //   }
-  // }, [session, loading]);
+  const { session, loading, isGuest } = useSession(); // Use session, loading, and isGuest from context
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  // If not loading, and neither authenticated nor a guest, redirect to login.
+  // The SessionContextProvider already handles this, but this explicit check can be useful for clarity.
+  if (!session && !isGuest) {
+    return null; // SessionContextProvider will handle the redirect
   }
 
   return (
