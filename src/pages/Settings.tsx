@@ -12,6 +12,7 @@ import AdvancedSettingsSection from "@/components/settings/AdvancedSettingsSecti
 import SettingsFooter from "@/components/settings/SettingsFooter";
 import { useSession } from "@/context/SessionContext";
 import { Link } from "react-router-dom";
+import DonationSection from "@/components/DonationSection"; // Import the new DonationSection
 
 const Settings = () => {
   const {
@@ -82,6 +83,7 @@ const Settings = () => {
       </div>
 
       <Credits />
+      <DonationSection /> {/* Added the new DonationSection here */}
     </div>
   );
 };
