@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useSettings, PRINTER_PROFILES, FILAMENT_PROFILES } from "@/context/SettingsContext";
+import { useSettings, PRINTER_PROFILES, MATERIAL_PROFILES } from "@/context/SettingsContext";
 import { Link } from "react-router-dom";
 import { Settings as SettingsIcon } from "lucide-react";
 import {
@@ -21,28 +21,21 @@ const PrintCalculator = () => {
   const { printCalculatorSettings, updatePrintCalculatorSettings } = useSettings();
 
   // Local states for per-print inputs
-  const [objectWeightGrams, setObjectWeightGrams] = useState<number>(printCalculatorSettings.objectWeightGrams);
+  const [objectValue, setObjectValue] = useState<number>(printCalculatorSettings.objectWeightGrams); // Renamed to be generic for weight/volume
   const [printTimeHours, setPrintTimeHours] = useState<number>(printCalculatorSettings.printTimeHours);
   const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
   const [postProcessingTimeHours, setPostProcessingTimeHours] = useState<number>(0);
   const [supportMaterialPercentage, setSupportMaterialPercentage] = useState<number>(0);
-  // localMaterialCostPerKg will now always reflect the selected filament profile's cost from settings
-  const [localMaterialCostPerKg, setLocalMaterialCostPerKg] = useState<number>(printCalculatorSettings.materialCostPerKg);
-  const [shippingCost, setShippingCost] = useState<number>(0); // New: Shipping Cost
+  const [localMaterialCostPerUnit, setLocalMaterialCostPerUnit] = useState<number>(printCalculatorSettings.materialCostPerKg); // Renamed to be generic for kg/liter
+  const [shippingCost, setShippingCost] = useState<number>(0);
 
   // Update local states when context defaults change (e.g., after reset in settings)
   useEffect(() => {
-    setObjectWeightGrams(printCalculatorSettings.objectWeightGrams);
+    setObjectValue(printCalculatorSettings.objectWeightGrams);
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
-    setLocalMaterialCostPerKg(printCalculatorSettings.materialCostPerKg); // Update local material cost from context
-    // Post-processing, support material, and shipping are per-print, so they start at 0 or their last input
-    // For simplicity, we'll keep them as local state that doesn't reset with context changes unless explicitly handled.
-    // If you want them to reset to 0 when settings change, uncomment the lines below:
-    // setPostProcessingTimeHours(0);
-    // setSupportMaterialPercentage(0);
-    // setShippingCost(0);
-  }, [printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.materialCostPerKg]);
+    setLocalMaterialCostPerUnit(printCalculatorSettings.materialCostPerKg); // Update local material cost from context
+  }, [printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.materialCostPerKg, printCalculatorSettings.printType]);
 
 
   const handlePrinterProfileChange = (profileName: string) => {
@@ -55,23 +48,23 @@ const PrintCalculator = () => {
     }
   };
 
-  const handleFilamentProfileChange = (profileName: string) => {
-    const selectedFilament = FILAMENT_PROFILES.find(f => f.name === profileName);
-    if (selectedFilament) {
+  const handleMaterialProfileChange = (profileName: string) => {
+    const selectedMaterial = MATERIAL_PROFILES.find(f => f.name === profileName);
+    if (selectedMaterial) {
       updatePrintCalculatorSettings({
         selectedFilamentProfile: profileName,
       });
-      // Update local state to reflect the cost of the newly selected profile
-      setLocalMaterialCostPerKg(selectedFilament.costPerKg);
+      setLocalMaterialCostPerUnit(selectedMaterial.costPerKg); // Update local state
     }
   };
 
   const calculatePrice = () => {
-    const objectWeightKg = objectWeightGrams / 1000;
-    
+    const isFilament = printCalculatorSettings.printType === 'filament';
+    const unitConversionFactor = isFilament ? 1000 : 1000; // grams to kg (1000), ml to liter (1000)
+
     // Material Cost with Support Material
-    const totalMaterialWeightKg = objectWeightKg * (1 + supportMaterialPercentage / 100);
-    const materialCost = totalMaterialWeightKg * localMaterialCostPerKg; // Use local material cost
+    const totalMaterialValue = objectValue * (1 + supportMaterialPercentage / 100);
+    const materialCost = (totalMaterialValue / unitConversionFactor) * localMaterialCostPerUnit;
 
     const electricityConsumptionKWh = (printCalculatorSettings.printerPowerWatts * printTimeHours) / 1000;
     const electricityCost = electricityConsumptionKWh * printCalculatorSettings.electricityCostPerKWh;
@@ -90,7 +83,7 @@ const PrintCalculator = () => {
       totalBaseCost = totalBaseCost / (1 - printCalculatorSettings.failedPrintRatePercentage / 100);
     }
 
-    const finalPrice = (totalBaseCost * (1 + printCalculatorSettings.profitMarginPercentage / 100)) + shippingCost; // Add shipping cost here
+    const finalPrice = (totalBaseCost * (1 + printCalculatorSettings.profitMarginPercentage / 100)) + shippingCost;
 
     return {
       materialCost,
@@ -98,7 +91,7 @@ const PrintCalculator = () => {
       laborCost,
       designSetupFee,
       printerDepreciationCost,
-      shippingCost, // Include shipping cost in the returned object
+      shippingCost,
       totalBaseCost,
       finalPrice,
     };
@@ -106,6 +99,13 @@ const PrintCalculator = () => {
 
   const { materialCost, electricityCost, laborCost, designSetupFee: calculatedDesignSetupFee, printerDepreciationCost, shippingCost: calculatedShippingCost, totalBaseCost, finalPrice } = calculatePrice();
   const currencySymbol = printCalculatorSettings.currency;
+
+  const filteredPrinterProfiles = PRINTER_PROFILES.filter(p => p.type === printCalculatorSettings.printType || p.type === 'both');
+  const filteredMaterialProfiles = MATERIAL_PROFILES.filter(m => m.type === printCalculatorSettings.printType);
+
+  const objectValueLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
+  const materialCostPerUnitLabel = printCalculatorSettings.printType === 'filament' ? "Material Cost per Kg" : "Material Cost per Liter";
+  const materialUnitSymbol = printCalculatorSettings.printType === 'filament' ? 'kg' : 'L';
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
@@ -121,24 +121,33 @@ const PrintCalculator = () => {
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
-              <Label htmlFor="filamentProfile">Filament Type</Label>
+              <Label htmlFor="materialProfile">Material Type</Label>
               <Select
                 value={printCalculatorSettings.selectedFilamentProfile}
-                onValueChange={handleFilamentProfileChange}
+                onValueChange={handleMaterialProfileChange}
               >
-                <SelectTrigger id="filamentProfile">
-                  <SelectValue placeholder="Select filament" />
+                <SelectTrigger id="materialProfile">
+                  <SelectValue placeholder="Select material" />
                 </SelectTrigger>
                 <SelectContent>
-                  {FILAMENT_PROFILES.map((profile) => (
+                  {filteredMaterialProfiles.map((profile) => (
                     <SelectItem key={profile.name} value={profile.name}>
-                      {profile.name} {profile.name !== "Custom Filament" && `(${currencySymbol}${profile.costPerKg}/kg)`}
+                      {profile.name} {profile.name.startsWith("Custom") ? "" : `(${currencySymbol}${profile.costPerKg}/${materialUnitSymbol})`}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            {/* Material Cost per Kg input removed from here */}
+            <div>
+              <Label htmlFor="materialCostPerUnit">{materialCostPerUnitLabel} ({currencySymbol})</Label>
+              <Input
+                id="materialCostPerUnit"
+                type="number"
+                value={localMaterialCostPerUnit}
+                onChange={(e) => setLocalMaterialCostPerUnit(parseFloat(e.target.value) || 0)}
+                min="0"
+              />
+            </div>
             <div>
               <Label htmlFor="printerProfile">Printer Profile</Label>
               <Select
@@ -149,7 +158,7 @@ const PrintCalculator = () => {
                   <SelectValue placeholder="Select a printer" />
                 </SelectTrigger>
                 <SelectContent>
-                  {PRINTER_PROFILES.map((profile) => (
+                  {filteredPrinterProfiles.map((profile) => (
                     <SelectItem key={profile.name} value={profile.name}>
                       {profile.name} {profile.name !== "Custom Printer" && `(${profile.powerWatts}W)`}
                     </SelectItem>
@@ -158,12 +167,12 @@ const PrintCalculator = () => {
               </Select>
             </div>
             <div>
-              <Label htmlFor="objectWeightGrams">Object Weight (grams)</Label>
+              <Label htmlFor="objectValue">{objectValueLabel}</Label>
               <Input
-                id="objectWeightGrams"
+                id="objectValue"
                 type="number"
-                value={objectWeightGrams}
-                onChange={(e) => setObjectWeightGrams(parseFloat(e.target.value) || 0)}
+                value={objectValue}
+                onChange={(e) => setObjectValue(parseFloat(e.target.value) || 0)}
                 min="0"
               />
             </div>
@@ -210,7 +219,6 @@ const PrintCalculator = () => {
                 max="100"
               />
             </div>
-            {/* New: Shipping Cost Input */}
             <div>
               <Label htmlFor="shippingCost">Shipping Cost ({currencySymbol})</Label>
               <Input
@@ -241,7 +249,6 @@ const PrintCalculator = () => {
             <div className="text-left">Printer Depreciation:</div>
             <div className="text-right">{currencySymbol}{printerDepreciationCost.toFixed(2)}</div>
 
-            {/* New: Display Shipping Cost */}
             <div className="text-left">Shipping Cost:</div>
             <div className="text-right">{currencySymbol}{calculatedShippingCost.toFixed(2)}</div>
           </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSettings, PRINTER_PROFILES, FILAMENT_PROFILES } from "@/context/SettingsContext";
+import { useSettings, PRINTER_PROFILES, MATERIAL_PROFILES } from "@/context/SettingsContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -28,7 +28,7 @@ const Settings = () => {
       : 0
   );
   const [customMaterialCost, setCustomMaterialCost] = useState<number>(
-    printCalculatorSettings.selectedFilamentProfile === "Custom Filament"
+    (printCalculatorSettings.selectedFilamentProfile === "Custom Filament" || printCalculatorSettings.selectedFilamentProfile === "Custom Resin")
       ? printCalculatorSettings.materialCostPerKg
       : 0
   );
@@ -42,14 +42,14 @@ const Settings = () => {
 
   // Update customMaterialCost when the context's materialCostPerKg changes and it's a custom profile
   useEffect(() => {
-    if (printCalculatorSettings.selectedFilamentProfile === "Custom Filament") {
+    if (printCalculatorSettings.selectedFilamentProfile === "Custom Filament" || printCalculatorSettings.selectedFilamentProfile === "Custom Resin") {
       setCustomMaterialCost(printCalculatorSettings.materialCostPerKg);
     }
   }, [printCalculatorSettings.selectedFilamentProfile, printCalculatorSettings.materialCostPerKg]);
 
 
   const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string | number) => {
-    if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile") {
+    if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType") {
       updatePrintCalculatorSettings({ [key]: value as string });
     } else {
       const numValue = parseFloat(value as string);
@@ -71,12 +71,12 @@ const Settings = () => {
     }
   };
 
-  const handleFilamentProfileChange = (profileName: string) => {
-    const selectedFilament = FILAMENT_PROFILES.find(f => f.name === profileName);
-    if (selectedFilament) {
+  const handleMaterialProfileChange = (profileName: string) => {
+    const selectedMaterial = MATERIAL_PROFILES.find(f => f.name === profileName);
+    if (selectedMaterial) {
       updatePrintCalculatorSettings({
-        selectedFilamentProfile: profileName,
-        materialCostPerKg: selectedFilament.name === "Custom Filament" ? customMaterialCost : selectedFilament.costPerKg,
+        selectedFilamentProfile: profileName, // Still using selectedFilamentProfile for consistency with interface
+        materialCostPerKg: (selectedMaterial.name === "Custom Filament" || selectedMaterial.name === "Custom Resin") ? customMaterialCost : selectedMaterial.costPerKg,
       });
     }
   };
@@ -92,7 +92,7 @@ const Settings = () => {
   const handleCustomMaterialCostChange = (value: string) => {
     const numValue = parseFloat(value);
     setCustomMaterialCost(isNaN(numValue) ? 0 : numValue);
-    if (printCalculatorSettings.selectedFilamentProfile === "Custom Filament") {
+    if (printCalculatorSettings.selectedFilamentProfile === "Custom Filament" || printCalculatorSettings.selectedFilamentProfile === "Custom Resin") {
       updatePrintCalculatorSettings({ materialCostPerKg: isNaN(numValue) ? 0 : numValue });
     }
   };
@@ -100,6 +100,13 @@ const Settings = () => {
   const handleSave = () => {
     toast.success("Settings saved successfully!");
   };
+
+  const filteredPrinterProfiles = PRINTER_PROFILES.filter(p => p.type === printCalculatorSettings.printType || p.type === 'both');
+  const filteredMaterialProfiles = MATERIAL_PROFILES.filter(m => m.type === printCalculatorSettings.printType);
+
+  const materialCostLabel = printCalculatorSettings.printType === 'filament' ? "Material Cost per Kg" : "Material Cost per Liter";
+  const customMaterialCostLabel = printCalculatorSettings.printType === 'filament' ? "Custom Material Cost per Kg" : "Custom Material Cost per Liter";
+  const objectWeightVolumeLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
@@ -119,26 +126,41 @@ const Settings = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-semibold mb-2">3D Print Calculator Defaults</h3>
             <div>
-              <Label htmlFor="filamentProfile">Filament Profile</Label>
+              <Label htmlFor="printType">Print Type</Label>
               <Select
-                value={printCalculatorSettings.selectedFilamentProfile}
-                onValueChange={handleFilamentProfileChange}
+                value={printCalculatorSettings.printType}
+                onValueChange={(value: 'filament' | 'resin') => handleSettingChange("printType", value)}
               >
-                <SelectTrigger id="filamentProfile">
-                  <SelectValue placeholder="Select filament" />
+                <SelectTrigger id="printType">
+                  <SelectValue placeholder="Select print type" />
                 </SelectTrigger>
                 <SelectContent>
-                  {FILAMENT_PROFILES.map((profile) => (
+                  <SelectItem value="filament">Filament Printing</SelectItem>
+                  <SelectItem value="resin">Resin Printing</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="materialProfile">Material Profile</Label>
+              <Select
+                value={printCalculatorSettings.selectedFilamentProfile}
+                onValueChange={handleMaterialProfileChange}
+              >
+                <SelectTrigger id="materialProfile">
+                  <SelectValue placeholder="Select material" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredMaterialProfiles.map((profile) => (
                     <SelectItem key={profile.name} value={profile.name}>
-                      {profile.name} {profile.name !== "Custom Filament" && `(${printCalculatorSettings.currency}${profile.costPerKg}/kg)`}
+                      {profile.name} {profile.name.startsWith("Custom") ? "" : `(${printCalculatorSettings.currency}${profile.costPerKg}/${printCalculatorSettings.printType === 'filament' ? 'kg' : 'L'})`}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            {printCalculatorSettings.selectedFilamentProfile === "Custom Filament" ? (
+            {(printCalculatorSettings.selectedFilamentProfile === "Custom Filament" || printCalculatorSettings.selectedFilamentProfile === "Custom Resin") ? (
               <div>
-                <Label htmlFor="customMaterialCostPerKg">Custom Material Cost per Kg ({printCalculatorSettings.currency})</Label>
+                <Label htmlFor="customMaterialCostPerKg">{customMaterialCostLabel} ({printCalculatorSettings.currency})</Label>
                 <Input
                   id="customMaterialCostPerKg"
                   type="number"
@@ -149,7 +171,7 @@ const Settings = () => {
               </div>
             ) : (
               <div>
-                <Label htmlFor="materialCostPerKg">Material Cost per Kg ({printCalculatorSettings.currency})</Label>
+                <Label htmlFor="materialCostPerKg">{materialCostLabel} ({printCalculatorSettings.currency})</Label>
                 <Input
                   id="materialCostPerKg"
                   type="number"
@@ -160,7 +182,7 @@ const Settings = () => {
               </div>
             )}
             <div>
-              <Label htmlFor="objectWeightGrams">Object Weight (grams)</Label>
+              <Label htmlFor="objectWeightGrams">{objectWeightVolumeLabel}</Label>
               <Input
                 id="objectWeightGrams"
                 type="number"
@@ -200,7 +222,7 @@ const Settings = () => {
                   <SelectValue placeholder="Select a printer" />
                 </SelectTrigger>
                 <SelectContent>
-                  {PRINTER_PROFILES.map((profile) => (
+                  {filteredPrinterProfiles.map((profile) => (
                     <SelectItem key={profile.name} value={profile.name}>
                       {profile.name} {profile.name !== "Custom Printer" && `(${profile.powerWatts}W)`}
                     </SelectItem>

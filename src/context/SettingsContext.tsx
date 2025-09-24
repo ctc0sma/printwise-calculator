@@ -4,8 +4,8 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import { toast } from "sonner"; // Import toast for notifications
 
 interface PrintCalculatorSettings {
-  materialCostPerKg: number;
-  objectWeightGrams: number;
+  materialCostPerKg: number; // This will be cost per Kg for filament, or cost per Liter for resin
+  objectWeightGrams: number; // This will be weight in grams for filament, or volume in ml for resin
   printTimeHours: number;
   electricityCostPerKWh: number;
   printerPowerWatts: number;
@@ -16,56 +16,53 @@ interface PrintCalculatorSettings {
   printerDepreciationHourly: number;
   failedPrintRatePercentage: number;
   selectedPrinterProfile: string;
-  selectedFilamentProfile: string; // New: Stores the name of the selected filament profile
-}
-
-interface SettingsContextType {
-  printCalculatorSettings: PrintCalculatorSettings;
-  updatePrintCalculatorSettings: (newSettings: Partial<PrintCalculatorSettings>) => void;
-  resetPrintCalculatorSettings: () => void;
+  selectedFilamentProfile: string; // Renamed to selectedMaterialProfile in practice, but keeping for now
+  printType: 'filament' | 'resin'; // New: Type of printing
 }
 
 // Predefined printer profiles for the dropdown
 export const PRINTER_PROFILES = [
-  { name: "Ender 3", powerWatts: 150 },
-  { name: "Prusa i3 MK3S+", powerWatts: 240 },
-  { name: "Anycubic Kobra 2 Pro", powerWatts: 400 },
-  { name: "Bambu Lab P1P", powerWatts: 350 },
-  { name: "Creality K1", powerWatts: 350 },
-  { name: "Ultimaker S5", powerWatts: 500 },
-  { name: "Formlabs Form 3+", powerWatts: 250 },
-  { name: "Raise3D Pro3", powerWatts: 600 },
-  { name: "FlashForge Adventurer 3", powerWatts: 150 },
-  { name: "Elegoo Neptune 4 Pro", powerWatts: 300 },
-  { name: "Custom Printer", powerWatts: 0 }, // Placeholder for custom input
+  { name: "Ender 3", powerWatts: 150, type: 'filament' },
+  { name: "Prusa i3 MK3S+", powerWatts: 240, type: 'filament' },
+  { name: "Anycubic Kobra 2 Pro", powerWatts: 400, type: 'filament' },
+  { name: "Bambu Lab P1P", powerWatts: 350, type: 'filament' },
+  { name: "Creality K1", powerWatts: 350, type: 'filament' },
+  { name: "Ultimaker S5", powerWatts: 500, type: 'filament' }, // Assuming filament for now
+  { name: "Raise3D Pro3", powerWatts: 600, type: 'filament' }, // Assuming filament for now
+  { name: "FlashForge Adventurer 3", powerWatts: 150, type: 'filament' },
+  { name: "Elegoo Neptune 4 Pro", powerWatts: 300, type: 'filament' },
+  { name: "Formlabs Form 3+", powerWatts: 250, type: 'resin' },
+  { name: "Custom Printer", powerWatts: 0, type: 'both' }, // Placeholder for custom input
 ];
 
-// Predefined filament profiles for the dropdown
-export const FILAMENT_PROFILES = [
-  { name: "PLA", costPerKg: 20 },
-  { name: "PETG", costPerKg: 25 },
-  { name: "ABS", costPerKg: 30 },
-  { name: "TPU", costPerKg: 35 },
-  { name: "Nylon", costPerKg: 40 },
-  { name: "Resin (Standard)", costPerKg: 50 },
-  { name: "Custom Filament", costPerKg: 0 }, // Placeholder for custom input
+// Predefined material profiles for the dropdown (renamed from FILAMENT_PROFILES)
+export const MATERIAL_PROFILES = [
+  { name: "PLA", costPerKg: 20, type: 'filament' },
+  { name: "PETG", costPerKg: 25, type: 'filament' },
+  { name: "ABS", costPerKg: 30, type: 'filament' },
+  { name: "TPU", costPerKg: 35, type: 'filament' },
+  { name: "Nylon", costPerKg: 40, type: 'filament' },
+  { name: "Custom Filament", costPerKg: 0, type: 'filament' }, // Placeholder for custom input
+  { name: "Resin (Standard)", costPerKg: 50, type: 'resin' }, // Cost per Liter for resin
+  { name: "Custom Resin", costPerKg: 0, type: 'resin' }, // Placeholder for custom input (cost per Liter)
 ];
 
 // Default settings as a constant
 const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
-  materialCostPerKg: FILAMENT_PROFILES[0].costPerKg, // Default to the first filament's cost
+  materialCostPerKg: MATERIAL_PROFILES.find(p => p.name === "PLA")?.costPerKg || 0, // Default to PLA cost
   objectWeightGrams: 100,
   printTimeHours: 5,
   electricityCostPerKWh: 0.15,
-  printerPowerWatts: PRINTER_PROFILES[0].powerWatts, // Default to the first printer's power
+  printerPowerWatts: PRINTER_PROFILES.find(p => p.name === "Ender 3")?.powerWatts || 0, // Default to Ender 3 power
   laborHourlyRate: 25,
   designSetupFee: 5,
   profitMarginPercentage: 20,
   currency: "$",
   printerDepreciationHourly: 1.5,
   failedPrintRatePercentage: 5,
-  selectedPrinterProfile: PRINTER_PROFILES[0].name, // Default to the first printer
-  selectedFilamentProfile: FILAMENT_PROFILES[0].name, // Default to the first filament
+  selectedPrinterProfile: "Ender 3", // Default to a filament printer
+  selectedFilamentProfile: "PLA", // Default to a filament material
+  printType: 'filament', // Default print type
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -97,25 +94,50 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     setPrintCalculatorSettings((prevSettings) => {
       let updatedSettings = { ...prevSettings, ...newSettings };
 
-      // Handle printer profile change
+      // Handle printType change
+      if (newSettings.printType !== undefined && newSettings.printType !== prevSettings.printType) {
+        const newPrintType = newSettings.printType;
+
+        // Reset printer profile to a default compatible with the new print type
+        const defaultPrinterForType = PRINTER_PROFILES.find(p => p.type === newPrintType || p.type === 'both');
+        if (defaultPrinterForType) {
+          updatedSettings.selectedPrinterProfile = defaultPrinterForType.name;
+          updatedSettings.printerPowerWatts = defaultPrinterForType.powerWatts;
+        } else {
+          // Fallback if no specific printer found, e.g., to Custom Printer
+          updatedSettings.selectedPrinterProfile = "Custom Printer";
+          updatedSettings.printerPowerWatts = 0;
+        }
+
+        // Reset material profile to a default compatible with the new print type
+        const defaultMaterialForType = MATERIAL_PROFILES.find(m => m.type === newPrintType);
+        if (defaultMaterialForType) {
+          updatedSettings.selectedFilamentProfile = defaultMaterialForType.name;
+          updatedSettings.materialCostPerKg = defaultMaterialForType.costPerKg;
+        } else {
+          // Fallback to custom material for the type
+          updatedSettings.selectedFilamentProfile = newPrintType === 'filament' ? "Custom Filament" : "Custom Resin";
+          updatedSettings.materialCostPerKg = 0;
+        }
+      }
+
+      // Handle printer profile change (if not already handled by printType change)
       if (newSettings.selectedPrinterProfile !== undefined && newSettings.selectedPrinterProfile !== prevSettings.selectedPrinterProfile) {
         const selectedProfile = PRINTER_PROFILES.find(p => p.name === newSettings.selectedPrinterProfile);
         if (selectedProfile && selectedProfile.name !== "Custom Printer") {
           updatedSettings.printerPowerWatts = selectedProfile.powerWatts;
         } else if (selectedProfile && selectedProfile.name === "Custom Printer" && newSettings.printerPowerWatts === undefined) {
-          // If switching to custom, and no custom power is provided, keep previous custom power or set to 0
           updatedSettings.printerPowerWatts = prevSettings.selectedPrinterProfile === "Custom Printer" ? prevSettings.printerPowerWatts : 0;
         }
       }
 
-      // Handle filament profile change
+      // Handle material profile change (if not already handled by printType change)
       if (newSettings.selectedFilamentProfile !== undefined && newSettings.selectedFilamentProfile !== prevSettings.selectedFilamentProfile) {
-        const selectedFilament = FILAMENT_PROFILES.find(f => f.name === newSettings.selectedFilamentProfile);
-        if (selectedFilament && selectedFilament.name !== "Custom Filament") {
-          updatedSettings.materialCostPerKg = selectedFilament.costPerKg;
-        } else if (selectedFilament && selectedFilament.name === "Custom Filament" && newSettings.materialCostPerKg === undefined) {
-          // If switching to custom, and no custom cost is provided, keep previous custom cost or set to 0
-          updatedSettings.materialCostPerKg = prevSettings.selectedFilamentProfile === "Custom Filament" ? prevSettings.materialCostPerKg : 0;
+        const selectedMaterial = MATERIAL_PROFILES.find(f => f.name === newSettings.selectedFilamentProfile);
+        if (selectedMaterial && selectedMaterial.name !== "Custom Filament" && selectedMaterial.name !== "Custom Resin") {
+          updatedSettings.materialCostPerKg = selectedMaterial.costPerKg;
+        } else if (selectedMaterial && (selectedMaterial.name === "Custom Filament" || selectedMaterial.name === "Custom Resin") && newSettings.materialCostPerKg === undefined) {
+          updatedSettings.materialCostPerKg = (prevSettings.selectedFilamentProfile === "Custom Filament" || prevSettings.selectedFilamentProfile === "Custom Resin") ? prevSettings.materialCostPerKg : 0;
         }
       }
       
