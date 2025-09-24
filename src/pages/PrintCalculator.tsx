@@ -105,8 +105,8 @@ const PrintCalculator = () => {
   const materialUnitSymbol = printCalculatorSettings.printType === 'filament' ? 'kg' : 'L';
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 p-4 pb-70"> {/* Removed items-center and justify-center */}
-      <Card className="w-full max-w-2xl shadow-lg mx-auto"> {/* Added mx-auto for horizontal centering */}
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 pb-96"> {/* Increased padding-bottom to account for fixed footer */}
+      <Card className="w-full max-w-2xl shadow-lg">
         <CardHeader className="relative">
           <CardTitle className="text-3xl font-bold text-center">3D Print Price Calculator</CardTitle>
           <Link to="/settings" className="absolute top-4 right-4">
