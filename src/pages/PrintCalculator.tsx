@@ -26,7 +26,6 @@ const PrintCalculator = () => {
   const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
   const [postProcessingTimeHours, setPostProcessingTimeHours] = useState<number>(0);
   const [supportMaterialPercentage, setSupportMaterialPercentage] = useState<number>(0);
-  const [localMaterialCostPerUnit, setLocalMaterialCostPerUnit] = useState<number>(printCalculatorSettings.materialCostPerKg); // Renamed to be generic for kg/liter
   const [shippingCost, setShippingCost] = useState<number>(0);
 
   // Update local states when context defaults change (e.g., after reset in settings)
@@ -34,8 +33,7 @@ const PrintCalculator = () => {
     setObjectValue(printCalculatorSettings.objectWeightGrams);
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
-    setLocalMaterialCostPerUnit(printCalculatorSettings.materialCostPerKg); // Update local material cost from context
-  }, [printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.materialCostPerKg, printCalculatorSettings.printType]);
+  }, [printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.printType]);
 
 
   const handlePrinterProfileChange = (profileName: string) => {
@@ -53,8 +51,9 @@ const PrintCalculator = () => {
     if (selectedMaterial) {
       updatePrintCalculatorSettings({
         selectedFilamentProfile: profileName,
+        // When a profile is selected, update the materialCostPerKg in settings
+        materialCostPerKg: selectedMaterial.costPerKg,
       });
-      setLocalMaterialCostPerUnit(selectedMaterial.costPerKg); // Update local state
     }
   };
 
@@ -64,7 +63,7 @@ const PrintCalculator = () => {
 
     // Material Cost with Support Material
     const totalMaterialValue = objectValue * (1 + supportMaterialPercentage / 100);
-    const materialCost = (totalMaterialValue / unitConversionFactor) * localMaterialCostPerUnit;
+    const materialCost = (totalMaterialValue / unitConversionFactor) * printCalculatorSettings.materialCostPerKg; // Use material cost from settings
 
     const electricityConsumptionKWh = (printCalculatorSettings.printerPowerWatts * printTimeHours) / 1000;
     const electricityCost = electricityConsumptionKWh * printCalculatorSettings.electricityCostPerKWh;
@@ -104,7 +103,6 @@ const PrintCalculator = () => {
   const filteredMaterialProfiles = MATERIAL_PROFILES.filter(m => m.type === printCalculatorSettings.printType);
 
   const objectValueLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
-  const materialCostPerUnitLabel = printCalculatorSettings.printType === 'filament' ? "Material Cost per Kg" : "Material Cost per Liter";
   const materialUnitSymbol = printCalculatorSettings.printType === 'filament' ? 'kg' : 'L';
 
   return (
@@ -138,16 +136,7 @@ const PrintCalculator = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label htmlFor="materialCostPerUnit">{materialCostPerUnitLabel} ({currencySymbol})</Label>
-              <Input
-                id="materialCostPerUnit"
-                type="number"
-                value={localMaterialCostPerUnit}
-                onChange={(e) => setLocalMaterialCostPerUnit(parseFloat(e.target.value) || 0)}
-                min="0"
-              />
-            </div>
+            {/* Material Cost per Unit input removed from here */}
             <div>
               <Label htmlFor="printerProfile">Printer Profile</Label>
               <Select
