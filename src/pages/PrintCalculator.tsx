@@ -264,6 +264,21 @@ const PrintCalculator = () => {
         companyName={printCalculatorSettings.companyName}
         companyAddress={printCalculatorSettings.companyAddress}
         companyLogoUrl={printCalculatorSettings.companyLogoUrl}
+        // Pass new print details
+        printType={printCalculatorSettings.printType}
+        selectedPrinterProfile={printCalculatorSettings.selectedPrinterProfile}
+        printerPowerWatts={printCalculatorSettings.printerPowerWatts}
+        selectedFilamentProfile={printCalculatorSettings.selectedFilamentProfile}
+        materialCostPerKg={printCalculatorSettings.materialCostPerKg}
+        objectWeightGrams={objectValue} // Use local state for current object value
+        printTimeHours={printTimeHours} // Use local state for current print time
+        electricityCostPerKWh={printCalculatorSettings.electricityCostPerKWh}
+        laborHourlyRate={printCalculatorSettings.laborHourlyRate}
+        profitMarginPercentage={printCalculatorSettings.profitMarginPercentage}
+        failedPrintRatePercentage={printCalculatorSettings.failedPrintRatePercentage}
+        supportMaterialPercentage={supportMaterialPercentage} // Use local state
+        postProcessingTimeHours={postProcessingTimeHours} // Use local state
+        selectedCountry={printCalculatorSettings.selectedCountry}
       />
     </div>
   );

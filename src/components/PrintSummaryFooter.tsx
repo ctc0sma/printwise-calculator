@@ -20,6 +20,21 @@ interface PrintSummaryFooterProps {
   companyName: string;
   companyAddress: string;
   companyLogoUrl: string;
+  // New props for print details
+  printType: 'filament' | 'resin';
+  selectedPrinterProfile: string;
+  printerPowerWatts: number;
+  selectedFilamentProfile: string;
+  materialCostPerKg: number;
+  objectWeightGrams: number;
+  printTimeHours: number;
+  electricityCostPerKWh: number;
+  laborHourlyRate: number;
+  profitMarginPercentage: number;
+  failedPrintRatePercentage: number;
+  supportMaterialPercentage: number;
+  postProcessingTimeHours: number;
+  selectedCountry: string;
 }
 
 const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
@@ -37,6 +52,21 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
   companyName,
   companyAddress,
   companyLogoUrl,
+  // Destructure new props
+  printType,
+  selectedPrinterProfile,
+  printerPowerWatts,
+  selectedFilamentProfile,
+  materialCostPerKg,
+  objectWeightGrams,
+  printTimeHours,
+  electricityCostPerKWh,
+  laborHourlyRate,
+  profitMarginPercentage,
+  failedPrintRatePercentage,
+  supportMaterialPercentage,
+  postProcessingTimeHours,
+  selectedCountry,
 }) => {
   const generateSummaryText = () => {
     return `3D Print Price Summary:
@@ -111,7 +141,48 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
     doc.text(`Date: ${new Date().toLocaleDateString()}`, pageWidth - margin, yPos, { align: "right" });
     yPos += 10;
 
+    // Print Details Section
+    if (isProfessional) {
+      doc.setFontSize(16);
+      doc.setFont(undefined, 'bold');
+      doc.text("Print Details", margin, yPos);
+      doc.setFont(undefined, 'normal');
+      yPos += 10;
+
+      doc.setFontSize(12);
+      const printDetails = [
+        { label: "Print Type:", value: printType === 'filament' ? "Filament Printing" : "Resin Printing" },
+        { label: "Printer Profile:", value: `${selectedPrinterProfile} (${printerPowerWatts}W)` },
+        { label: "Material Profile:", value: `${selectedFilamentProfile} (${currencySymbol}${materialCostPerKg.toFixed(2)}/${printType === 'filament' ? 'kg' : 'L'})` },
+        { label: printType === 'filament' ? "Object Weight:" : "Object Volume:", value: `${objectWeightGrams.toFixed(2)} ${printType === 'filament' ? 'grams' : 'ml'}` },
+        { label: "Print Time:", value: `${printTimeHours.toFixed(2)} hours` },
+        { label: "Post-processing Time:", value: `${postProcessingTimeHours.toFixed(2)} hours` },
+        { label: "Country (Electricity):", value: `${selectedCountry} (${currencySymbol}${electricityCostPerKWh.toFixed(2)}/kWh)` },
+        { label: "Labor Hourly Rate:", value: `${currencySymbol}${laborHourlyRate.toFixed(2)}` },
+        { label: "Profit Margin:", value: `${profitMarginPercentage.toFixed(2)}%` },
+        { label: "Failed Print Rate:", value: `${failedPrintRatePercentage.toFixed(2)}%` },
+        { label: "Support Material Overhead:", value: `${supportMaterialPercentage.toFixed(2)}%` },
+      ];
+
+      printDetails.forEach(item => {
+        doc.text(`${item.label}`, margin, yPos);
+        doc.text(`${item.value}`, pageWidth - margin, yPos, { align: "right" });
+        yPos += 8;
+        if (yPos > pageHeight - margin - 50) { // Check if new page is needed
+          doc.addPage();
+          yPos = margin;
+        }
+      });
+      yPos += 10; // Space after print details
+    }
+
     // Summary Details
+    doc.setFontSize(16);
+    doc.setFont(undefined, 'bold');
+    doc.text("Cost Breakdown", margin, yPos);
+    doc.setFont(undefined, 'normal');
+    yPos += 10;
+
     doc.setFontSize(12);
     const summaryItems = [
       { label: "Material Cost:", value: materialCost },
@@ -128,6 +199,10 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
       doc.text(`${item.label}`, margin, yPos);
       doc.text(`${currencySymbol}${item.value.toFixed(2)}`, pageWidth - margin, yPos, { align: "right" });
       yPos += 8;
+      if (yPos > pageHeight - margin - 50) { // Check if new page is needed
+        doc.addPage();
+        yPos = margin;
+      }
     });
 
     yPos += 10; // Space before total
