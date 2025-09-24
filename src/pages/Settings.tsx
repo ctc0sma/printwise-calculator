@@ -343,9 +343,10 @@ const Settings = () => {
                   <Input
                     id="electricityCostPerKWh"
                     type="number"
-                    value={printCalculatorSettings.electricityCostPerKWh}
-                    readOnly
-                    className="bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
+                    value={printCalculatorSettings.electricityCostPerKWh.toString()}
+                    onChange={(e) => handleSettingChange("electricityCostPerKWh", e.target.value)}
+                    min="0"
+                    step="0.01"
                   />
                 </div>
                 <div>
@@ -354,8 +355,7 @@ const Settings = () => {
                     id="currency"
                     type="text"
                     value={printCalculatorSettings.currency}
-                    readOnly
-                    className="bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
+                    onChange={(e) => handleSettingChange("currency", e.target.value)}
                   />
                 </div>
               </>
