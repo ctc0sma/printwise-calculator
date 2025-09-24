@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } => "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Corrected '=>' to 'from'
 import { useSession } from "@/context/SessionContext";
 
 const Login = () => {
