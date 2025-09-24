@@ -1,7 +1,25 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
 import { toast } from "sonner"; // Import toast for notifications
+import { supabase } from "@/integrations/supabase/client";
+import { useSession } from "@/context/SessionContext";
+
+interface PrinterProfile {
+  id?: string; // Optional for new profiles, required for existing
+  name: string;
+  powerWatts: number;
+  type: 'filament' | 'resin' | 'both';
+  isCustom?: boolean; // To distinguish user-defined from predefined
+}
+
+interface MaterialProfile {
+  id?: string; // Optional for new profiles, required for existing
+  name: string;
+  costPerKg: number; // This will be cost per Kg for filament, or cost per Liter for resin
+  type: 'filament' | 'resin';
+  isCustom?: boolean; // To distinguish user-defined from predefined
+}
 
 interface PrintCalculatorSettings {
   materialCostPerKg: number; // This will be cost per Kg for filament, or cost per Liter for resin
@@ -16,7 +34,7 @@ interface PrintCalculatorSettings {
   printerDepreciationHourly: number;
   failedPrintRatePercentage: number;
   selectedPrinterProfile: string;
-  selectedFilamentProfile: string; // Renamed to selectedMaterialProfile in practice, but keeping for now
+  selectedFilamentProfile: string;
   printType: 'filament' | 'resin'; // New: Type of printing
   supportMaterialCost: number; // New: Cost for support material (e.g., per print or fixed)
   postProcessingMaterialCost: number; // New: Cost for post-processing materials (e.g., fixed per print)
@@ -29,15 +47,15 @@ interface PrintCalculatorSettings {
 }
 
 // Predefined printer profiles for the dropdown
-export const PRINTER_PROFILES = [
+export const PREDEFINED_PRINTER_PROFILES: PrinterProfile[] = [
   { name: "Ender 3", powerWatts: 150, type: 'filament' },
   { name: "Prusa i3 MK3S+", powerWatts: 240, type: 'filament' },
   { name: "Anycubic Kobra 2 Pro", powerWatts: 400, type: 'filament' },
   { name: "Bambu Lab P1P", powerWatts: 350, type: 'filament' },
-  { name: "Bambu Lab X1C", powerWatts: 1000, type: 'filament' }, // Added Bambu Lab X1C
+  { name: "Bambu Lab X1C", powerWatts: 1000, type: 'filament' },
   { name: "Creality K1", powerWatts: 350, type: 'filament' },
-  { name: "Ultimaker S5", powerWatts: 500, type: 'filament' }, // Assuming filament for now
-  { name: "Raise3D Pro3", powerWatts: 600, type: 'filament' }, // Assuming filament for now
+  { name: "Ultimaker S5", powerWatts: 500, type: 'filament' },
+  { name: "Raise3D Pro3", powerWatts: 600, type: 'filament' },
   { name: "FlashForge Adventurer 3", powerWatts: 150, type: 'filament' },
   { name: "Elegoo Neptune 4 Pro", powerWatts: 300, type: 'filament' },
   { name: "Formlabs Form 3+", powerWatts: 250, type: 'resin' },
@@ -48,8 +66,8 @@ export const PRINTER_PROFILES = [
   { name: "Custom Printer", powerWatts: 0, type: 'both' }, // Placeholder for custom input
 ];
 
-// Predefined material profiles for the dropdown (renamed from FILAMENT_PROFILES)
-export const MATERIAL_PROFILES = [
+// Predefined material profiles for the dropdown
+export const PREDEFINED_MATERIAL_PROFILES: MaterialProfile[] = [
   { name: "PLA", costPerKg: 20, type: 'filament' },
   { name: "PETG", costPerKg: 25, type: 'filament' },
   { name: "ABS", costPerKg: 30, type: 'filament' },
@@ -76,18 +94,18 @@ export const COUNTRY_ELECTRICITY_COSTS = [
   { name: "India", costPerKWh: 0.07, currency: "₹" },
   { name: "Brazil", costPerKWh: 0.18, currency: "R$" },
   { name: "South Africa", costPerKWh: 0.15, currency: "R" },
-  { name: "Philippines", costPerKWh: 0.20, currency: "₱" }, // Added Philippines
-  { name: "Greece", costPerKWh: 0.27, currency: "€" }, // Added Greece
+  { name: "Philippines", costPerKWh: 0.20, currency: "₱" },
+  { name: "Greece", costPerKWh: 0.27, currency: "€" },
   { name: "Custom Country", costPerKWh: 0.15, currency: "$" }, // Default custom value
 ];
 
 // Default settings as a constant
 const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
-  materialCostPerKg: MATERIAL_PROFILES.find(p => p.name === "PLA")?.costPerKg || 0, // Default to PLA cost
+  materialCostPerKg: PREDEFINED_MATERIAL_PROFILES.find(p => p.name === "PLA")?.costPerKg || 0, // Default to PLA cost
   objectWeightGrams: 100,
   printTimeHours: 5,
   electricityCostPerKWh: COUNTRY_ELECTRICITY_COSTS.find(c => c.name === "Cyprus")?.costPerKWh || 0.15, // Default to Cyprus cost
-  printerPowerWatts: PRINTER_PROFILES.find(p => p.name === "Ender 3")?.powerWatts || 0, // Default to Ender 3 power
+  printerPowerWatts: PREDEFINED_PRINTER_PROFILES.find(p => p.name === "Ender 3")?.powerWatts || 0, // Default to Ender 3 power
   laborHourlyRate: 25,
   designSetupFee: 5,
   profitMarginPercentage: 20,
@@ -111,6 +129,16 @@ interface SettingsContextType {
   printCalculatorSettings: PrintCalculatorSettings;
   updatePrintCalculatorSettings: (newSettings: Partial<PrintCalculatorSettings>) => void;
   resetPrintCalculatorSettings: () => void;
+  userPrinterProfiles: PrinterProfile[];
+  userMaterialProfiles: MaterialProfile[];
+  addPrinterProfile: (profile: Omit<PrinterProfile, 'id' | 'isCustom'>) => Promise<void>;
+  updatePrinterProfile: (id: string, profile: Omit<Partial<PrinterProfile>, 'id' | 'isCustom'>) => Promise<void>;
+  deletePrinterProfile: (id: string) => Promise<void>;
+  addMaterialProfile: (profile: Omit<MaterialProfile, 'id' | 'isCustom'>) => Promise<void>;
+  updateMaterialProfile: (id: string, profile: Omit<Partial<MaterialProfile>, 'id' | 'isCustom'>) => Promise<void>;
+  deleteMaterialProfile: (id: string) => Promise<void>;
+  PRINTER_PROFILES: PrinterProfile[]; // Combined list
+  MATERIAL_PROFILES: MaterialProfile[]; // Combined list
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -118,19 +146,64 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 const LOCAL_STORAGE_KEY = "printCalculatorSettings";
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
+  const { session, isGuest } = useSession();
   const [printCalculatorSettings, setPrintCalculatorSettings] = useState<PrintCalculatorSettings>(() => {
-    // Να σου κολλήσει το νήμα! (May your filament jam!)
-    // Initialize state from localStorage or use defaults
     if (typeof window !== "undefined") {
       const savedSettings = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (savedSettings) {
         const parsedSettings = JSON.parse(savedSettings);
-        // Ensure new settings fields are included if they weren't in saved data
         return { ...defaultPrintCalculatorSettings, ...parsedSettings };
       }
     }
     return defaultPrintCalculatorSettings;
   });
+
+  const [userPrinterProfiles, setUserPrinterProfiles] = useState<PrinterProfile[]>([]);
+  const [userMaterialProfiles, setUserMaterialProfiles] = useState<MaterialProfile[]>([]);
+
+  const fetchUserProfiles = useCallback(async () => {
+    if (!session || isGuest) {
+      setUserPrinterProfiles([]);
+      setUserMaterialProfiles([]);
+      return;
+    }
+
+    const userId = session.user.id;
+
+    // Fetch printer profiles
+    const { data: printerData, error: printerError } = await supabase
+      .from('user_printer_profiles')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (printerError) {
+      console.error("Error fetching printer profiles:", printerError);
+      toast.error("Failed to load custom printer profiles.");
+    } else {
+      setUserPrinterProfiles(printerData.map(p => ({ ...p, isCustom: true })));
+    }
+
+    // Fetch material profiles
+    const { data: materialData, error: materialError } = await supabase
+      .from('user_material_profiles')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (materialError) {
+      console.error("Error fetching material profiles:", materialError);
+      toast.error("Failed to load custom material profiles.");
+    } else {
+      setUserMaterialProfiles(materialData.map(m => ({ ...m, isCustom: true })));
+    }
+  }, [session, isGuest]);
+
+  useEffect(() => {
+    fetchUserProfiles();
+  }, [fetchUserProfiles]);
+
+  // Combine predefined and user-defined profiles
+  const combinedPrinterProfiles = [...PREDEFINED_PRINTER_PROFILES, ...userPrinterProfiles];
+  const combinedMaterialProfiles = [...PREDEFINED_MATERIAL_PROFILES, ...userMaterialProfiles];
 
   // Save settings to localStorage whenever they change
   useEffect(() => {
@@ -148,23 +221,21 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
         const newPrintType = newSettings.printType;
 
         // Reset printer profile to a default compatible with the new print type
-        const defaultPrinterForType = PRINTER_PROFILES.find(p => p.type === newPrintType || p.type === 'both');
+        const defaultPrinterForType = combinedPrinterProfiles.find(p => p.type === newPrintType || p.type === 'both');
         if (defaultPrinterForType) {
           updatedSettings.selectedPrinterProfile = defaultPrinterForType.name;
           updatedSettings.printerPowerWatts = defaultPrinterForType.powerWatts;
         } else {
-          // Fallback if no specific printer found, e.g., to Custom Printer
           updatedSettings.selectedPrinterProfile = "Custom Printer";
           updatedSettings.printerPowerWatts = 0;
         }
 
         // Reset material profile to a default compatible with the new print type
-        const defaultMaterialForType = MATERIAL_PROFILES.find(m => m.type === newPrintType);
+        const defaultMaterialForType = combinedMaterialProfiles.find(m => m.type === newPrintType);
         if (defaultMaterialForType) {
           updatedSettings.selectedFilamentProfile = defaultMaterialForType.name;
           updatedSettings.materialCostPerKg = defaultMaterialForType.costPerKg;
         } else {
-          // Fallback to custom material for the type
           updatedSettings.selectedFilamentProfile = newPrintType === 'filament' ? "Custom Filament" : "Custom Resin";
           updatedSettings.materialCostPerKg = 0;
         }
@@ -172,7 +243,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
       // Handle printer profile change (if not already handled by printType change)
       if (newSettings.selectedPrinterProfile !== undefined && newSettings.selectedPrinterProfile !== prevSettings.selectedPrinterProfile) {
-        const selectedProfile = PRINTER_PROFILES.find(p => p.name === newSettings.selectedPrinterProfile);
+        const selectedProfile = combinedPrinterProfiles.find(p => p.name === newSettings.selectedPrinterProfile);
         if (selectedProfile && selectedProfile.name !== "Custom Printer") {
           updatedSettings.printerPowerWatts = selectedProfile.powerWatts;
         } else if (selectedProfile && selectedProfile.name === "Custom Printer" && newSettings.printerPowerWatts === undefined) {
@@ -182,7 +253,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
       // Handle material profile change (if not already handled by printType change)
       if (newSettings.selectedFilamentProfile !== undefined && newSettings.selectedFilamentProfile !== prevSettings.selectedFilamentProfile) {
-        const selectedMaterial = MATERIAL_PROFILES.find(f => f.name === newSettings.selectedFilamentProfile);
+        const selectedMaterial = combinedMaterialProfiles.find(f => f.name === newSettings.selectedFilamentProfile);
         if (selectedMaterial && (selectedMaterial.name !== "Custom Filament" && selectedMaterial.name !== "Custom Resin")) {
           updatedSettings.materialCostPerKg = selectedMaterial.costPerKg;
         } else if (selectedMaterial && (selectedMaterial.name === "Custom Filament" || selectedMaterial.name === "Custom Resin") && newSettings.materialCostPerKg === undefined) {
@@ -197,9 +268,8 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
           updatedSettings.electricityCostPerKWh = selectedCountryData.costPerKWh;
           updatedSettings.currency = selectedCountryData.currency;
         } else {
-          // Fallback for custom country or if not found
-          updatedSettings.electricityCostPerKWh = 0.15; // Default to a common value
-          updatedSettings.currency = "$"; // Default currency
+          updatedSettings.electricityCostPerKWh = 0.15;
+          updatedSettings.currency = "$";
         }
       }
       
@@ -212,8 +282,142 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     toast.success("Settings reset to defaults!");
   };
 
+  const addPrinterProfile = async (profile: Omit<PrinterProfile, 'id' | 'isCustom'>) => {
+    if (!session) {
+      toast.error("You must be logged in to add custom profiles.");
+      return;
+    }
+    const { data, error } = await supabase
+      .from('user_printer_profiles')
+      .insert({ ...profile, user_id: session.user.id })
+      .select();
+
+    if (error) {
+      console.error("Error adding printer profile:", error);
+      toast.error("Failed to add printer profile.");
+    } else {
+      toast.success("Printer profile added successfully!");
+      fetchUserProfiles();
+    }
+  };
+
+  const updatePrinterProfile = async (id: string, profile: Omit<Partial<PrinterProfile>, 'id' | 'isCustom'>) => {
+    if (!session) {
+      toast.error("You must be logged in to update custom profiles.");
+      return;
+    }
+    const { error } = await supabase
+      .from('user_printer_profiles')
+      .update(profile)
+      .eq('id', id)
+      .eq('user_id', session.user.id);
+
+    if (error) {
+      console.error("Error updating printer profile:", error);
+      toast.error("Failed to update printer profile.");
+    } else {
+      toast.success("Printer profile updated successfully!");
+      fetchUserProfiles();
+    }
+  };
+
+  const deletePrinterProfile = async (id: string) => {
+    if (!session) {
+      toast.error("You must be logged in to delete custom profiles.");
+      return;
+    }
+    const { error } = await supabase
+      .from('user_printer_profiles')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', session.user.id);
+
+    if (error) {
+      console.error("Error deleting printer profile:", error);
+      toast.error("Failed to delete printer profile.");
+    } else {
+      toast.success("Printer profile deleted successfully!");
+      fetchUserProfiles();
+    }
+  };
+
+  const addMaterialProfile = async (profile: Omit<MaterialProfile, 'id' | 'isCustom'>) => {
+    if (!session) {
+      toast.error("You must be logged in to add custom profiles.");
+      return;
+    }
+    const { data, error } = await supabase
+      .from('user_material_profiles')
+      .insert({ ...profile, user_id: session.user.id })
+      .select();
+
+    if (error) {
+      console.error("Error adding material profile:", error);
+      toast.error("Failed to add material profile.");
+    } else {
+      toast.success("Material profile added successfully!");
+      fetchUserProfiles();
+    }
+  };
+
+  const updateMaterialProfile = async (id: string, profile: Omit<Partial<MaterialProfile>, 'id' | 'isCustom'>) => {
+    if (!session) {
+      toast.error("You must be logged in to update custom profiles.");
+      return;
+    }
+    const { error } = await supabase
+      .from('user_material_profiles')
+      .update(profile)
+      .eq('id', id)
+      .eq('user_id', session.user.id);
+
+    if (error) {
+      console.error("Error updating material profile:", error);
+      toast.error("Failed to update material profile.");
+    } else {
+      toast.success("Material profile updated successfully!");
+      fetchUserProfiles();
+    }
+  };
+
+  const deleteMaterialProfile = async (id: string) => {
+    if (!session) {
+      toast.error("You must be logged in to delete custom profiles.");
+      return;
+    }
+    const { error } = await supabase
+      .from('user_material_profiles')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', session.user.id);
+
+    if (error) {
+      console.error("Error deleting material profile:", error);
+      toast.error("Failed to delete material profile.");
+    } else {
+      toast.success("Material profile deleted successfully!");
+      fetchUserProfiles();
+    }
+  };
+
   return (
-    <SettingsContext.Provider value={{ printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings }}>
+    <SettingsContext.Provider
+      value={{
+        printCalculatorSettings,
+        updatePrintCalculatorSettings,
+        resetPrintCalculatorSettings,
+        userPrinterProfiles,
+        userMaterialProfiles,
+        addPrinterProfile,
+        updatePrinterProfile,
+        deletePrinterProfile,
+        addMaterialProfile,
+        updateMaterialProfile,
+        deleteMaterialProfile,
+        PRINTER_PROFILES: combinedPrinterProfiles,
+        MATERIAL_PROFILES: combinedMaterialProfiles,
+      }}
+    >
       {children}
     </SettingsContext.Provider>
   );
