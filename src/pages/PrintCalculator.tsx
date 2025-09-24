@@ -27,7 +27,7 @@ const PrintCalculator = () => {
   const [postProcessingTimeHours, setPostProcessingTimeHours] = useState<number>(0);
   const [supportMaterialPercentage, setSupportMaterialPercentage] = useState<number>(0);
   const [localMaterialCostPerKg, setLocalMaterialCostPerKg] = useState<number>(printCalculatorSettings.materialCostPerKg);
-
+  const [shippingCost, setShippingCost] = useState<number>(0); // New: Shipping Cost
 
   // Update local states when context defaults change (e.g., after reset in settings)
   useEffect(() => {
@@ -35,11 +35,12 @@ const PrintCalculator = () => {
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
     setLocalMaterialCostPerKg(printCalculatorSettings.materialCostPerKg); // Update local material cost from context
-    // Post-processing and support material are per-print, so they start at 0 or their last input
+    // Post-processing, support material, and shipping are per-print, so they start at 0 or their last input
     // For simplicity, we'll keep them as local state that doesn't reset with context changes unless explicitly handled.
     // If you want them to reset to 0 when settings change, uncomment the lines below:
     // setPostProcessingTimeHours(0);
     // setSupportMaterialPercentage(0);
+    // setShippingCost(0);
   }, [printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.materialCostPerKg]);
 
 
@@ -90,7 +91,7 @@ const PrintCalculator = () => {
       totalBaseCost = totalBaseCost / (1 - printCalculatorSettings.failedPrintRatePercentage / 100);
     }
 
-    const finalPrice = totalBaseCost * (1 + printCalculatorSettings.profitMarginPercentage / 100);
+    const finalPrice = (totalBaseCost * (1 + printCalculatorSettings.profitMarginPercentage / 100)) + shippingCost; // Add shipping cost here
 
     return {
       materialCost,
@@ -98,12 +99,13 @@ const PrintCalculator = () => {
       laborCost,
       designSetupFee,
       printerDepreciationCost,
+      shippingCost, // Include shipping cost in the returned object
       totalBaseCost,
       finalPrice,
     };
   };
 
-  const { materialCost, electricityCost, laborCost, designSetupFee: calculatedDesignSetupFee, printerDepreciationCost, totalBaseCost, finalPrice } = calculatePrice();
+  const { materialCost, electricityCost, laborCost, designSetupFee: calculatedDesignSetupFee, printerDepreciationCost, shippingCost: calculatedShippingCost, totalBaseCost, finalPrice } = calculatePrice();
   const currencySymbol = printCalculatorSettings.currency;
 
   return (
@@ -218,6 +220,17 @@ const PrintCalculator = () => {
                 max="100"
               />
             </div>
+            {/* New: Shipping Cost Input */}
+            <div>
+              <Label htmlFor="shippingCost">Shipping Cost ({currencySymbol})</Label>
+              <Input
+                id="shippingCost"
+                type="number"
+                value={shippingCost}
+                onChange={(e) => setShippingCost(parseFloat(e.target.value) || 0)}
+                min="0"
+              />
+            </div>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4 p-6">
@@ -237,6 +250,10 @@ const PrintCalculator = () => {
 
             <div className="text-left">Printer Depreciation:</div>
             <div className="text-right">{currencySymbol}{printerDepreciationCost.toFixed(2)}</div>
+
+            {/* New: Display Shipping Cost */}
+            <div className="text-left">Shipping Cost:</div>
+            <div className="text-right">{currencySymbol}{calculatedShippingCost.toFixed(2)}</div>
           </div>
           <Separator />
           <div className="w-full flex justify-between items-center text-2xl font-bold mt-4">
