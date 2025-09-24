@@ -260,7 +260,7 @@ const PrintCalculator = () => {
         postProcessingMaterialCost={calculatedPostProcessingMaterialCost}
         finalPrice={finalPrice}
         currencySymbol={currencySymbol}
-        isCompanyMode={printCalculatorSettings.isCompanyMode}
+        pdfExportMode={printCalculatorSettings.pdfExportMode} // Pass the new pdfExportMode
         companyName={printCalculatorSettings.companyName}
         companyAddress={printCalculatorSettings.companyAddress}
         companyLogoUrl={printCalculatorSettings.companyLogoUrl}

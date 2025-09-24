@@ -16,7 +16,7 @@ interface PrintSummaryFooterProps {
   postProcessingMaterialCost: number;
   finalPrice: number;
   currencySymbol: string;
-  isCompanyMode: boolean; // New: Company mode flag
+  pdfExportMode: 'standard' | 'professional'; // Changed from isCompanyMode: boolean
   companyName: string; // New: Company name
   companyAddress: string; // New: Company address
   companyLogoUrl: string; // New: Company logo URL
@@ -33,7 +33,7 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
   postProcessingMaterialCost,
   finalPrice,
   currencySymbol,
-  isCompanyMode,
+  pdfExportMode, // Use pdfExportMode
   companyName,
   companyAddress,
   companyLogoUrl,
@@ -60,7 +60,9 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
     const margin = 20;
     const pageWidth = doc.internal.pageSize.getWidth();
 
-    if (isCompanyMode && companyName) {
+    const isProfessional = pdfExportMode === 'professional';
+
+    if (isProfessional && companyName) {
       if (companyLogoUrl) {
         try {
           const response = await fetch(companyLogoUrl);

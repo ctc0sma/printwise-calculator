@@ -21,7 +21,7 @@ interface PrintCalculatorSettings {
   supportMaterialCost: number; // New: Cost for support material (e.g., per print or fixed)
   postProcessingMaterialCost: number; // New: Cost for post-processing materials (e.g., fixed per print)
   selectedCountry: string; // New: Selected country for electricity cost
-  isCompanyMode: boolean; // New: Toggle for company mode
+  pdfExportMode: 'standard' | 'professional'; // Changed from isCompanyMode: boolean
   companyName: string; // New: Company name for PDF export
   companyAddress: string; // New: Company address for PDF export
   companyLogoUrl: string; // New: Company logo URL for PDF export
@@ -98,7 +98,7 @@ const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
   supportMaterialCost: 0, // Default support material cost
   postProcessingMaterialCost: 0, // Default post-processing material cost
   selectedCountry: "Cyprus", // Default country
-  isCompanyMode: false, // Default to company mode off
+  pdfExportMode: 'standard', // Default to standard PDF export
   companyName: "", // Default empty company name
   companyAddress: "", // Default empty company address
   companyLogoUrl: "", // Default empty company logo URL

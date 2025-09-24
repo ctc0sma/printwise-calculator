@@ -18,7 +18,7 @@ from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Switch } from "@/components/ui/switch"; // Import Switch component
+// Removed Switch import as it's no longer needed for this feature
 
 const Settings = () => {
   const { printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings } = useSettings();
@@ -68,10 +68,8 @@ const Settings = () => {
 
 
   const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string | number | boolean) => {
-    if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType" || key === "selectedCountry" || key === "companyName" || key === "companyAddress" || key === "companyLogoUrl") {
+    if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType" || key === "selectedCountry" || key === "companyName" || key === "companyAddress" || key === "companyLogoUrl" || key === "pdfExportMode") {
       updatePrintCalculatorSettings({ [key]: value as string });
-    } else if (key === "isCompanyMode") {
-      updatePrintCalculatorSettings({ [key]: value as boolean });
     }
     else {
       const numValue = parseFloat(value as string);
@@ -164,6 +162,7 @@ const Settings = () => {
   const objectWeightVolumeLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
 
   const isCustomCountry = printCalculatorSettings.selectedCountry === "Custom Country";
+  const isProfessionalPdfExport = printCalculatorSettings.pdfExportMode === 'professional';
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
@@ -441,15 +440,22 @@ const Settings = () => {
                 step="0.01"
               />
             </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="company-mode"
-                checked={printCalculatorSettings.isCompanyMode}
-                onCheckedChange={(checked) => handleSettingChange("isCompanyMode", checked)}
-              />
-              <Label htmlFor="company-mode">Enable Professional PDF Export</Label>
+            <div>
+              <Label htmlFor="pdfExportMode">PDF Export Mode</Label>
+              <Select
+                value={printCalculatorSettings.pdfExportMode}
+                onValueChange={(value: 'standard' | 'professional') => handleSettingChange("pdfExportMode", value)}
+              >
+                <SelectTrigger id="pdfExportMode">
+                  <SelectValue placeholder="Select export mode" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="standard">Standard PDF Export</SelectItem>
+                  <SelectItem value="professional">Professional PDF Export</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            {printCalculatorSettings.isCompanyMode && (
+            {isProfessionalPdfExport && (
               <>
                 <div>
                   <Label htmlFor="companyName">Company Name</Label>
