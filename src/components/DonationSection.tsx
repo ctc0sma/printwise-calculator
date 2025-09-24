@@ -15,11 +15,11 @@ const DonationSection = () => {
         <p className="text-gray-700 dark:text-gray-300">
           If you find PrintWise Calculator useful, please consider making a small donation to help us continue developing and improving the app. Your support is greatly appreciated!
         </p>
-        <Button className="w-full md:w-auto" onClick={() => window.open("https://www.buymeacoffee.com/yourusername", "_blank")}>
+        <Button className="w-full md:w-auto" onClick={() => window.open("YOUR_ACTUAL_DONATION_LINK_HERE", "_blank")}>
           <Heart className="mr-2 h-4 w-4" /> Donate Now
         </Button>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          (Note: This is a placeholder link. Please replace "https://www.buymeacoffee.com/yourusername" with your actual donation link.)
+          (Note: This is a placeholder link. Please replace "YOUR_ACTUAL_DONATION_LINK_HERE" with your actual donation link.)
         </p>
       </CardContent>
     </Card>
