@@ -62,7 +62,14 @@ export const COUNTRY_ELECTRICITY_COSTS = [
   { name: "Germany", costPerKWh: 0.40, currency: "€" },
   { name: "Australia", costPerKWh: 0.25, currency: "$" },
   { name: "Japan", costPerKWh: 0.27, currency: "¥" },
-  { name: "Cyprus", costPerKWh: 0.25, currency: "€" }, // Added Cyprus with example values
+  { name: "Cyprus", costPerKWh: 0.25, currency: "€" },
+  { name: "France", costPerKWh: 0.25, currency: "€" },
+  { name: "Spain", costPerKWh: 0.28, currency: "€" },
+  { name: "Italy", costPerKWh: 0.30, currency: "€" },
+  { name: "China", costPerKWh: 0.08, currency: "¥" },
+  { name: "India", costPerKWh: 0.07, currency: "₹" },
+  { name: "Brazil", costPerKWh: 0.18, currency: "R$" },
+  { name: "South Africa", costPerKWh: 0.15, currency: "R" },
   { name: "Custom Country", costPerKWh: 0.15, currency: "$" }, // Default custom value
 ];
 
