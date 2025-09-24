@@ -154,8 +154,8 @@ const Settings = () => {
                   id="materialCostPerKg"
                   type="number"
                   value={printCalculatorSettings.materialCostPerKg}
-                  readOnly
-                  className="bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
+                  onChange={(e) => handleSettingChange("materialCostPerKg", e.target.value)}
+                  min="0"
                 />
               </div>
             )}
