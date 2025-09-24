@@ -13,7 +13,6 @@ import SettingsFooter from "@/components/settings/SettingsFooter";
 import { useSession } from "@/context/SessionContext";
 import { Link } from "react-router-dom";
 import DonationSection from "@/components/DonationSection";
-import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const Settings = () => {
   const {
@@ -24,7 +23,6 @@ const Settings = () => {
     MATERIAL_PROFILES,
   } = useSettings();
   const { isGuest } = useSession();
-  const { t } = useTranslation("common"); // Use translation hook
 
   // Local states for custom electricity cost and currency, managed here and passed down
   const [customElectricityCost, setCustomElectricityCost] = useState<number>(
@@ -74,12 +72,10 @@ const Settings = () => {
       </Card>
 
       <div className="w-full max-w-2xl mt-6 space-y-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center">{t("advancedProfileManagement")}</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center">Advanced Profile Management</h2>
         {isGuest && (
           <p className="text-center text-red-500 dark:text-red-400">
-            {t("loginToManageProfiles", {
-              loginLink: <Link to="/login" className="underline">{t("login")}</Link>
-            })}
+            Please log in to add, edit, or delete custom profiles.
           </p>
         )}
         <PrinterProfileManager />

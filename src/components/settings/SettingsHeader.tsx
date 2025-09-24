@@ -8,21 +8,18 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { useSession } from "@/context/SessionContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import LanguageSwitcher from "@/components/LanguageSwitcher"; // Import LanguageSwitcher
-import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const SettingsHeader = () => {
   const { isGuest } = useSession();
   const navigate = useNavigate();
-  const { t } = useTranslation("common"); // Use translation hook
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error("Error logging out:", error);
-      toast.error(t("failedToLogout"));
+      toast.error("Failed to log out.");
     } else {
-      toast.success(t("loggedOutSuccessfully"));
+      toast.success("Logged out successfully!");
       navigate("/settings");
     }
   };
@@ -34,9 +31,8 @@ const SettingsHeader = () => {
           <ArrowLeft className="h-4 w-4" />
         </Button>
       </Link>
-      <h1 className="text-2xl md:text-3xl font-bold text-center flex-grow mx-4">{t("settings")}</h1>
+      <h1 className="text-2xl md:text-3xl font-bold text-center flex-grow mx-4">Application Settings</h1>
       <div className="flex space-x-2">
-        <LanguageSwitcher /> {/* Add LanguageSwitcher here */}
         <ThemeToggle />
         {isGuest ? (
           <Link to="/login">

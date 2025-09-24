@@ -18,12 +18,10 @@ import {
 import PrintSummaryFooter from "@/components/PrintSummaryFooter";
 import { useSession } from "@/context/SessionContext";
 import AdBanner from "@/components/AdBanner";
-import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const PrintCalculator = () => {
   const { session, loading, isGuest } = useSession();
   const { printCalculatorSettings, updatePrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES } = useSettings();
-  const { t } = useTranslation("common"); // Use translation hook
 
   const [projectName, setProjectName] = useState<string>(printCalculatorSettings.projectName);
   const [objectValue, setObjectValue] = useState<number>(printCalculatorSettings.objectWeightGrams);
@@ -109,7 +107,7 @@ const PrintCalculator = () => {
   const filteredPrinterProfiles = PRINTER_PROFILES.filter(p => p.type === printCalculatorSettings.printType || p.type === 'both');
   const filteredMaterialProfiles = MATERIAL_PROFILES.filter(m => m.type === printCalculatorSettings.printType);
 
-  const objectValueLabel = printCalculatorSettings.printType === 'filament' ? t("objectWeightGrams") : t("objectVolumeMl");
+  const objectValueLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
   const materialUnitSymbol = printCalculatorSettings.printType === 'filament' ? 'kg' : 'L';
 
   if (loading) {
@@ -125,7 +123,7 @@ const PrintCalculator = () => {
       <Card className="w-full max-w-2xl shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between p-6">
           <div className="flex-grow"></div>
-          <CardTitle className="text-3xl font-bold text-center flex-grow-0">{t("appName")}</CardTitle>
+          <CardTitle className="text-3xl font-bold text-center flex-grow-0">PrintWise Calculator</CardTitle>
           <div className="flex-grow flex justify-end">
             <Link to="/settings">
               <Button variant="outline" size="icon">
@@ -138,7 +136,7 @@ const PrintCalculator = () => {
           <AdBanner />
           <div className="space-y-4">
             <div>
-              <Label htmlFor="projectName">{t("projectName")}</Label>
+              <Label htmlFor="projectName">Project Name</Label>
               <Input
                 id="projectName"
                 type="text"
@@ -147,13 +145,13 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="materialProfile">{t("materialType")}</Label>
+              <Label htmlFor="materialProfile">Material Type</Label>
               <Select
                 value={printCalculatorSettings.selectedFilamentProfile}
                 onValueChange={handleMaterialProfileChange}
               >
                 <SelectTrigger id="materialProfile">
-                  <SelectValue placeholder={t("selectType")} />
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredMaterialProfiles.map((profile) => (
@@ -165,13 +163,13 @@ const PrintCalculator = () => {
               </Select>
             </div>
             <div>
-              <Label htmlFor="printerProfile">{t("printerProfile")}</Label>
+              <Label htmlFor="printerProfile">Printer Profile</Label>
               <Select
                 value={printCalculatorSettings.selectedPrinterProfile}
                 onValueChange={handlePrinterProfileChange}
               >
                 <SelectTrigger id="printerProfile">
-                  <SelectValue placeholder={t("selectType")} />
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredPrinterProfiles.map((profile) => (
@@ -193,7 +191,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="printTimeHours">{t("printTimeHours")}</Label>
+              <Label htmlFor="printTimeHours">Print Time (hours)</Label>
               <Input
                 id="printTimeHours"
                 type="number"
@@ -205,7 +203,7 @@ const PrintCalculator = () => {
           </div>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="postProcessingTimeHours">{t("postProcessingTimeHours")}</Label>
+              <Label htmlFor="postProcessingTimeHours">Post-processing Time (hours)</Label>
               <Input
                 id="postProcessingTimeHours"
                 type="number"
@@ -215,7 +213,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="designSetupFee">{t("designSetupFee")} ({currencySymbol})</Label>
+              <Label htmlFor="designSetupFee">Design/Setup Fee ({currencySymbol})</Label>
               <Input
                 id="designSetupFee"
                 type="number"
@@ -225,7 +223,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="supportMaterialPercentage">{t("supportMaterialOverhead")}</Label>
+              <Label htmlFor="supportMaterialPercentage">Support Material Overhead (%)</Label>
               <Input
                 id="supportMaterialPercentage"
                 type="number"
@@ -236,7 +234,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="postProcessingMaterialCost">{t("postProcessingMaterialCostInput")} ({currencySymbol})</Label>
+              <Label htmlFor="postProcessingMaterialCost">Post-processing Material Cost ({currencySymbol})</Label>
               <Input
                 id="postProcessingMaterialCost"
                 type="number"
@@ -246,7 +244,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="shippingCost">{t("shippingCostInput")} ({currencySymbol})</Label>
+              <Label htmlFor="shippingCost">Shipping Cost ({currencySymbol})</Label>
               <Input
                 id="shippingCost"
                 type="number"

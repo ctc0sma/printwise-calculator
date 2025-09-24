@@ -11,8 +11,6 @@ import Login from "./pages/Login";
 import { SettingsProvider } from "./context/SettingsContext";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { SessionContextProvider } from "./context/SessionContext";
-import { I18nextProvider } from "react-i18next"; // Import I18nextProvider
-import i18n from "./lib/i18n"; // Import your i18n configuration
 
 const queryClient = new QueryClient();
 
@@ -23,19 +21,17 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <I18nextProvider i18n={i18n}> {/* Wrap with I18nextProvider */}
-            <SessionContextProvider>
-              <SettingsProvider>
-                <Routes>
-                  <Route path="/" element={<PrintCalculator />} />
-                  <Route path="/home" element={<Index />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </SettingsProvider>
-            </SessionContextProvider>
-          </I18nextProvider>
+          <SessionContextProvider>
+            <SettingsProvider>
+              <Routes>
+                <Route path="/" element={<PrintCalculator />} />
+                <Route path="/home" element={<Index />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </SettingsProvider>
+          </SessionContextProvider>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
