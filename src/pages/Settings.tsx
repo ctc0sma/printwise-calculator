@@ -447,7 +447,7 @@ const Settings = () => {
                 checked={printCalculatorSettings.isCompanyMode}
                 onCheckedChange={(checked) => handleSettingChange("isCompanyMode", checked)}
               />
-              <Label htmlFor="company-mode">Enable Company Mode</Label>
+              <Label htmlFor="company-mode">Enable Professional PDF Export</Label>
             </div>
             {printCalculatorSettings.isCompanyMode && (
               <>
