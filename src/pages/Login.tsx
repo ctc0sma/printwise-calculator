@@ -27,7 +27,7 @@ const Login = () => {
         <Auth
           supabaseClient={supabase}
           providers={["email", "google"]}
-          magicLink={false} // Disabled magic link to remove potential redundant button
+          view="magic_link" // Set the default view to Magic Link
           appearance={{
             theme: ThemeSupa,
             variables: {
