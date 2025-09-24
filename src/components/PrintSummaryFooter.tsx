@@ -16,10 +16,10 @@ interface PrintSummaryFooterProps {
   postProcessingMaterialCost: number;
   finalPrice: number;
   currencySymbol: string;
-  pdfExportMode: 'standard' | 'professional'; // Changed from isCompanyMode: boolean
-  companyName: string; // New: Company name
-  companyAddress: string; // New: Company address
-  companyLogoUrl: string; // New: Company logo URL
+  pdfExportMode: 'standard' | 'professional';
+  companyName: string;
+  companyAddress: string;
+  companyLogoUrl: string;
 }
 
 const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
@@ -33,7 +33,7 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
   postProcessingMaterialCost,
   finalPrice,
   currencySymbol,
-  pdfExportMode, // Use pdfExportMode
+  pdfExportMode,
   companyName,
   companyAddress,
   companyLogoUrl,
@@ -59,10 +59,12 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
     let yPos = 20;
     const margin = 20;
     const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
 
     const isProfessional = pdfExportMode === 'professional';
 
-    if (isProfessional && companyName) {
+    if (isProfessional) {
+      // Company Logo
       if (companyLogoUrl) {
         try {
           const response = await fetch(companyLogoUrl);
@@ -72,11 +74,11 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
           await new Promise<void>((resolve) => {
             reader.onloadend = () => {
               const imgData = reader.result as string;
-              const imgWidth = 40; // Adjust as needed
-              const imgHeight = 20; // Adjust as needed
+              const imgWidth = 50; // Adjust as needed
+              const imgHeight = 25; // Adjust as needed
               const x = (pageWidth - imgWidth) / 2; // Center the image
               doc.addImage(imgData, 'PNG', x, yPos, imgWidth, imgHeight);
-              yPos += imgHeight + 5; // Space after logo
+              yPos += imgHeight + 10; // Space after logo
               resolve();
             };
           });
@@ -86,43 +88,61 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
         }
       }
 
-      doc.setFontSize(18);
-      doc.text(companyName, pageWidth / 2, yPos, { align: "center" });
-      yPos += 7;
-
-      if (companyAddress) {
-        doc.setFontSize(10);
-        doc.text(companyAddress, pageWidth / 2, yPos, { align: "center" });
-        yPos += 10;
+      // Company Name and Address
+      if (companyName) {
+        doc.setFontSize(20);
+        doc.text(companyName, pageWidth / 2, yPos, { align: "center" });
+        yPos += 8;
       }
-      yPos += 10; // Extra space after company details
+      if (companyAddress) {
+        doc.setFontSize(12);
+        doc.text(companyAddress, pageWidth / 2, yPos, { align: "center" });
+        yPos += 15; // More space after address
+      }
     }
 
-    doc.setFontSize(22);
+    // Main Title
+    doc.setFontSize(24);
     doc.text("3D Print Price Summary", pageWidth / 2, yPos, { align: "center" });
     yPos += 15;
 
+    // Date of Generation
+    doc.setFontSize(10);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, pageWidth - margin, yPos, { align: "right" });
+    yPos += 10;
+
+    // Summary Details
     doc.setFontSize(12);
-    const summaryLines = [
-      `Material Cost: ${currencySymbol}${materialCost.toFixed(2)}`,
-      `Electricity Cost: ${currencySymbol}${electricityCost.toFixed(2)}`,
-      `Labor Cost: ${currencySymbol}${laborCost.toFixed(2)}`,
-      `Design/Setup Fee: ${currencySymbol}${designSetupFee.toFixed(2)}`,
-      `Printer Depreciation: ${currencySymbol}${printerDepreciationCost.toFixed(2)}`,
-      `Support Material Cost: ${currencySymbol}${supportMaterialCost.toFixed(2)}`,
-      `Post-processing Material Cost: ${currencySymbol}${postProcessingMaterialCost.toFixed(2)}`,
-      `Shipping Cost: ${currencySymbol}${shippingCost.toFixed(2)}`,
+    const summaryItems = [
+      { label: "Material Cost:", value: materialCost },
+      { label: "Electricity Cost:", value: electricityCost },
+      { label: "Labor Cost:", value: laborCost },
+      { label: "Design/Setup Fee:", value: designSetupFee },
+      { label: "Printer Depreciation:", value: printerDepreciationCost },
+      { label: "Support Material Cost:", value: supportMaterialCost },
+      { label: "Post-processing Material Cost:", value: postProcessingMaterialCost },
+      { label: "Shipping Cost:", value: shippingCost },
     ];
 
-    summaryLines.forEach(line => {
-      doc.text(line, margin, yPos);
-      yPos += 10;
+    summaryItems.forEach(item => {
+      doc.text(`${item.label}`, margin, yPos);
+      doc.text(`${currencySymbol}${item.value.toFixed(2)}`, pageWidth - margin, yPos, { align: "right" });
+      yPos += 8;
     });
 
-    yPos += 5; // Add a little extra space before total
+    yPos += 10; // Space before total
 
-    doc.setFontSize(16);
-    doc.text(`Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}`, margin, yPos);
+    // Total Estimated Price
+    doc.setFontSize(18);
+    doc.setFont(undefined, 'bold'); // Make total bold
+    doc.text("Total Estimated Price:", margin, yPos);
+    doc.text(`${currencySymbol}${finalPrice.toFixed(2)}`, pageWidth - margin, yPos, { align: "right" });
+    doc.setFont(undefined, 'normal'); // Reset font style
+    yPos += 15;
+
+    // Footer
+    doc.setFontSize(10);
+    doc.text("Generated by PrintWise Calculator", pageWidth / 2, pageHeight - 10, { align: "center" });
 
     doc.save("3d_print_summary.pdf");
   };
