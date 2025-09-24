@@ -26,6 +26,7 @@ const PrintCalculator = () => {
   const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
   const [postProcessingTimeHours, setPostProcessingTimeHours] = useState<number>(0);
   const [supportMaterialPercentage, setSupportMaterialPercentage] = useState<number>(0);
+  // localMaterialCostPerKg will now always reflect the selected filament profile's cost from settings
   const [localMaterialCostPerKg, setLocalMaterialCostPerKg] = useState<number>(printCalculatorSettings.materialCostPerKg);
   const [shippingCost, setShippingCost] = useState<number>(0); // New: Shipping Cost
 
@@ -59,11 +60,9 @@ const PrintCalculator = () => {
     if (selectedFilament) {
       updatePrintCalculatorSettings({
         selectedFilamentProfile: profileName,
-        // Do NOT update materialCostPerKg in context directly from here,
-        // as the user might want to override it locally.
-        // Instead, update the local state for material cost.
       });
-      setLocalMaterialCostPerKg(selectedFilament.costPerKg); // Update local state
+      // Update local state to reflect the cost of the newly selected profile
+      setLocalMaterialCostPerKg(selectedFilament.costPerKg);
     }
   };
 
@@ -139,16 +138,7 @@ const PrintCalculator = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label htmlFor="materialCostPerKg">Material Cost per Kg ({currencySymbol})</Label>
-              <Input
-                id="materialCostPerKg"
-                type="number"
-                value={localMaterialCostPerKg}
-                onChange={(e) => setLocalMaterialCostPerKg(parseFloat(e.target.value) || 0)}
-                min="0"
-              />
-            </div>
+            {/* Material Cost per Kg input removed from here */}
             <div>
               <Label htmlFor="printerProfile">Printer Profile</Label>
               <Select
