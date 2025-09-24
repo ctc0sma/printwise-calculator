@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import PrintSummaryFooter from "@/components/PrintSummaryFooter";
 import { useSession } from "@/context/SessionContext";
+import AdBanner from "@/components/AdBanner"; // Import the new AdBanner component
 
 const PrintCalculator = () => {
   const { session, loading, isGuest } = useSession();
@@ -132,6 +133,7 @@ const PrintCalculator = () => {
           </div>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <AdBanner /> {/* Ad banner added here */}
           <div className="space-y-4">
             <div>
               <Label htmlFor="projectName">Project Name</Label>
