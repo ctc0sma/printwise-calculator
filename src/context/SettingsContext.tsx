@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 interface PrintCalculatorSettings {
   materialCostPerKg: number;
@@ -54,10 +54,26 @@ const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
+const LOCAL_STORAGE_KEY = "printCalculatorSettings";
+
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
-  const [printCalculatorSettings, setPrintCalculatorSettings] = useState<PrintCalculatorSettings>(
-    defaultPrintCalculatorSettings
-  );
+  const [printCalculatorSettings, setPrintCalculatorSettings] = useState<PrintCalculatorSettings>(() => {
+    // Initialize state from localStorage or use defaults
+    if (typeof window !== "undefined") {
+      const savedSettings = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (savedSettings) {
+        return { ...defaultPrintCalculatorSettings, ...JSON.parse(savedSettings) };
+      }
+    }
+    return defaultPrintCalculatorSettings;
+  });
+
+  // Save settings to localStorage whenever they change
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(printCalculatorSettings));
+    }
+  }, [printCalculatorSettings]);
 
   const updatePrintCalculatorSettings = (newSettings: Partial<PrintCalculatorSettings>) => {
     setPrintCalculatorSettings((prevSettings) => ({
