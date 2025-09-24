@@ -18,7 +18,7 @@ const Credits = () => {
           Special thanks to the open-source community and libraries used in this project.
         </p>
         <p className="text-gray-700 dark:text-gray-300">
-          Developed by Tokyo with assistance from Dyad.
+          Developed by Tokyo with assistance from Dyad. 🇨🇾
         </p>
         <MadeWithDyad />
       </CardContent>
