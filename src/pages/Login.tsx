@@ -26,7 +26,7 @@ const Login = () => {
         </h1>
         <Auth
           supabaseClient={supabase}
-          providers={["google"]} // Enable Google as an auth provider
+          providers={["google"]} // Google will still be an option
           appearance={{
             theme: ThemeSupa,
             variables: {
@@ -40,8 +40,7 @@ const Login = () => {
           }}
           theme="dark" // Use dark theme for Auth UI
           redirectTo={window.location.origin + "/settings"} // Redirect to settings after login
-          magicLink={false} // Disable magic link (email) sign-in
-          onlyThirdPartyProviders={true} // Explicitly show only third-party providers
+          // Removed magicLink={false} and onlyThirdPartyProviders={true} to re-enable email options
         />
       </div>
     </div>
