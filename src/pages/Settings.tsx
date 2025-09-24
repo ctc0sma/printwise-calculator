@@ -309,6 +309,28 @@ const Settings = () => {
               />
             </div>
             <div>
+              <Label htmlFor="supportMaterialCost">Support Material Cost ({printCalculatorSettings.currency})</Label>
+              <Input
+                id="supportMaterialCost"
+                type="number"
+                value={printCalculatorSettings.supportMaterialCost}
+                onChange={(e) => handleSettingChange("supportMaterialCost", e.target.value)}
+                min="0"
+                step="0.01"
+              />
+            </div>
+            <div>
+              <Label htmlFor="postProcessingMaterialCost">Post-processing Material Cost ({printCalculatorSettings.currency})</Label>
+              <Input
+                id="postProcessingMaterialCost"
+                type="number"
+                value={printCalculatorSettings.postProcessingMaterialCost}
+                onChange={(e) => handleSettingChange("postProcessingMaterialCost", e.target.value)}
+                min="0"
+                step="0.01"
+              />
+            </div>
+            <div>
               <Label htmlFor="currency">Currency Symbol</Label>
               <Select
                 value={printCalculatorSettings.currency}

@@ -27,13 +27,15 @@ const PrintCalculator = () => {
   const [postProcessingTimeHours, setPostProcessingTimeHours] = useState<number>(0);
   const [supportMaterialPercentage, setSupportMaterialPercentage] = useState<number>(0);
   const [shippingCost, setShippingCost] = useState<number>(0);
+  const [postProcessingMaterialCost, setPostProcessingMaterialCost] = useState<number>(printCalculatorSettings.postProcessingMaterialCost); // New local state
 
   // Update local states when context defaults change (e.g., after reset in settings)
   useEffect(() => {
     setObjectValue(printCalculatorSettings.objectWeightGrams);
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
-  }, [printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.printType]);
+    setPostProcessingMaterialCost(printCalculatorSettings.postProcessingMaterialCost); // Sync new setting
+  }, [printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.printType, printCalculatorSettings.postProcessingMaterialCost]);
 
 
   const handlePrinterProfileChange = (profileName: string) => {
@@ -60,7 +62,7 @@ const PrintCalculator = () => {
     const isFilament = printCalculatorSettings.printType === 'filament';
     const unitConversionFactor = isFilament ? 1000 : 1000; // grams to kg (1000), ml to liter (1000)
 
-    // Material Cost with Support Material
+    // Material Cost with Support Material Percentage
     const totalMaterialValue = objectValue * (1 + supportMaterialPercentage / 100);
     const materialCost = (totalMaterialValue / unitConversionFactor) * printCalculatorSettings.materialCostPerKg; // Use material cost from settings
 
@@ -74,7 +76,11 @@ const PrintCalculator = () => {
     // Printer Depreciation Cost
     const printerDepreciationCost = printTimeHours * printCalculatorSettings.printerDepreciationHourly;
 
-    let totalBaseCost = materialCost + electricityCost + laborCost + designSetupFee + printerDepreciationCost;
+    // New costs from settings and local state
+    const supportMaterialCostFromSettings = printCalculatorSettings.supportMaterialCost;
+    const postProcessingMaterialCostFromInput = postProcessingMaterialCost;
+
+    let totalBaseCost = materialCost + electricityCost + laborCost + designSetupFee + printerDepreciationCost + supportMaterialCostFromSettings + postProcessingMaterialCostFromInput;
     
     // Adjust for Failed Print Rate
     if (printCalculatorSettings.failedPrintRatePercentage > 0) {
@@ -90,12 +96,14 @@ const PrintCalculator = () => {
       designSetupFee,
       printerDepreciationCost,
       shippingCost,
+      supportMaterialCost: supportMaterialCostFromSettings, // Pass through
+      postProcessingMaterialCost: postProcessingMaterialCostFromInput, // Pass through
       totalBaseCost,
       finalPrice,
     };
   };
 
-  const { materialCost, electricityCost, laborCost, designSetupFee: calculatedDesignSetupFee, printerDepreciationCost, shippingCost: calculatedShippingCost, totalBaseCost, finalPrice } = calculatePrice();
+  const { materialCost, electricityCost, laborCost, designSetupFee: calculatedDesignSetupFee, printerDepreciationCost, shippingCost: calculatedShippingCost, supportMaterialCost: calculatedSupportMaterialCost, postProcessingMaterialCost: calculatedPostProcessingMaterialCost, totalBaseCost, finalPrice } = calculatePrice();
   const currencySymbol = printCalculatorSettings.currency;
 
   const filteredPrinterProfiles = PRINTER_PROFILES.filter(p => p.type === printCalculatorSettings.printType || p.type === 'both');
@@ -207,6 +215,16 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
+              <Label htmlFor="postProcessingMaterialCost">Post-processing Material Cost ({currencySymbol})</Label>
+              <Input
+                id="postProcessingMaterialCost"
+                type="number"
+                value={postProcessingMaterialCost}
+                onChange={(e) => setPostProcessingMaterialCost(parseFloat(e.target.value) || 0)}
+                min="0"
+              />
+            </div>
+            <div>
               <Label htmlFor="shippingCost">Shipping Cost ({currencySymbol})</Label>
               <Input
                 id="shippingCost"
@@ -226,6 +244,8 @@ const PrintCalculator = () => {
         designSetupFee={calculatedDesignSetupFee}
         printerDepreciationCost={printerDepreciationCost}
         shippingCost={calculatedShippingCost}
+        supportMaterialCost={calculatedSupportMaterialCost}
+        postProcessingMaterialCost={calculatedPostProcessingMaterialCost}
         finalPrice={finalPrice}
         currencySymbol={currencySymbol}
       />

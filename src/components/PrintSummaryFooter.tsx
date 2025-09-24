@@ -10,6 +10,8 @@ interface PrintSummaryFooterProps {
   designSetupFee: number;
   printerDepreciationCost: number;
   shippingCost: number;
+  supportMaterialCost: number; // New prop
+  postProcessingMaterialCost: number; // New prop
   finalPrice: number;
   currencySymbol: string;
 }
@@ -21,6 +23,8 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
   designSetupFee,
   printerDepreciationCost,
   shippingCost,
+  supportMaterialCost, // Destructure new prop
+  postProcessingMaterialCost, // Destructure new prop
   finalPrice,
   currencySymbol,
 }) => {
@@ -43,6 +47,12 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
 
           <div className="text-left">Printer Depreciation:</div>
           <div className="text-right">{currencySymbol}{printerDepreciationCost.toFixed(2)}</div>
+
+          <div className="text-left">Support Material Cost:</div> {/* Display new cost */}
+          <div className="text-right">{currencySymbol}{supportMaterialCost.toFixed(2)}</div>
+
+          <div className="text-left">Post-processing Material Cost:</div> {/* Display new cost */}
+          <div className="text-right">{currencySymbol}{postProcessingMaterialCost.toFixed(2)}</div>
 
           <div className="text-left">Shipping Cost:</div>
           <div className="text-right">{currencySymbol}{shippingCost.toFixed(2)}</div>

@@ -18,6 +18,8 @@ interface PrintCalculatorSettings {
   selectedPrinterProfile: string;
   selectedFilamentProfile: string; // Renamed to selectedMaterialProfile in practice, but keeping for now
   printType: 'filament' | 'resin'; // New: Type of printing
+  supportMaterialCost: number; // New: Cost for support material (e.g., per print or fixed)
+  postProcessingMaterialCost: number; // New: Cost for post-processing materials (e.g., fixed per print)
 }
 
 // Predefined printer profiles for the dropdown
@@ -67,7 +69,15 @@ const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
   selectedPrinterProfile: "Ender 3", // Default to a filament printer
   selectedFilamentProfile: "PLA", // Default to a filament material
   printType: 'filament', // Default print type
+  supportMaterialCost: 0, // Default support material cost
+  postProcessingMaterialCost: 0, // Default post-processing material cost
 };
+
+interface SettingsContextType {
+  printCalculatorSettings: PrintCalculatorSettings;
+  updatePrintCalculatorSettings: (newSettings: Partial<PrintCalculatorSettings>) => void;
+  resetPrintCalculatorSettings: () => void;
+}
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
