@@ -20,9 +20,9 @@ const Credits = () => {
         <p className="text-gray-700 dark:text-gray-300">
           Developed by Tokyo with assistance from Dyad .
 
-          putankinamo 🌴 🇵🇭 ✌️
+          putankinamo 🌴 🇵🇭 🫰
           
-          chikiamou 🫏 🇨🇾 🫰
+          chikiamou 🫏 🇨🇾 ✌️
         </p>
         <MadeWithDyad />
       </CardContent>
