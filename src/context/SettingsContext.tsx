@@ -62,6 +62,7 @@ export const COUNTRY_ELECTRICITY_COSTS = [
   { name: "Germany", costPerKWh: 0.40, currency: "€" },
   { name: "Australia", costPerKWh: 0.25, currency: "$" },
   { name: "Japan", costPerKWh: 0.27, currency: "¥" },
+  { name: "Cyprus", costPerKWh: 0.25, currency: "€" }, // Added Cyprus with example values
   { name: "Custom Country", costPerKWh: 0.15, currency: "$" }, // Default custom value
 ];
 
@@ -70,12 +71,12 @@ const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
   materialCostPerKg: MATERIAL_PROFILES.find(p => p.name === "PLA")?.costPerKg || 0, // Default to PLA cost
   objectWeightGrams: 100,
   printTimeHours: 5,
-  electricityCostPerKWh: COUNTRY_ELECTRICITY_COSTS.find(c => c.name === "United States")?.costPerKWh || 0.15, // Default to US cost
+  electricityCostPerKWh: COUNTRY_ELECTRICITY_COSTS.find(c => c.name === "Cyprus")?.costPerKWh || 0.15, // Default to Cyprus cost
   printerPowerWatts: PRINTER_PROFILES.find(p => p.name === "Ender 3")?.powerWatts || 0, // Default to Ender 3 power
   laborHourlyRate: 25,
   designSetupFee: 5,
   profitMarginPercentage: 20,
-  currency: COUNTRY_ELECTRICITY_COSTS.find(c => c.name === "United States")?.currency || "$", // Default to US currency
+  currency: COUNTRY_ELECTRICITY_COSTS.find(c => c.name === "Cyprus")?.currency || "$", // Default to Cyprus currency
   printerDepreciationHourly: 1.5,
   failedPrintRatePercentage: 5,
   selectedPrinterProfile: "Ender 3", // Default to a filament printer
@@ -83,7 +84,7 @@ const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
   printType: 'filament', // Default print type
   supportMaterialCost: 0, // Default support material cost
   postProcessingMaterialCost: 0, // Default post-processing material cost
-  selectedCountry: "United States", // Default country
+  selectedCountry: "Cyprus", // Default country
 };
 
 interface SettingsContextType {
