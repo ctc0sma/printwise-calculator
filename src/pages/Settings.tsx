@@ -18,8 +18,11 @@ from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useSession } from "@/context/SessionContext"; // Import useSession
+import { supabase } from "@/integrations/supabase/client"; // Import supabase client for sign out
 
 const Settings = () => {
+  const { session, loading } = useSession(); // Use session and loading from context
   const { printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings } = useSettings();
   
   const [customPrinterPower, setCustomPrinterPower] = useState<number>(
@@ -93,7 +96,7 @@ const Settings = () => {
     const selectedMaterial = MATERIAL_PROFILES.find(f => f.name === profileName);
     if (selectedMaterial) {
       updatePrintCalculatorSettings({
-        selectedFilamentProfile: profileName, // Still using selectedFilamentProfile for consistency with interface
+        selectedFilamentProfile: profileName,
         materialCostPerKg: (selectedMaterial.name === "Custom Filament" || selectedMaterial.name === "Custom Resin") ? customMaterialCost : selectedMaterial.costPerKg,
       });
     }
@@ -152,6 +155,15 @@ const Settings = () => {
     toast.success("Settings saved successfully!");
   };
 
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error("Error signing out: " + error.message);
+    } else {
+      toast.success("Signed out successfully!");
+    }
+  };
+
   const filteredPrinterProfiles = PRINTER_PROFILES.filter(p => p.type === printCalculatorSettings.printType || p.type === 'both');
   const filteredMaterialProfiles = MATERIAL_PROFILES.filter(m => m.type === printCalculatorSettings.printType);
 
@@ -160,6 +172,13 @@ const Settings = () => {
   const objectWeightVolumeLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
 
   const isCustomCountry = printCalculatorSettings.selectedCountry === "Custom Country";
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  // The SessionContextProvider already handles redirects, so no explicit redirect here.
+  // If (!session) { return null; } // Or a loading spinner, if you prefer.
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
@@ -171,8 +190,13 @@ const Settings = () => {
             </Button>
           </Link>
           <CardTitle className="text-3xl font-bold text-center flex-grow">Application Settings</CardTitle>
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-4 right-4 flex space-x-2">
             <ThemeToggle />
+            {session && (
+              <Button variant="outline" onClick={handleSignOut}>
+                Sign Out
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -193,7 +217,7 @@ const Settings = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div> {/* Moved Printer Profile here */}
+            <div>
               <Label htmlFor="printerProfile">Printer Profile</Label>
               <Select
                 value={printCalculatorSettings.selectedPrinterProfile}
@@ -362,7 +386,7 @@ const Settings = () => {
             )}
           </div>
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold mb-2 invisible md:visible">_</h3> {/* Placeholder for alignment */}
+            <h3 className="text-xl font-semibold mb-2 invisible md:visible">_</h3>
             <div>
               <Label htmlFor="laborHourlyRate">Labor Hourly Rate ({printCalculatorSettings.currency})</Label>
               <Input

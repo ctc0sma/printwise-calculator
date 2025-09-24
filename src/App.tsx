@@ -7,27 +7,32 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PrintCalculator from "./pages/PrintCalculator";
 import Settings from "./pages/Settings";
+import Login from "./pages/Login"; // Import the new Login page
 import { SettingsProvider } from "./context/SettingsContext";
-import { ThemeProvider } from "./components/ThemeProvider"; // Import ThemeProvider
+import { ThemeProvider } from "./components/ThemeProvider";
+import { SessionContextProvider } from "./context/SessionContext"; // Import SessionContextProvider
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="system" enableSystem attribute="class"> {/* Wrap with ThemeProvider */}
+    <ThemeProvider defaultTheme="system" enableSystem attribute="class">
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <SettingsProvider>
-            <Routes>
-              <Route path="/" element={<PrintCalculator />} /> {/* PrintCalculator is now the default route */}
-              <Route path="/home" element={<Index />} /> {/* Index page moved to /home */}
-              <Route path="/settings" element={<Settings />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </SettingsProvider>
+          <SessionContextProvider> {/* Wrap with SessionContextProvider */}
+            <SettingsProvider>
+              <Routes>
+                <Route path="/login" element={<Login />} /> {/* Add Login route */}
+                <Route path="/" element={<PrintCalculator />} />
+                <Route path="/home" element={<Index />} />
+                <Route path="/settings" element={<Settings />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </SettingsProvider>
+          </SessionContextProvider>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>

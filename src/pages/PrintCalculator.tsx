@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Removed CardFooter
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSettings, PRINTER_PROFILES, MATERIAL_PROFILES } from "@/context/SettingsContext";
 import { Link } from "react-router-dom";
 import { Settings as SettingsIcon } from "lucide-react";
@@ -15,9 +15,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import PrintSummaryFooter from "@/components/PrintSummaryFooter"; // Import the new footer component
+import PrintSummaryFooter from "@/components/PrintSummaryFooter";
+import { useSession } from "@/context/SessionContext"; // Import useSession
 
 const PrintCalculator = () => {
+  const { session, loading } = useSession(); // Use session and loading from context
   const { printCalculatorSettings, updatePrintCalculatorSettings } = useSettings();
 
   // Local states for per-print inputs
@@ -27,14 +29,14 @@ const PrintCalculator = () => {
   const [postProcessingTimeHours, setPostProcessingTimeHours] = useState<number>(0);
   const [supportMaterialPercentage, setSupportMaterialPercentage] = useState<number>(0);
   const [shippingCost, setShippingCost] = useState<number>(0);
-  const [postProcessingMaterialCost, setPostProcessingMaterialCost] = useState<number>(printCalculatorSettings.postProcessingMaterialCost); // New local state
+  const [postProcessingMaterialCost, setPostProcessingMaterialCost] = useState<number>(printCalculatorSettings.postProcessingMaterialCost);
 
   // Update local states when context defaults change (e.g., after reset in settings)
   useEffect(() => {
     setObjectValue(printCalculatorSettings.objectWeightGrams);
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
-    setPostProcessingMaterialCost(printCalculatorSettings.postProcessingMaterialCost); // Sync new setting
+    setPostProcessingMaterialCost(printCalculatorSettings.postProcessingMaterialCost);
   }, [printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.printType, printCalculatorSettings.postProcessingMaterialCost]);
 
 
@@ -64,7 +66,7 @@ const PrintCalculator = () => {
 
     // Material Cost with Support Material Percentage
     const totalMaterialValue = objectValue * (1 + supportMaterialPercentage / 100);
-    const materialCost = (totalMaterialValue / unitConversionFactor) * printCalculatorSettings.materialCostPerKg; // Use material cost from settings
+    const materialCost = (totalMaterialValue / unitConversionFactor) * printCalculatorSettings.materialCostPerKg;
 
     const electricityConsumptionKWh = (printCalculatorSettings.printerPowerWatts * printTimeHours) / 1000;
     const electricityCost = electricityConsumptionKWh * printCalculatorSettings.electricityCostPerKWh;
@@ -96,8 +98,8 @@ const PrintCalculator = () => {
       designSetupFee,
       printerDepreciationCost,
       shippingCost,
-      supportMaterialCost: supportMaterialCostFromSettings, // Pass through
-      postProcessingMaterialCost: postProcessingMaterialCostFromInput, // Pass through
+      supportMaterialCost: supportMaterialCostFromSettings,
+      postProcessingMaterialCost: postProcessingMaterialCostFromInput,
       totalBaseCost,
       finalPrice,
     };
@@ -112,8 +114,15 @@ const PrintCalculator = () => {
   const objectValueLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
   const materialUnitSymbol = printCalculatorSettings.printType === 'filament' ? 'kg' : 'L';
 
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  // The SessionContextProvider already handles redirects, so no explicit redirect here.
+  // If (!session) { return null; } // Or a loading spinner, if you prefer.
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 pb-72"> {/* Adjusted padding-bottom to pb-72 */}
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 pb-72">
       <Card className="w-full max-w-2xl shadow-lg">
         <CardHeader className="relative">
           <CardTitle className="text-3xl font-bold text-center">3D Print Price Calculator</CardTitle>
