@@ -25,6 +25,7 @@ interface PrintCalculatorSettings {
   companyName: string; // New: Company name for PDF export
   companyAddress: string; // New: Company address for PDF export
   companyLogoUrl: string; // New: Company logo URL for PDF export
+  projectName: string; // New: Project name for PDF export
 }
 
 // Predefined printer profiles for the dropdown
@@ -103,6 +104,7 @@ const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
   companyName: "", // Default empty company name
   companyAddress: "", // Default empty company address
   companyLogoUrl: "", // Default empty company logo URL
+  projectName: "3D Print Project", // Default project name
 };
 
 interface SettingsContextType {

@@ -35,6 +35,7 @@ interface PrintSummaryFooterProps {
   supportMaterialPercentage: number;
   postProcessingTimeHours: number;
   selectedCountry: string;
+  projectName: string; // New: Project name for PDF export
 }
 
 const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
@@ -67,6 +68,7 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
   supportMaterialPercentage,
   postProcessingTimeHours,
   selectedCountry,
+  projectName, // Use the project name
 }) => {
   const generateSummaryText = () => {
     return `3D Print Price Summary:
@@ -131,6 +133,15 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
       }
     }
 
+    // Project Name (if provided)
+    if (projectName) {
+      doc.setFontSize(22);
+      doc.setFont(undefined, 'bold');
+      doc.text(projectName, pageWidth / 2, yPos, { align: "center" });
+      doc.setFont(undefined, 'normal');
+      yPos += 15;
+    }
+
     // Main Title
     doc.setFontSize(24);
     doc.text("3D Print Price Summary", pageWidth / 2, yPos, { align: "center" });
@@ -176,7 +187,7 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
       yPos += 10; // Space after print details
     }
 
-    // Summary Details
+    // Cost Breakdown Section
     doc.setFontSize(16);
     doc.setFont(undefined, 'bold');
     doc.text("Cost Breakdown", margin, yPos);

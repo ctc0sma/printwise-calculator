@@ -23,6 +23,7 @@ const PrintCalculator = () => {
   const { printCalculatorSettings, updatePrintCalculatorSettings } = useSettings();
 
   // Local states for per-print inputs
+  const [projectName, setProjectName] = useState<string>(printCalculatorSettings.projectName); // New state for project name
   const [objectValue, setObjectValue] = useState<number>(printCalculatorSettings.objectWeightGrams);
   const [printTimeHours, setPrintTimeHours] = useState<number>(printCalculatorSettings.printTimeHours);
   const [designSetupFee, setDesignSetupFee] = useState<number>(printCalculatorSettings.designSetupFee);
@@ -33,11 +34,12 @@ const PrintCalculator = () => {
 
   // Update local states when context defaults change (e.g., after reset in settings)
   useEffect(() => {
+    setProjectName(printCalculatorSettings.projectName); // Update project name from settings
     setObjectValue(printCalculatorSettings.objectWeightGrams);
     setPrintTimeHours(printCalculatorSettings.printTimeHours);
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
     setPostProcessingMaterialCost(printCalculatorSettings.postProcessingMaterialCost);
-  }, [printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.printType, printCalculatorSettings.postProcessingMaterialCost]);
+  }, [printCalculatorSettings.projectName, printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.printType, printCalculatorSettings.postProcessingMaterialCost]);
 
 
   const handlePrinterProfileChange = (profileName: string) => {
@@ -137,6 +139,15 @@ const PrintCalculator = () => {
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
+            <div>
+              <Label htmlFor="projectName">Project Name</Label>
+              <Input
+                id="projectName"
+                type="text"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+              />
+            </div>
             <div>
               <Label htmlFor="materialProfile">Material Type</Label>
               <Select
@@ -279,6 +290,7 @@ const PrintCalculator = () => {
         supportMaterialPercentage={supportMaterialPercentage} // Use local state
         postProcessingTimeHours={postProcessingTimeHours} // Use local state
         selectedCountry={printCalculatorSettings.selectedCountry}
+        projectName={projectName} // Pass the project name
       />
     </div>
   );
