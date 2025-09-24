@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useSettings, PRINTER_PROFILES, MATERIAL_PROFILES } from "@/context/SettingsContext";
+import { useSettings } from "@/context/SettingsContext"; // Removed direct import of PRINTER_PROFILES, MATERIAL_PROFILES
 import { Link } from "react-router-dom";
 import { Settings as SettingsIcon } from "lucide-react";
 import {
@@ -20,7 +20,7 @@ import { useSession } from "@/context/SessionContext"; // Import useSession
 
 const PrintCalculator = () => {
   const { session, loading, isGuest } = useSession(); // Use session, loading, and isGuest from context
-  const { printCalculatorSettings, updatePrintCalculatorSettings } = useSettings();
+  const { printCalculatorSettings, updatePrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES } = useSettings(); // Get PRINTER_PROFILES and MATERIAL_PROFILES from useSettings
 
   // Local states for per-print inputs
   const [projectName, setProjectName] = useState<string>(printCalculatorSettings.projectName); // New state for project name

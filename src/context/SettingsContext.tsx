@@ -47,7 +47,7 @@ interface PrintCalculatorSettings {
 }
 
 // Predefined printer profiles for the dropdown
-export const PREDEFINED_PRINTER_PROFILES: PrinterProfile[] = [
+const PREDEFINED_PRINTER_PROFILES: PrinterProfile[] = [
   { name: "Ender 3", powerWatts: 150, type: 'filament' },
   { name: "Prusa i3 MK3S+", powerWatts: 240, type: 'filament' },
   { name: "Anycubic Kobra 2 Pro", powerWatts: 400, type: 'filament' },
@@ -67,7 +67,7 @@ export const PREDEFINED_PRINTER_PROFILES: PrinterProfile[] = [
 ];
 
 // Predefined material profiles for the dropdown
-export const PREDEFINED_MATERIAL_PROFILES: MaterialProfile[] = [
+const PREDEFINED_MATERIAL_PROFILES: MaterialProfile[] = [
   { name: "PLA", costPerKg: 20, type: 'filament' },
   { name: "PETG", costPerKg: 25, type: 'filament' },
   { name: "ABS", costPerKg: 30, type: 'filament' },
@@ -414,8 +414,8 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
         addMaterialProfile,
         updateMaterialProfile,
         deleteMaterialProfile,
-        PRINTER_PROFILES: combinedPrinterProfiles,
-        MATERIAL_PROFILES: combinedMaterialProfiles,
+        PRINTER_PROFILES: combinedPrinterProfiles, // Export combined list
+        MATERIAL_PROFILES: combinedMaterialProfiles, // Export combined list
       }}
     >
       {children}

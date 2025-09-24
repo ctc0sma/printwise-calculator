@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSettings, PRINTER_PROFILES, MATERIAL_PROFILES, COUNTRY_ELECTRICITY_COSTS } from "@/context/SettingsContext";
+import { useSettings, COUNTRY_ELECTRICITY_COSTS } from "@/context/SettingsContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -21,7 +21,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import Credits from "@/components/Credits"; // Import the new Credits component
 
 const Settings = () => {
-  const { printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings } = useSettings();
+  const { printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES } = useSettings();
   
   const [customPrinterPower, setCustomPrinterPower] = useState<number>(
     printCalculatorSettings.selectedPrinterProfile === "Custom Printer"
@@ -68,7 +68,7 @@ const Settings = () => {
 
 
   const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string | number | boolean) => {
-    if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType" || key === "selectedCountry" || key === "companyName" || key === "companyAddress" || key === "companyLogoUrl" || key === "pdfExportMode") {
+    if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType" || key === "selectedCountry" || key === "companyName" || key === "companyAddress" || key === "companyLogoUrl" || key === "pdfExportMode" || key === "projectName") {
       updatePrintCalculatorSettings({ [key]: value as string });
     }
     else {
