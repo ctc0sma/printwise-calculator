@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { jsPDF } from "jspdf"; // Import jsPDF
+import { ChevronDown, ChevronUp } from "lucide-react"; // Import icons
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"; // Import Collapsible components
 
 interface PrintSummaryFooterProps {
   materialCost: number;
@@ -70,6 +72,8 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
   selectedCountry,
   projectName, // Use the project name
 }) => {
+  const [isBreakdownOpen, setIsBreakdownOpen] = useState(false); // State to manage collapsible section
+
   const generateSummaryText = () => {
     return `3D Print Price Summary:
 
@@ -243,32 +247,42 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-card border-t shadow-lg p-4 z-50 dark:bg-gray-800 dark:border-gray-700">
       <div className="w-full max-w-2xl mx-auto flex flex-col space-y-2">
-        <Separator />
-        <div className="w-full grid grid-cols-2 gap-2 text-base font-medium">
-          <div className="text-left">Material Cost:</div>
-          <div className="text-right">{currencySymbol}{materialCost.toFixed(2)}</div>
+        <Collapsible open={isBreakdownOpen} onOpenChange={setIsBreakdownOpen}>
+          <CollapsibleTrigger asChild>
+            <Button variant="ghost" className="w-full justify-between text-base font-medium px-0">
+              <span>Cost Breakdown Details</span>
+              {isBreakdownOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <Separator className="my-2" />
+            <div className="w-full grid grid-cols-2 gap-2 text-base font-medium">
+              <div className="text-left">Material Cost:</div>
+              <div className="text-right">{currencySymbol}{materialCost.toFixed(2)}</div>
 
-          <div className="text-left">Electricity Cost:</div>
-          <div className="text-right">{currencySymbol}{electricityCost.toFixed(2)}</div>
+              <div className="text-left">Electricity Cost:</div>
+              <div className="text-right">{currencySymbol}{electricityCost.toFixed(2)}</div>
 
-          <div className="text-left">Labor Cost:</div>
-          <div className="text-right">{currencySymbol}{laborCost.toFixed(2)}</div>
+              <div className="text-left">Labor Cost:</div>
+              <div className="text-right">{currencySymbol}{laborCost.toFixed(2)}</div>
 
-          <div className="text-left">Design/Setup Fee:</div>
-          <div className="text-right">{currencySymbol}{designSetupFee.toFixed(2)}</div>
+              <div className="text-left">Design/Setup Fee:</div>
+              <div className="text-right">{currencySymbol}{designSetupFee.toFixed(2)}</div>
 
-          <div className="text-left">Printer Depreciation:</div>
-          <div className="text-right">{currencySymbol}{printerDepreciationCost.toFixed(2)}</div>
+              <div className="text-left">Printer Depreciation:</div>
+              <div className="text-right">{currencySymbol}{printerDepreciationCost.toFixed(2)}</div>
 
-          <div className="text-left">Support Material Cost:</div>
-          <div className="text-right">{currencySymbol}{supportMaterialCost.toFixed(2)}</div>
+              <div className="text-left">Support Material Cost:</div>
+              <div className="text-right">{currencySymbol}{supportMaterialCost.toFixed(2)}</div>
 
-          <div className="text-left">Post-processing Material Cost:</div>
-          <div className="text-right">{currencySymbol}{postProcessingMaterialCost.toFixed(2)}</div>
+              <div className="text-left">Post-processing Material Cost:</div>
+              <div className="text-right">{currencySymbol}{postProcessingMaterialCost.toFixed(2)}</div>
 
-          <div className="text-left">Shipping Cost:</div>
-          <div className="text-right">{currencySymbol}{shippingCost.toFixed(2)}</div>
-        </div>
+              <div className="text-left">Shipping Cost:</div>
+              <div className="text-right">{currencySymbol}{shippingCost.toFixed(2)}</div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
         <Separator />
         <div className="w-full flex justify-between items-center text-xl font-bold mt-2">
           <span>Total Estimated Price:</span>
