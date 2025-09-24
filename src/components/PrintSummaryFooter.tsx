@@ -2,7 +2,8 @@
 
 import React from "react";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button"; // Import Button component
+import { Button } from "@/components/ui/button";
+import { jsPDF } from "jspdf"; // Import jsPDF
 
 interface PrintSummaryFooterProps {
   materialCost: number;
@@ -46,16 +47,36 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
   };
 
   const handleExportSummary = () => {
-    const summaryText = generateSummaryText();
-    const blob = new Blob([summaryText], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "3d_print_summary.txt";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    const doc = new jsPDF();
+    let yPos = 20;
+
+    doc.setFontSize(22);
+    doc.text("3D Print Price Summary", 105, yPos, { align: "center" });
+    yPos += 15;
+
+    doc.setFontSize(12);
+    const summaryLines = [
+      `Material Cost: ${currencySymbol}${materialCost.toFixed(2)}`,
+      `Electricity Cost: ${currencySymbol}${electricityCost.toFixed(2)}`,
+      `Labor Cost: ${currencySymbol}${laborCost.toFixed(2)}`,
+      `Design/Setup Fee: ${currencySymbol}${designSetupFee.toFixed(2)}`,
+      `Printer Depreciation: ${currencySymbol}${printerDepreciationCost.toFixed(2)}`,
+      `Support Material Cost: ${currencySymbol}${supportMaterialCost.toFixed(2)}`,
+      `Post-processing Material Cost: ${currencySymbol}${postProcessingMaterialCost.toFixed(2)}`,
+      `Shipping Cost: ${currencySymbol}${shippingCost.toFixed(2)}`,
+    ];
+
+    summaryLines.forEach(line => {
+      doc.text(line, 20, yPos);
+      yPos += 10;
+    });
+
+    yPos += 5; // Add a little extra space before total
+
+    doc.setFontSize(16);
+    doc.text(`Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}`, 20, yPos);
+
+    doc.save("3d_print_summary.pdf");
   };
 
   const handleSendEmail = () => {
@@ -101,7 +122,7 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
         </div>
         <div className="w-full flex justify-end space-x-2 mt-4">
           <Button variant="outline" onClick={handleExportSummary}>
-            Export Summary
+            Export Summary (PDF)
           </Button>
           <Button onClick={handleSendEmail}>
             Send via Email
