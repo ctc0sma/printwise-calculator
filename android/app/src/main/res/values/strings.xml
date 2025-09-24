@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">snuggly-kookaburra-climb</string>
-    <string name="title_activity_main">snuggly-kookaburra-climb</string>
+    <string name="app_name">PrintWise Calculator</string>
+    <string name="title_activity_main">PrintWise Calculator</string>
     <string name="package_name">com.example.snugglykookaburraclimb</string>
     <string name="custom_url_scheme">com.example.snugglykookaburraclimb</string>
 </resources>

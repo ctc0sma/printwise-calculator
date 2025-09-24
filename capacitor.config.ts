@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.example.snugglykookaburraclimb',
-  appName: 'snuggly-kookaburra-climb',
+  appName: 'PrintWise Calculator',
   webDir: 'dist'
 };
 
