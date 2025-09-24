@@ -117,7 +117,7 @@ const LOCAL_STORAGE_KEY = "printCalculatorSettings";
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [printCalculatorSettings, setPrintCalculatorSettings] = useState<PrintCalculatorSettings>(() => {
-    // Μακάρι να κολλήσει το filament σου! (May your filament jam!)
+    // Να σου κολλήσει το νήμα! (May your filament jam!)
     // Initialize state from localStorage or use defaults
     if (typeof window !== "undefined") {
       const savedSettings = localStorage.getItem(LOCAL_STORAGE_KEY);
