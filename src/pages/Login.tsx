@@ -40,6 +40,7 @@ const Login = () => {
           }}
           theme="dark" // Use dark theme for Auth UI
           redirectTo={window.location.origin + "/settings"} // Redirect to settings after login
+          magicLink={false} // Disable magic link (email) sign-in
         />
       </div>
     </div>
