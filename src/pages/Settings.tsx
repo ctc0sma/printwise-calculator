@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { useSettings } from "@/context/SettingsContext";
+import React, { useState, useEffect } from "react";
+import { useSettings, PRINTER_PROFILES } from "@/context/SettingsContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
@@ -17,9 +17,22 @@ import {
 
 const Settings = () => {
   const { printCalculatorSettings, updatePrintCalculatorSettings } = useSettings();
+  const [customPrinterPower, setCustomPrinterPower] = useState<number>(
+    printCalculatorSettings.selectedPrinterProfile === "Custom Printer"
+      ? printCalculatorSettings.printerPowerWatts
+      : 0
+  );
+
+  // Update customPrinterPower when the context's printerPowerWatts changes and it's a custom profile
+  useEffect(() => {
+    if (printCalculatorSettings.selectedPrinterProfile === "Custom Printer") {
+      setCustomPrinterPower(printCalculatorSettings.printerPowerWatts);
+    }
+  }, [printCalculatorSettings.selectedPrinterProfile, printCalculatorSettings.printerPowerWatts]);
+
 
   const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string | number) => {
-    if (key === "currency") {
+    if (key === "currency" || key === "selectedPrinterProfile") {
       updatePrintCalculatorSettings({ [key]: value as string });
     } else {
       const numValue = parseFloat(value as string);
@@ -28,6 +41,24 @@ const Settings = () => {
       } else if (value === "") {
         updatePrintCalculatorSettings({ [key]: 0 }); // Allow clearing input to 0
       }
+    }
+  };
+
+  const handlePrinterProfileChange = (profileName: string) => {
+    const selectedProfile = PRINTER_PROFILES.find(p => p.name === profileName);
+    if (selectedProfile) {
+      updatePrintCalculatorSettings({
+        selectedPrinterProfile: profileName,
+        printerPowerWatts: selectedProfile.name === "Custom Printer" ? customPrinterPower : selectedProfile.powerWatts,
+      });
+    }
+  };
+
+  const handleCustomPrinterPowerChange = (value: string) => {
+    const numValue = parseFloat(value);
+    setCustomPrinterPower(isNaN(numValue) ? 0 : numValue);
+    if (printCalculatorSettings.selectedPrinterProfile === "Custom Printer") {
+      updatePrintCalculatorSettings({ printerPowerWatts: isNaN(numValue) ? 0 : numValue });
     }
   };
 
@@ -86,15 +117,35 @@ const Settings = () => {
               />
             </div>
             <div>
-              <Label htmlFor="printerPowerWatts">Printer Power (Watts)</Label>
-              <Input
-                id="printerPowerWatts"
-                type="number"
-                value={printCalculatorSettings.printerPowerWatts}
-                onChange={(e) => handleSettingChange("printerPowerWatts", e.target.value)}
-                min="0"
-              />
+              <Label htmlFor="printerProfile">Printer Profile</Label>
+              <Select
+                value={printCalculatorSettings.selectedPrinterProfile}
+                onValueChange={handlePrinterProfileChange}
+              >
+                <SelectTrigger id="printerProfile">
+                  <SelectValue placeholder="Select a printer" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PRINTER_PROFILES.map((profile) => (
+                    <SelectItem key={profile.name} value={profile.name}>
+                      {profile.name} {profile.name !== "Custom Printer" && `(${profile.powerWatts}W)`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+            {printCalculatorSettings.selectedPrinterProfile === "Custom Printer" && (
+              <div>
+                <Label htmlFor="customPrinterPowerWatts">Custom Printer Power (Watts)</Label>
+                <Input
+                  id="customPrinterPowerWatts"
+                  type="number"
+                  value={customPrinterPower}
+                  onChange={(e) => handleCustomPrinterPowerChange(e.target.value)}
+                  min="0"
+                />
+              </div>
+            )}
           </div>
           <div className="space-y-4">
             <h3 className="text-xl font-semibold mb-2 invisible md:visible">_</h3> {/* Placeholder for alignment */}
