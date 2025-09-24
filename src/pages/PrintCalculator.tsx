@@ -17,11 +17,13 @@ import {
 } from "@/components/ui/select";
 import PrintSummaryFooter from "@/components/PrintSummaryFooter";
 import { useSession } from "@/context/SessionContext";
-import AdBanner from "@/components/AdBanner"; // Import the new AdBanner component
+import AdBanner from "@/components/AdBanner";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const PrintCalculator = () => {
   const { session, loading, isGuest } = useSession();
   const { printCalculatorSettings, updatePrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES } = useSettings();
+  const { t } = useTranslation("common"); // Use translation hook
 
   const [projectName, setProjectName] = useState<string>(printCalculatorSettings.projectName);
   const [objectValue, setObjectValue] = useState<number>(printCalculatorSettings.objectWeightGrams);
@@ -107,7 +109,7 @@ const PrintCalculator = () => {
   const filteredPrinterProfiles = PRINTER_PROFILES.filter(p => p.type === printCalculatorSettings.printType || p.type === 'both');
   const filteredMaterialProfiles = MATERIAL_PROFILES.filter(m => m.type === printCalculatorSettings.printType);
 
-  const objectValueLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
+  const objectValueLabel = printCalculatorSettings.printType === 'filament' ? t("objectWeightGrams") : t("objectVolumeMl");
   const materialUnitSymbol = printCalculatorSettings.printType === 'filament' ? 'kg' : 'L';
 
   if (loading) {
@@ -121,10 +123,10 @@ const PrintCalculator = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 pb-[420px]">
       <Card className="w-full max-w-2xl shadow-lg">
-        <CardHeader className="flex flex-row items-center justify-between p-6"> {/* Adjusted to flex row */}
-          <div className="flex-grow"></div> {/* Empty div to push title to center */}
-          <CardTitle className="text-3xl font-bold text-center flex-grow-0">PrintWise Calculator</CardTitle>
-          <div className="flex-grow flex justify-end"> {/* Div to push button to the right */}
+        <CardHeader className="flex flex-row items-center justify-between p-6">
+          <div className="flex-grow"></div>
+          <CardTitle className="text-3xl font-bold text-center flex-grow-0">{t("appName")}</CardTitle>
+          <div className="flex-grow flex justify-end">
             <Link to="/settings">
               <Button variant="outline" size="icon">
                 <SettingsIcon className="h-4 w-4" />
@@ -133,10 +135,10 @@ const PrintCalculator = () => {
           </div>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <AdBanner /> {/* Ad banner added here */}
+          <AdBanner />
           <div className="space-y-4">
             <div>
-              <Label htmlFor="projectName">Project Name</Label>
+              <Label htmlFor="projectName">{t("projectName")}</Label>
               <Input
                 id="projectName"
                 type="text"
@@ -145,13 +147,13 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="materialProfile">Material Type</Label>
+              <Label htmlFor="materialProfile">{t("materialType")}</Label>
               <Select
                 value={printCalculatorSettings.selectedFilamentProfile}
                 onValueChange={handleMaterialProfileChange}
               >
                 <SelectTrigger id="materialProfile">
-                  <SelectValue placeholder="Select material" />
+                  <SelectValue placeholder={t("selectType")} />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredMaterialProfiles.map((profile) => (
@@ -163,13 +165,13 @@ const PrintCalculator = () => {
               </Select>
             </div>
             <div>
-              <Label htmlFor="printerProfile">Printer Profile</Label>
+              <Label htmlFor="printerProfile">{t("printerProfile")}</Label>
               <Select
                 value={printCalculatorSettings.selectedPrinterProfile}
                 onValueChange={handlePrinterProfileChange}
               >
                 <SelectTrigger id="printerProfile">
-                  <SelectValue placeholder="Select a printer" />
+                  <SelectValue placeholder={t("selectType")} />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredPrinterProfiles.map((profile) => (
@@ -191,7 +193,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="printTimeHours">Print Time (hours)</Label>
+              <Label htmlFor="printTimeHours">{t("printTimeHours")}</Label>
               <Input
                 id="printTimeHours"
                 type="number"
@@ -203,7 +205,7 @@ const PrintCalculator = () => {
           </div>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="postProcessingTimeHours">Post-processing Time (hours)</Label>
+              <Label htmlFor="postProcessingTimeHours">{t("postProcessingTimeHours")}</Label>
               <Input
                 id="postProcessingTimeHours"
                 type="number"
@@ -213,7 +215,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="designSetupFee">Design/Setup Fee ({currencySymbol})</Label>
+              <Label htmlFor="designSetupFee">{t("designSetupFee")} ({currencySymbol})</Label>
               <Input
                 id="designSetupFee"
                 type="number"
@@ -223,7 +225,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="supportMaterialPercentage">Support Material Overhead (%)</Label>
+              <Label htmlFor="supportMaterialPercentage">{t("supportMaterialOverhead")}</Label>
               <Input
                 id="supportMaterialPercentage"
                 type="number"
@@ -234,7 +236,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="postProcessingMaterialCost">Post-processing Material Cost ({currencySymbol})</Label>
+              <Label htmlFor="postProcessingMaterialCost">{t("postProcessingMaterialCostInput")} ({currencySymbol})</Label>
               <Input
                 id="postProcessingMaterialCost"
                 type="number"
@@ -244,7 +246,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="shippingCost">Shipping Cost ({currencySymbol})</Label>
+              <Label htmlFor="shippingCost">{t("shippingCostInput")} ({currencySymbol})</Label>
               <Input
                 id="shippingCost"
                 type="number"
