@@ -22,11 +22,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Trash2, Edit, PlusCircle } from "lucide-react";
-import { useSession } from "@/context/SessionContext";
+// import { useSession } from "@/context/SessionContext"; // No longer needed for disabling
 
 const MaterialProfileManager = () => {
   const { userMaterialProfiles, addMaterialProfile, updateMaterialProfile, deleteMaterialProfile } = useSettings();
-  const { isGuest } = useSession();
+  // const { isGuest } = useSession(); // No longer used for disabling
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -86,7 +86,7 @@ const MaterialProfileManager = () => {
                     variant="outline"
                     size="icon"
                     onClick={() => openEditDialog(profile as typeof currentProfile)}
-                    disabled={isGuest}
+                    // disabled={isGuest} // Removed guest restriction
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -94,7 +94,7 @@ const MaterialProfileManager = () => {
                     variant="destructive"
                     size="icon"
                     onClick={() => deleteMaterialProfile(profile.id!)}
-                    disabled={isGuest}
+                    // disabled={isGuest} // Removed guest restriction
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -106,7 +106,7 @@ const MaterialProfileManager = () => {
 
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full" disabled={isGuest}>
+            <Button className="w-full" /* disabled={isGuest} */> {/* Removed guest restriction */}
               <PlusCircle className="mr-2 h-4 w-4" /> Add New Material Profile
             </Button>
           </DialogTrigger>

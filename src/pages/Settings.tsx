@@ -21,11 +21,11 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import Credits from "@/components/Credits";
 import PrinterProfileManager from "@/components/PrinterProfileManager"; // Import new component
 import MaterialProfileManager from "@/components/MaterialProfileManager"; // Import new component
-import { useSession } from "@/context/SessionContext"; // Import useSession
+// import { useSession } from "@/context/SessionContext"; // No longer needed for isGuest check
 
 const Settings = () => {
   const { printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES } = useSettings();
-  const { isGuest } = useSession(); // Get isGuest from session context
+  // const { isGuest } = useSession(); // No longer used for disabling
   
   const [customPrinterPower, setCustomPrinterPower] = useState<number>(
     printCalculatorSettings.selectedPrinterProfile === "Custom Printer"
@@ -501,11 +501,7 @@ const Settings = () => {
       {/* New sections for managing profiles */}
       <div className="w-full max-w-2xl mt-6 space-y-6">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center">Advanced Profile Management</h2>
-        {isGuest && (
-          <p className="text-center text-red-500 dark:text-red-400">
-            You must be logged in to add, edit, or delete custom profiles.
-          </p>
-        )}
+        {/* Removed guest warning message */}
         <PrinterProfileManager />
         <MaterialProfileManager />
       </div>
