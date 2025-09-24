@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PrintCalculator from "./pages/PrintCalculator";
 import Settings from "./pages/Settings";
+import Login from "./pages/Login"; // Import the new Login page
 import { SettingsProvider } from "./context/SettingsContext";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { SessionContextProvider } from "./context/SessionContext";
@@ -26,6 +27,7 @@ const App = () => (
                 <Route path="/" element={<PrintCalculator />} />
                 <Route path="/home" element={<Index />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/login" element={<Login />} /> {/* Add the new login route */}
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

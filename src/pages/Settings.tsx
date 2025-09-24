@@ -15,17 +15,19 @@ import {
   SelectValue,
 }
 from "@/components/ui/select";
-import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, LogIn, LogOut } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Credits from "@/components/Credits";
 import PrinterProfileManager from "@/components/PrinterProfileManager"; // Import new component
 import MaterialProfileManager from "@/components/MaterialProfileManager"; // Import new component
-// import { useSession } from "@/context/SessionContext"; // No longer needed for isGuest check
+import { useSession } from "@/context/SessionContext"; // Import useSession
+import { supabase } from "@/integrations/supabase/client"; // Import supabase client
 
 const Settings = () => {
   const { printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES } = useSettings();
-  // const { isGuest } = useSession(); // No longer used for disabling
+  const { session, isGuest } = useSession(); // Get session and isGuest from session context
+  const navigate = useNavigate();
   
   const [customPrinterPower, setCustomPrinterPower] = useState<number>(
     printCalculatorSettings.selectedPrinterProfile === "Custom Printer"
@@ -158,6 +160,17 @@ const Settings = () => {
     toast.success("Settings saved successfully!");
   };
 
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error logging out:", error);
+      toast.error("Failed to log out.");
+    } else {
+      toast.success("Logged out successfully!");
+      navigate("/settings"); // Redirect to settings page after logout
+    }
+  };
+
   const filteredPrinterProfiles = PRINTER_PROFILES.filter(p => p.type === printCalculatorSettings.printType || p.type === 'both');
   const filteredMaterialProfiles = MATERIAL_PROFILES.filter(m => m.type === printCalculatorSettings.printType);
 
@@ -180,6 +193,17 @@ const Settings = () => {
           <CardTitle className="text-3xl font-bold text-center flex-grow">Application Settings</CardTitle>
           <div className="absolute top-4 right-4 flex space-x-2">
             <ThemeToggle />
+            {isGuest ? (
+              <Link to="/login">
+                <Button variant="outline" size="icon">
+                  <LogIn className="h-4 w-4" />
+                </Button>
+              </Link>
+            ) : (
+              <Button variant="outline" size="icon" onClick={handleLogout}>
+                <LogOut className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -501,7 +525,11 @@ const Settings = () => {
       {/* New sections for managing profiles */}
       <div className="w-full max-w-2xl mt-6 space-y-6">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center">Advanced Profile Management</h2>
-        {/* Removed guest warning message */}
+        {isGuest && (
+          <p className="text-center text-red-500 dark:text-red-400">
+            Please <Link to="/login" className="underline">log in</Link> to add, edit, or delete custom profiles.
+          </p>
+        )}
         <PrinterProfileManager />
         <MaterialProfileManager />
       </div>

@@ -16,20 +16,20 @@ const SessionContext = createContext<SessionContextType | undefined>(undefined);
 export const SessionContextProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isGuest, setIsGuest] = useState(true); // Always true as login is disabled
+  const [isGuest, setIsGuest] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
       setSession(currentSession);
+      setIsGuest(!currentSession); // isGuest is true if there's no session
       setLoading(false);
-      setIsGuest(!currentSession); // If no session, they are a guest
     });
 
     // Initial session check
     supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
       setSession(initialSession);
-      setIsGuest(!initialSession); // If no session, they are a guest
+      setIsGuest(!initialSession); // isGuest is true if there's no session
       setLoading(false);
     });
 

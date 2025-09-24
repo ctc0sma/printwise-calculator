@@ -162,7 +162,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [userMaterialProfiles, setUserMaterialProfiles] = useState<MaterialProfile[]>([]);
 
   const fetchUserProfiles = useCallback(async () => {
-    if (!session || isGuest) {
+    if (!session) { // Only fetch if there's a session
       setUserPrinterProfiles([]);
       setUserMaterialProfiles([]);
       return;
@@ -195,7 +195,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setUserMaterialProfiles(materialData.map(m => ({ ...m, isCustom: true })));
     }
-  }, [session, isGuest]);
+  }, [session]); // Depend on session, not isGuest
 
   useEffect(() => {
     fetchUserProfiles();
@@ -283,7 +283,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addPrinterProfile = async (profile: Omit<PrinterProfile, 'id' | 'isCustom'>) => {
-    if (!session) {
+    if (!session) { // Re-enabled session check
       toast.error("You must be logged in to add custom profiles.");
       return;
     }
@@ -302,7 +302,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updatePrinterProfile = async (id: string, profile: Omit<Partial<PrinterProfile>, 'id' | 'isCustom'>) => {
-    if (!session) {
+    if (!session) { // Re-enabled session check
       toast.error("You must be logged in to update custom profiles.");
       return;
     }
@@ -322,7 +322,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deletePrinterProfile = async (id: string) => {
-    if (!session) {
+    if (!session) { // Re-enabled session check
       toast.error("You must be logged in to delete custom profiles.");
       return;
     }
@@ -342,7 +342,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addMaterialProfile = async (profile: Omit<MaterialProfile, 'id' | 'isCustom'>) => {
-    if (!session) {
+    if (!session) { // Re-enabled session check
       toast.error("You must be logged in to add custom profiles.");
       return;
     }
@@ -361,7 +361,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateMaterialProfile = async (id: string, profile: Omit<Partial<MaterialProfile>, 'id' | 'isCustom'>) => {
-    if (!session) {
+    if (!session) { // Re-enabled session check
       toast.error("You must be logged in to update custom profiles.");
       return;
     }
@@ -381,7 +381,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteMaterialProfile = async (id: string) => {
-    if (!session) {
+    if (!session) { // Re-enabled session check
       toast.error("You must be logged in to delete custom profiles.");
       return;
     }
