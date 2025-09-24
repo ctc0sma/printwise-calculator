@@ -18,7 +18,7 @@ from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-// Removed Switch import as it's no longer needed for this feature
+import Credits from "@/components/Credits"; // Import the new Credits component
 
 const Settings = () => {
   const { printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings } = useSettings();
@@ -493,6 +493,7 @@ const Settings = () => {
           <Button onClick={handleSave}>Save Settings</Button>
         </CardFooter>
       </Card>
+      <Credits /> {/* Add the Credits component here */}
     </div>
   );
 };
