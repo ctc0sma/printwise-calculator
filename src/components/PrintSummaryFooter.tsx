@@ -16,6 +16,10 @@ interface PrintSummaryFooterProps {
   postProcessingMaterialCost: number;
   finalPrice: number;
   currencySymbol: string;
+  isCompanyMode: boolean; // New: Company mode flag
+  companyName: string; // New: Company name
+  companyAddress: string; // New: Company address
+  companyLogoUrl: string; // New: Company logo URL
 }
 
 const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
@@ -29,6 +33,10 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
   postProcessingMaterialCost,
   finalPrice,
   currencySymbol,
+  isCompanyMode,
+  companyName,
+  companyAddress,
+  companyLogoUrl,
 }) => {
   const generateSummaryText = () => {
     return `3D Print Price Summary:
@@ -46,12 +54,50 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
 `;
   };
 
-  const handleExportSummary = () => {
+  const handleExportSummary = async () => {
     const doc = new jsPDF();
     let yPos = 20;
+    const margin = 20;
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    if (isCompanyMode && companyName) {
+      if (companyLogoUrl) {
+        try {
+          const response = await fetch(companyLogoUrl);
+          const blob = await response.blob();
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          await new Promise<void>((resolve) => {
+            reader.onloadend = () => {
+              const imgData = reader.result as string;
+              const imgWidth = 40; // Adjust as needed
+              const imgHeight = 20; // Adjust as needed
+              const x = (pageWidth - imgWidth) / 2; // Center the image
+              doc.addImage(imgData, 'PNG', x, yPos, imgWidth, imgHeight);
+              yPos += imgHeight + 5; // Space after logo
+              resolve();
+            };
+          });
+        } catch (error) {
+          console.error("Failed to load company logo:", error);
+          // Continue without logo if it fails
+        }
+      }
+
+      doc.setFontSize(18);
+      doc.text(companyName, pageWidth / 2, yPos, { align: "center" });
+      yPos += 7;
+
+      if (companyAddress) {
+        doc.setFontSize(10);
+        doc.text(companyAddress, pageWidth / 2, yPos, { align: "center" });
+        yPos += 10;
+      }
+      yPos += 10; // Extra space after company details
+    }
 
     doc.setFontSize(22);
-    doc.text("3D Print Price Summary", 105, yPos, { align: "center" });
+    doc.text("3D Print Price Summary", pageWidth / 2, yPos, { align: "center" });
     yPos += 15;
 
     doc.setFontSize(12);
@@ -67,14 +113,14 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
     ];
 
     summaryLines.forEach(line => {
-      doc.text(line, 20, yPos);
+      doc.text(line, margin, yPos);
       yPos += 10;
     });
 
     yPos += 5; // Add a little extra space before total
 
     doc.setFontSize(16);
-    doc.text(`Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}`, 20, yPos);
+    doc.text(`Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}`, margin, yPos);
 
     doc.save("3d_print_summary.pdf");
   };

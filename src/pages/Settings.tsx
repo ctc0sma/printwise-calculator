@@ -18,7 +18,7 @@ from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { useSession } from "@/context/SessionContext";
+import { Switch } from "@/components/ui/switch"; // Import Switch component
 
 const Settings = () => {
   const { printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings } = useSettings();
@@ -67,10 +67,13 @@ const Settings = () => {
   }, [printCalculatorSettings.selectedCountry, printCalculatorSettings.electricityCostPerKWh, printCalculatorSettings.currency]);
 
 
-  const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string | number) => {
-    if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType" || key === "selectedCountry") {
+  const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string | number | boolean) => {
+    if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType" || key === "selectedCountry" || key === "companyName" || key === "companyAddress" || key === "companyLogoUrl") {
       updatePrintCalculatorSettings({ [key]: value as string });
-    } else {
+    } else if (key === "isCompanyMode") {
+      updatePrintCalculatorSettings({ [key]: value as boolean });
+    }
+    else {
       const numValue = parseFloat(value as string);
       if (!isNaN(numValue) && numValue >= 0) {
         updatePrintCalculatorSettings({ [key]: numValue });
@@ -438,6 +441,45 @@ const Settings = () => {
                 step="0.01"
               />
             </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="company-mode"
+                checked={printCalculatorSettings.isCompanyMode}
+                onCheckedChange={(checked) => handleSettingChange("isCompanyMode", checked)}
+              />
+              <Label htmlFor="company-mode">Enable Company Mode</Label>
+            </div>
+            {printCalculatorSettings.isCompanyMode && (
+              <>
+                <div>
+                  <Label htmlFor="companyName">Company Name</Label>
+                  <Input
+                    id="companyName"
+                    type="text"
+                    value={printCalculatorSettings.companyName}
+                    onChange={(e) => handleSettingChange("companyName", e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="companyAddress">Company Address</Label>
+                  <Input
+                    id="companyAddress"
+                    type="text"
+                    value={printCalculatorSettings.companyAddress}
+                    onChange={(e) => handleSettingChange("companyAddress", e.target.value)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="companyLogoUrl">Company Logo URL</Label>
+                  <Input
+                    id="companyLogoUrl"
+                    type="text"
+                    value={printCalculatorSettings.companyLogoUrl}
+                    onChange={(e) => handleSettingChange("companyLogoUrl", e.target.value)}
+                  />
+                </div>
+              </>
+            )}
           </div>
         </CardContent>
         <CardFooter className="flex justify-between p-6">

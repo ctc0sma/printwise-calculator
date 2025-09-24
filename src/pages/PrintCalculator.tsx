@@ -260,6 +260,10 @@ const PrintCalculator = () => {
         postProcessingMaterialCost={calculatedPostProcessingMaterialCost}
         finalPrice={finalPrice}
         currencySymbol={currencySymbol}
+        isCompanyMode={printCalculatorSettings.isCompanyMode}
+        companyName={printCalculatorSettings.companyName}
+        companyAddress={printCalculatorSettings.companyAddress}
+        companyLogoUrl={printCalculatorSettings.companyLogoUrl}
       />
     </div>
   );
