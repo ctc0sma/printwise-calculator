@@ -20,6 +20,7 @@ interface PrintCalculatorSettings {
 interface SettingsContextType {
   printCalculatorSettings: PrintCalculatorSettings;
   updatePrintCalculatorSettings: (newSettings: Partial<PrintCalculatorSettings>) => void;
+  resetPrintCalculatorSettings: () => void; // New: Function to reset settings
 }
 
 // Predefined printer profiles for the dropdown
@@ -37,6 +38,7 @@ export const PRINTER_PROFILES = [
   { name: "Custom Printer", powerWatts: 0 }, // Placeholder for custom input
 ];
 
+// Default settings as a constant
 const defaultPrintCalculatorSettings: PrintCalculatorSettings = {
   materialCostPerKg: 20,
   objectWeightGrams: 100,
@@ -82,8 +84,13 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
+  const resetPrintCalculatorSettings = () => {
+    setPrintCalculatorSettings(defaultPrintCalculatorSettings);
+    toast.success("Settings reset to defaults!");
+  };
+
   return (
-    <SettingsContext.Provider value={{ printCalculatorSettings, updatePrintCalculatorSettings }}>
+    <SettingsContext.Provider value={{ printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings }}>
       {children}
     </SettingsContext.Provider>
   );

@@ -15,11 +15,12 @@ import {
   SelectValue,
 }
 from "@/components/ui/select";
-import { Link } from "react-router-dom"; // Import Link
-import { ArrowLeft } from "lucide-react"; // Import ArrowLeft icon
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle"; // Import ThemeToggle
 
 const Settings = () => {
-  const { printCalculatorSettings, updatePrintCalculatorSettings } = useSettings();
+  const { printCalculatorSettings, updatePrintCalculatorSettings, resetPrintCalculatorSettings } = useSettings();
   const [customPrinterPower, setCustomPrinterPower] = useState<number>(
     printCalculatorSettings.selectedPrinterProfile === "Custom Printer"
       ? printCalculatorSettings.printerPowerWatts
@@ -72,13 +73,16 @@ const Settings = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-2xl shadow-lg">
-        <CardHeader className="relative"> {/* Added relative for absolute positioning of button */}
-          <CardTitle className="text-3xl font-bold text-center">Application Settings</CardTitle>
-          <Link to="/" className="absolute top-4 left-4"> {/* Back button */}
+        <CardHeader className="relative flex flex-row items-center justify-between p-6">
+          <Link to="/" className="absolute top-4 left-4">
             <Button variant="outline" size="icon">
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
+          <CardTitle className="text-3xl font-bold text-center flex-grow">Application Settings</CardTitle>
+          <div className="absolute top-4 right-4">
+            <ThemeToggle />
+          </div>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
@@ -228,7 +232,8 @@ const Settings = () => {
             </div>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-end p-6">
+        <CardFooter className="flex justify-between p-6">
+          <Button variant="outline" onClick={resetPrintCalculatorSettings}>Reset to Defaults</Button>
           <Button onClick={handleSave}>Save Settings</Button>
         </CardFooter>
       </Card>
