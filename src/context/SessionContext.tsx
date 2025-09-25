@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+// Removed useNavigate as it's not needed in this context file
 
 interface SessionContextType {
   session: Session | null;
@@ -17,24 +17,31 @@ export const SessionContextProvider = ({ children }: { children: ReactNode }) =>
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isGuest, setIsGuest] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("SessionContext: useEffect triggered");
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+      console.log("SessionContext: onAuthStateChange event:", _event, "session:", currentSession);
       setSession(currentSession);
       setIsGuest(!currentSession); // isGuest is true if there's no session
       setLoading(false);
+      console.log("SessionContext: isGuest after onAuthStateChange:", !currentSession);
     });
 
     // Initial session check
     supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+      console.log("SessionContext: initial getSession:", initialSession);
       setSession(initialSession);
       setIsGuest(!initialSession); // isGuest is true if there's no session
       setLoading(false);
+      console.log("SessionContext: isGuest after initial getSession:", !initialSession);
     });
 
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+    return () => {
+      console.log("SessionContext: Unsubscribing from auth state changes");
+      subscription.unsubscribe();
+    };
+  }, []); // Removed navigate from dependencies
 
   return (
     <SessionContext.Provider value={{ session, loading, isGuest }}>
