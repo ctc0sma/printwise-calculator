@@ -1,6 +1,6 @@
 {
   "home": {
-    "welcomeTitle": "Bem-vindo à Calculadora PrintWise",
+    "welcomeTitle": "Bem-vindo à PrintWise Calculator",
     "startBuilding": "Comece a construir seu incrível projeto aqui!",
     "goToCalculator": "Ir para a Calculadora de Impressão 3D"
   },
@@ -99,7 +99,7 @@
   },
   "donation": {
     "title": "Apoie Nosso Trabalho",
-    "description": "Se você acha a Calculadora PrintWise útil, considere fazer uma pequena doação para nos ajudar a continuar desenvolvendo e melhorando o aplicativo. Seu apoio é muito apreciado!",
+    "description": "Se você acha a PrintWise Calculator útil, considere fazer uma pequena doação para nos ajudar a continuar desenvolvendo e melhorando o aplicativo. Seu apoio é muito apreciado!",
     "donateNow": "Doar Agora",
     "note": "(Nota: Este é um link de espaço reservado. Por favor, substitua \"YOUR_ACTUAL_DONATION_LINK_HERE\" pelo seu link de doação real.)"
   },
@@ -107,10 +107,10 @@
     "title": "Créditos",
     "appDescription": "Este aplicativo foi desenvolvido para ajudá-lo a calcular os custos de impressão 3D de forma eficiente.",
     "thanksMessage": "Agradecimentos especiais à comunidade de código aberto e às bibliotecas usadas neste projeto.",
-    "developedBy": "Desenvolvido por Tokyo . putankinamo 🌴 🇵🇭 🫰 chikiamou 🫏 🇨🇾 ✌️"
+    "developedBy": "Desenvolvido por PrintWise Calculator"
   },
   "calculator": {
-    "title": "Calculadora PrintWise",
+    "title": "PrintWise Calculator",
     "projectName": "Nome do Projeto",
     "materialType": "Tipo de Material",
     "selectType": "Selecionar tipo",
@@ -137,7 +137,7 @@
     "totalEstimatedPrice": "Preço Total Estimado",
     "exportPdf": "Exportar Resumo (PDF)",
     "sendEmail": "Enviar por E-mail",
-    "emailSubject": "Detalhes do Desdobramento de Custos da Calculadora PrintWise",
+    "emailSubject": "PrintWise Calculator Detalhes do Desdobramento de Custos",
     "date": "Data",
     "projectDetails": "Detalhes do Projeto",
     "printType": "Tipo de Impressão",
@@ -153,6 +153,6 @@
     "profitMargin": "Margem de Lucro",
     "failedPrintRate": "Taxa de Impressão Falha",
     "supportMaterialOverhead": "Sobrecarga de Material de Suporte",
-    "developedBy": "Desenvolvido por Calculadora PrintWise"
+    "developedBy": "Desenvolvido por PrintWise Calculator"
   }
 }

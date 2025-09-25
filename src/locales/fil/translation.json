@@ -107,7 +107,7 @@
     "title": "Mga Kredito",
     "appDescription": "Ang application na ito ay binuo upang matulungan kang kalkulahin ang mga gastos sa 3D print nang mahusay.",
     "thanksMessage": "Espesyal na pasasalamat sa open-source community at mga library na ginamit sa proyektong ito.",
-    "developedBy": "Binuo ng Tokyo . putankinamo 🌴 🇵🇭 🫰 chikiamou 🫏 🇨🇾 ✌️"
+    "developedBy": "Binuo ng PrintWise Calculator"
   },
   "calculator": {
     "title": "PrintWise Calculator",
@@ -137,7 +137,7 @@
     "totalEstimatedPrice": "Kabuuang Tinantyang Presyo",
     "exportPdf": "I-export ang Buod (PDF)",
     "sendEmail": "Ipadala sa Email",
-    "emailSubject": "Mga Detalye ng Pagkasira ng Gastos ng PrintWise Calculator",
+    "emailSubject": "PrintWise Calculator Cost Breakdown Details",
     "date": "Petsa",
     "projectDetails": "Mga Detalye ng Proyekto",
     "printType": "Uri ng Pag-print",

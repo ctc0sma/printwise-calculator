@@ -1,6 +1,6 @@
 {
   "home": {
-    "welcomeTitle": "Willkommen beim PrintWise Rechner",
+    "welcomeTitle": "Willkommen beim PrintWise Calculator",
     "startBuilding": "Beginnen Sie hier mit dem Aufbau Ihres großartigen Projekts!",
     "goToCalculator": "Zum 3D-Druck-Rechner gehen"
   },
@@ -99,7 +99,7 @@
   },
   "donation": {
     "title": "Unterstützen Sie unsere Arbeit",
-    "description": "Wenn Sie den PrintWise Rechner nützlich finden, ziehen Sie bitte eine kleine Spende in Betracht, um uns bei der Weiterentwicklung und Verbesserung der App zu helfen. Ihre Unterstützung wird sehr geschätzt!",
+    "description": "Wenn Sie den PrintWise Calculator nützlich finden, ziehen Sie bitte eine kleine Spende in Betracht, um uns bei der Weiterentwicklung und Verbesserung der App zu helfen. Ihre Unterstützung wird sehr geschätzt!",
     "donateNow": "Jetzt spenden",
     "note": "(Hinweis: Dies ist ein Platzhalter-Link. Bitte ersetzen Sie \"YOUR_ACTUAL_DONATION_LINK_HERE\" durch Ihren tatsächlichen Spendenlink.)"
   },
@@ -107,10 +107,10 @@
     "title": "Credits",
     "appDescription": "Diese Anwendung wurde entwickelt, um Ihnen zu helfen, 3D-Druckkosten effizient zu berechnen.",
     "thanksMessage": "Besonderer Dank geht an die Open-Source-Community und die in diesem Projekt verwendeten Bibliotheken.",
-    "developedBy": "Entwickelt von Tokyo . putankinamo 🌴 🇵🇭 🫰 chikiamou 🫏 🇨🇾 ✌️"
+    "developedBy": "Entwickelt von PrintWise Calculator"
   },
   "calculator": {
-    "title": "PrintWise Rechner",
+    "title": "PrintWise Calculator",
     "projectName": "Projektname",
     "materialType": "Materialtyp",
     "selectType": "Typ auswählen",
@@ -137,7 +137,7 @@
     "totalEstimatedPrice": "Geschätzter Gesamtpreis",
     "exportPdf": "Zusammenfassung exportieren (PDF)",
     "sendEmail": "Per E-Mail senden",
-    "emailSubject": "PrintWise Rechner Kostenaufschlüsselung",
+    "emailSubject": "PrintWise Calculator Kostenaufschlüsselung",
     "date": "Datum",
     "projectDetails": "Projektdetails",
     "printType": "Drucktyp",

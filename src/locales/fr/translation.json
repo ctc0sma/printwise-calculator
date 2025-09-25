@@ -1,6 +1,6 @@
 {
   "home": {
-    "welcomeTitle": "Bienvenue sur la Calculatrice PrintWise",
+    "welcomeTitle": "Bienvenue sur PrintWise Calculator",
     "startBuilding": "Commencez à construire votre incroyable projet ici !",
     "goToCalculator": "Aller à la Calculatrice d'Impression 3D"
   },
@@ -99,18 +99,18 @@
   },
   "donation": {
     "title": "Soutenez Notre Travail",
-    "description": "Si vous trouvez la Calculatrice PrintWise utile, veuillez envisager de faire un petit don pour nous aider à continuer à développer et à améliorer l'application. Votre soutien est très apprécié !",
+    "description": "Si vous trouvez la PrintWise Calculator utile, veuillez envisager de faire un petit don pour nous aider à continuer à développer et à améliorer l'application. Votre soutien est très apprécié !",
     "donateNow": "Faire un Don Maintenant",
     "note": "(Remarque : Ceci est un lien de substitution. Veuillez remplacer \"YOUR_ACTUAL_DONATION_LINK_HERE\" par votre lien de don réel.)"
   },
   "credits": {
     "title": "Crédits",
-    "appDescription": "Cette application a été développée pour vous aider à calculer efficacement les coûts d'impression 3D.",
+    "appDescription": "Cette application a été développée pour vous aider à calculer les coûts d'impression 3D de manière efficace.",
     "thanksMessage": "Remerciements spéciaux à la communauté open-source et aux bibliothèques utilisées dans ce projet.",
-    "developedBy": "Développé par Tokyo . putankinamo 🌴 🇵🇭 🫰 chikiamou 🫏 🇨🇾 ✌️"
+    "developedBy": "Développé par PrintWise Calculator"
   },
   "calculator": {
-    "title": "Calculatrice PrintWise",
+    "title": "PrintWise Calculator",
     "projectName": "Nom du Projet",
     "materialType": "Type de Matériau",
     "selectType": "Sélectionner le type",
@@ -137,7 +137,7 @@
     "totalEstimatedPrice": "Prix Total Estimé",
     "exportPdf": "Exporter le Résumé (PDF)",
     "sendEmail": "Envoyer par E-mail",
-    "emailSubject": "Détails de la Répartition des Coûts de la Calculatrice PrintWise",
+    "emailSubject": "PrintWise Calculator Détails de la Répartition des Coûts",
     "date": "Date",
     "projectDetails": "Détails du Projet",
     "printType": "Type d'Impression",
@@ -153,6 +153,6 @@
     "profitMargin": "Marge Bénéficiaire",
     "failedPrintRate": "Taux d'Échec d'Impression",
     "supportMaterialOverhead": "Surcoût du Matériau de Support",
-    "developedBy": "Développé par Calculatrice PrintWise"
+    "developedBy": "Développé par PrintWise Calculator"
   }
 }

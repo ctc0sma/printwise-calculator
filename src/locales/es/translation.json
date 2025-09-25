@@ -1,6 +1,6 @@
 {
   "home": {
-    "welcomeTitle": "Bienvenido a la Calculadora PrintWise",
+    "welcomeTitle": "Bienvenido a PrintWise Calculator",
     "startBuilding": "¡Empieza a construir tu increíble proyecto aquí!",
     "goToCalculator": "Ir a la Calculadora de Impresión 3D"
   },
@@ -107,10 +107,10 @@
     "title": "Créditos",
     "appDescription": "Esta aplicación fue desarrollada para ayudarte a calcular los costos de impresión 3D de manera eficiente.",
     "thanksMessage": "Agradecimientos especiales a la comunidad de código abierto y a las bibliotecas utilizadas en este proyecto.",
-    "developedBy": "Desarrollado por Tokyo . putankinamo 🌴 🇵🇭 🫰 chikiamou 🫏 🇨🇾 ✌️"
+    "developedBy": "Desarrollado por PrintWise Calculator"
   },
   "calculator": {
-    "title": "Calculadora PrintWise",
+    "title": "PrintWise Calculator",
     "projectName": "Nombre del Proyecto",
     "materialType": "Tipo de Material",
     "selectType": "Seleccionar tipo",
@@ -137,7 +137,7 @@
     "totalEstimatedPrice": "Precio Total Estimado",
     "exportPdf": "Exportar Resumen (PDF)",
     "sendEmail": "Enviar por Correo Electrónico",
-    "emailSubject": "Detalles del Desglose de Costos de la Calculadora PrintWise",
+    "emailSubject": "PrintWise Calculator Cost Breakdown Details",
     "date": "Fecha",
     "projectDetails": "Detalles del Proyecto",
     "printType": "Tipo de Impresión",
@@ -153,6 +153,6 @@
     "profitMargin": "Margen de Beneficio",
     "failedPrintRate": "Tasa de Impresión Fallida",
     "supportMaterialOverhead": "Sobrecarga de Material de Soporte",
-    "developedBy": "Desarrollado por Calculadora PrintWise"
+    "developedBy": "Desarrollado por PrintWise Calculator"
   }
 }
