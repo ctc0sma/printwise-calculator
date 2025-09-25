@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import { SettingsProvider } from "./context/SettingsContext";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { SessionContextProvider } from "./context/SessionContext";
+import "./i18n"; // Import i18n configuration
 
 const queryClient = new QueryClient();
 

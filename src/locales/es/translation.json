@@ -1,0 +1,21 @@
+{
+  "home": {
+    "welcomeTitle": "Bienvenido a la Calculadora PrintWise",
+    "startBuilding": "¡Empieza a construir tu increíble proyecto aquí!",
+    "goToCalculator": "Ir a la Calculadora de Impresión 3D"
+  },
+  "settings": {
+    "title": "Configuración de la Aplicación"
+  },
+  "common": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema",
+    "toggleTheme": "Cambiar tema",
+    "loginToSave": "Inicia sesión para guardar tus perfiles",
+    "logoutSuccess": "¡Sesión cerrada con éxito!",
+    "logoutFailed": "Error al cerrar sesión.",
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión"
+  }
+}
