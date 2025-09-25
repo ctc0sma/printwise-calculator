@@ -45,5 +45,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+    <!-- AdMob App ID -->
+    <key>GADApplicationIdentifier</key>
+    <string>YOUR_ADMOB_APP_ID</string> <!-- REPLACE WITH YOUR ACTUAL ADMOB APP ID -->
 </dict>
 </plist>

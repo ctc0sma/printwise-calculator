@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSettings } from "@/context/SettingsContext";
 import { Link } from "react-router-dom";
-import { Settings as SettingsIcon, Save, History } from "lucide-react"; // Import Save and History icons
+import { Settings as SettingsIcon, Save, History } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -17,14 +17,15 @@ import {
 } from "@/components/ui/select";
 import PrintSummaryFooter from "@/components/PrintSummaryFooter";
 import { useSession } from "@/context/SessionContext";
-import AdBanner from "@/components/AdBanner";
-import { useTranslation } from "react-i18next"; // Import useTranslation
-import { toast } from "sonner"; // Import toast for notifications
+// import AdBanner from "@/components/AdBanner"; // Removed placeholder AdBanner
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
+import { AdMob } from '@capacitor-community/admob'; // Import AdMob
 
 const PrintCalculator = () => {
   const { session, loading, isGuest } = useSession();
   const { printCalculatorSettings, updatePrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES, saveCalculation } = useSettings();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   const [projectName, setProjectName] = useState<string>(printCalculatorSettings.projectName);
   const [objectValue, setObjectValue] = useState<number>(printCalculatorSettings.objectWeightGrams);
@@ -34,7 +35,7 @@ const PrintCalculator = () => {
   const [supportMaterialPercentage, setSupportMaterialPercentage] = useState<number>(0);
   const [shippingCost, setShippingCost] = useState<number>(0);
   const [postProcessingMaterialCost, setPostProcessingMaterialCost] = useState<number>(printCalculatorSettings.postProcessingMaterialCost);
-  const [isSummaryCollapsed, setIsSummaryCollapsed] = useState(true); // New state for footer collapse
+  const [isSummaryCollapsed, setIsSummaryCollapsed] = useState(true);
 
   useEffect(() => {
     setProjectName(printCalculatorSettings.projectName);
@@ -43,6 +44,36 @@ const PrintCalculator = () => {
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
     setPostProcessingMaterialCost(printCalculatorSettings.postProcessingMaterialCost);
   }, [printCalculatorSettings.projectName, printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.printType, printCalculatorSettings.postProcessingMaterialCost]);
+
+  // AdMob Initialization and Banner Display
+  useEffect(() => {
+    const initializeAdMob = async () => {
+      try {
+        await AdMob.initialize({
+          testingDevices: [], // Add your test device IDs here for testing ads
+          initializeForTesting: false,
+        });
+        console.log("AdMob initialized successfully.");
+
+        await AdMob.showBanner({
+          adUnitId: "YOUR_BANNER_AD_UNIT_ID", // REPLACE WITH YOUR ACTUAL BANNER AD UNIT ID
+          position: 'TOP_CENTER',
+          margin: 0,
+          is  Testing: false, // Set to true for testing
+          npa: false, // Non-personalized ads
+        });
+        console.log("AdMob banner shown.");
+      } catch (e) {
+        console.error("AdMob initialization or banner display failed:", e);
+      }
+    };
+
+    initializeAdMob();
+
+    return () => {
+      AdMob.hideBanner().catch(e => console.error("Failed to hide banner on unmount:", e));
+    };
+  }, []);
 
   const handlePrinterProfileChange = (profileName: string) => {
     const selectedProfile = PRINTER_PROFILES.find(p => p.name === profileName);
@@ -128,7 +159,7 @@ const PrintCalculator = () => {
     }
 
     const currentCalculationData = {
-      ...printCalculatorSettings, // Include all settings
+      ...printCalculatorSettings,
       materialCost,
       electricityCost,
       laborCost,
@@ -140,14 +171,13 @@ const PrintCalculator = () => {
       finalPrice,
       postProcessingTimeHours,
       supportMaterialPercentage,
-      objectWeightGrams: objectValue, // Ensure this is saved as objectWeightGrams
-      objectValue: objectValue, // Also save as objectValue for consistency with historical data structure
+      objectWeightGrams: objectValue,
+      objectValue: objectValue,
     };
     await saveCalculation(projectName, currentCalculationData);
   };
 
-  // Define padding classes based on collapse state
-  const paddingClass = isSummaryCollapsed ? "pb-[200px]" : "pb-[470px]"; // Increased padding for open state
+  const paddingClass = isSummaryCollapsed ? "pb-[200px]" : "pb-[470px]";
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">{t('common.loading')}</div>;
@@ -179,7 +209,8 @@ const PrintCalculator = () => {
           </div>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <AdBanner />
+          {/* AdMob banner will appear at the top of the app, so removing the placeholder AdBanner here */}
+          {/* <AdBanner /> */}
           <div className="space-y-4">
             <div>
               <Label htmlFor="projectName">{t('calculator.projectName')}</Label>
