@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSettings } from "@/context/SettingsContext";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 interface AdvancedSettingsSectionProps {
   printCalculatorSettings: ReturnType<typeof useSettings>['printCalculatorSettings'];
@@ -21,6 +22,8 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
   printCalculatorSettings,
   updatePrintCalculatorSettings,
 }) => {
+  const { t } = useTranslation(); // Initialize useTranslation
+
   const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string | number | boolean) => {
     if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType" || key === "selectedCountry" || key === "companyName" || key === "companyAddress" || key === "companyLogoUrl" || key === "pdfExportMode" || key === "projectName") {
       updatePrintCalculatorSettings({ [key]: value as string });
@@ -41,7 +44,7 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
     <div className="space-y-4">
       <h3 className="text-xl font-semibold mb-2 invisible md:visible">_</h3> {/* Placeholder for alignment */}
       <div>
-        <Label htmlFor="laborHourlyRate">Labor Hourly Rate ({printCalculatorSettings.currency})</Label>
+        <Label htmlFor="laborHourlyRate">{t('settings.laborHourlyRate')} ({printCalculatorSettings.currency})</Label>
         <Input
           id="laborHourlyRate"
           type="number"
@@ -51,7 +54,7 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
         />
       </div>
       <div>
-        <Label htmlFor="designSetupFee">Design/Setup Fee ({printCalculatorSettings.currency})</Label>
+        <Label htmlFor="designSetupFee">{t('settings.designSetupFee')} ({printCalculatorSettings.currency})</Label>
         <Input
           id="designSetupFee"
           type="number"
@@ -61,7 +64,7 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
         />
       </div>
       <div>
-        <Label htmlFor="profitMarginPercentage">Profit Margin (%)</Label>
+        <Label htmlFor="profitMarginPercentage">{t('settings.profitMarginPercentage')}</Label>
         <Input
           id="profitMarginPercentage"
           type="number"
@@ -71,7 +74,7 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
         />
       </div>
       <div>
-        <Label htmlFor="printerDepreciationHourly">Printer Depreciation/Maintenance Hourly Rate ({printCalculatorSettings.currency})</Label>
+        <Label htmlFor="printerDepreciationHourly">{t('settings.printerDepreciationHourly')} ({printCalculatorSettings.currency})</Label>
         <Input
           id="printerDepreciationHourly"
           type="number"
@@ -82,7 +85,7 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
         />
       </div>
       <div>
-        <Label htmlFor="failedPrintRatePercentage">Failed Print Rate (%)</Label>
+        <Label htmlFor="failedPrintRatePercentage">{t('settings.failedPrintRatePercentage')}</Label>
         <Input
           id="failedPrintRatePercentage"
           type="number"
@@ -93,7 +96,7 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
         />
       </div>
       <div>
-        <Label htmlFor="supportMaterialCost">Support Material Cost ({printCalculatorSettings.currency})</Label>
+        <Label htmlFor="supportMaterialCost">{t('settings.supportMaterialCost')} ({printCalculatorSettings.currency})</Label>
         <Input
           id="supportMaterialCost"
           type="number"
@@ -104,7 +107,7 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
         />
       </div>
       <div>
-        <Label htmlFor="postProcessingMaterialCost">Post-processing Material Cost ({printCalculatorSettings.currency})</Label>
+        <Label htmlFor="postProcessingMaterialCost">{t('settings.postProcessingMaterialCost')} ({printCalculatorSettings.currency})</Label>
         <Input
           id="postProcessingMaterialCost"
           type="number"
@@ -115,24 +118,24 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
         />
       </div>
       <div>
-        <Label htmlFor="pdfExportMode">PDF Export Mode</Label>
+        <Label htmlFor="pdfExportMode">{t('settings.pdfExportMode')}</Label>
         <Select
           value={printCalculatorSettings.pdfExportMode}
           onValueChange={(value: 'standard' | 'professional') => handleSettingChange("pdfExportMode", value)}
         >
           <SelectTrigger id="pdfExportMode">
-            <SelectValue placeholder="Select export mode" />
+            <SelectValue placeholder={t('settings.selectExportMode')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="standard">Standard PDF Export</SelectItem>
-            <SelectItem value="professional">Professional PDF Export</SelectItem>
+            <SelectItem value="standard">{t('settings.standardPdfExport')}</SelectItem>
+            <SelectItem value="professional">{t('settings.professionalPdfExport')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
       {isProfessionalPdfExport && (
         <>
           <div>
-            <Label htmlFor="companyName">Company Name</Label>
+            <Label htmlFor="companyName">{t('settings.companyName')}</Label>
             <Input
               id="companyName"
               type="text"
@@ -141,7 +144,7 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
             />
           </div>
           <div>
-            <Label htmlFor="companyAddress">Company Address</Label>
+            <Label htmlFor="companyAddress">{t('settings.companyAddress')}</Label>
             <Input
               id="companyAddress"
               type="text"
@@ -150,7 +153,7 @@ const AdvancedSettingsSection: React.FC<AdvancedSettingsSectionProps> = ({
             />
           </div>
           <div>
-            <Label htmlFor="companyLogoUrl">Company Logo URL</Label>
+            <Label htmlFor="companyLogoUrl">{t('settings.companyLogoUrl')}</Label>
             <Input
               id="companyLogoUrl"
               type="text"

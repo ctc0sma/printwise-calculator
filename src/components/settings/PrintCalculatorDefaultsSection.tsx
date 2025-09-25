@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSettings, COUNTRY_ELECTRICITY_COSTS } from "@/context/SettingsContext";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 interface PrintCalculatorDefaultsSectionProps {
   printCalculatorSettings: ReturnType<typeof useSettings>['printCalculatorSettings'];
@@ -33,6 +34,8 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
   customCurrency,
   setCustomCurrency,
 }) => {
+  const { t } = useTranslation(); // Initialize useTranslation
+
   const handleSettingChange = (key: keyof typeof printCalculatorSettings, value: string | number | boolean) => {
     if (key === "currency" || key === "selectedPrinterProfile" || key === "selectedFilamentProfile" || key === "printType" || key === "selectedCountry" || key === "companyName" || key === "companyAddress" || key === "companyLogoUrl" || key === "pdfExportMode" || key === "projectName") {
       updatePrintCalculatorSettings({ [key]: value as string });
@@ -103,35 +106,35 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
   const filteredPrinterProfiles = PRINTER_PROFILES.filter(p => p.type === printCalculatorSettings.printType || p.type === 'both');
   const filteredMaterialProfiles = MATERIAL_PROFILES.filter(m => m.type === printCalculatorSettings.printType);
 
-  const materialCostLabel = printCalculatorSettings.printType === 'filament' ? "Material Cost per Kg" : "Material Cost per Liter";
-  const objectWeightVolumeLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
+  const materialCostLabel = printCalculatorSettings.printType === 'filament' ? t('settings.materialCostPerKg') : t('settings.materialCostPerLiter');
+  const objectWeightVolumeLabel = printCalculatorSettings.printType === 'filament' ? t('settings.objectWeightGrams') : t('settings.objectVolumeMl');
   const isCustomCountry = printCalculatorSettings.selectedCountry === "Custom Country";
 
   return (
     <div className="space-y-4">
       <div>
-        <Label htmlFor="printType">Print Type</Label>
+        <Label htmlFor="printType">{t('settings.printType')}</Label>
         <Select
           value={printCalculatorSettings.printType}
           onValueChange={(value: 'filament' | 'resin') => handleSettingChange("printType", value)}
         >
           <SelectTrigger id="printType">
-            <SelectValue placeholder="Select print type" />
+            <SelectValue placeholder={t('settings.selectPrintType')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="filament">Filament Printing</SelectItem>
-            <SelectItem value="resin">Resin Printing</SelectItem>
+            <SelectItem value="filament">{t('settings.filamentPrinting')}</SelectItem>
+            <SelectItem value="resin">{t('settings.resinPrinting')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
       <div>
-        <Label htmlFor="printerProfile">Printer Profile</Label>
+        <Label htmlFor="printerProfile">{t('settings.printerProfile')}</Label>
         <Select
           value={printCalculatorSettings.selectedPrinterProfile}
           onValueChange={handlePrinterProfileChange}
         >
           <SelectTrigger id="printerProfile">
-            <SelectValue placeholder="Select a printer" />
+            <SelectValue placeholder={t('settings.selectPrinter')} />
           </SelectTrigger>
           <SelectContent>
             {filteredPrinterProfiles.map((profile) => (
@@ -143,7 +146,7 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
         </Select>
       </div>
       <div>
-        <Label htmlFor="printerPowerWatts">Printer Power (Watts)</Label>
+        <Label htmlFor="printerPowerWatts">{t('settings.printerPowerWatts')}</Label>
         <Input
           id="printerPowerWatts"
           type="number"
@@ -153,13 +156,13 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
         />
       </div>
       <div>
-        <Label htmlFor="materialProfile">Material Profile</Label>
+        <Label htmlFor="materialProfile">{t('settings.materialProfile')}</Label>
         <Select
           value={printCalculatorSettings.selectedFilamentProfile}
           onValueChange={handleMaterialProfileChange}
         >
           <SelectTrigger id="materialProfile">
-            <SelectValue placeholder="Select material" />
+            <SelectValue placeholder={t('settings.selectMaterial')} />
           </SelectTrigger>
           <SelectContent>
             {filteredMaterialProfiles.map((profile) => (
@@ -191,7 +194,7 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
         />
       </div>
       <div>
-        <Label htmlFor="printTimeHours">Print Time (hours)</Label>
+        <Label htmlFor="printTimeHours">{t('settings.printTimeHours')}</Label>
         <Input
           id="printTimeHours"
           type="number"
@@ -201,13 +204,13 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
         />
       </div>
       <div>
-        <Label htmlFor="country">Country</Label>
+        <Label htmlFor="country">{t('settings.country')}</Label>
         <Select
           value={printCalculatorSettings.selectedCountry}
           onValueChange={handleCountryChange}
         >
           <SelectTrigger id="country">
-            <SelectValue placeholder="Select country" />
+            <SelectValue placeholder={t('settings.selectCountry')} />
           </SelectTrigger>
           <SelectContent>
             {COUNTRY_ELECTRICITY_COSTS.map((country) => (
@@ -221,7 +224,7 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
       {isCustomCountry ? (
         <>
           <div>
-            <Label htmlFor="customElectricityCostPerKWh">Custom Electricity Cost per kWh ({printCalculatorSettings.currency})</Label>
+            <Label htmlFor="customElectricityCostPerKWh">{t('settings.customElectricityCostPerKWh')} ({printCalculatorSettings.currency})</Label>
             <Input
               id="customElectricityCostPerKWh"
               type="number"
@@ -232,7 +235,7 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
             />
           </div>
           <div>
-            <Label htmlFor="customCurrency">Custom Currency Symbol</Label>
+            <Label htmlFor="customCurrency">{t('settings.customCurrencySymbol')}</Label>
             <Input
               id="customCurrency"
               type="text"
@@ -244,7 +247,7 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
       ) : (
         <>
           <div>
-            <Label htmlFor="electricityCostPerKWh">Electricity Cost per kWh ({printCalculatorSettings.currency})</Label>
+            <Label htmlFor="electricityCostPerKWh">{t('settings.electricityCostPerKWh')} ({printCalculatorSettings.currency})</Label>
             <Input
               id="electricityCostPerKWh"
               type="number"
@@ -255,7 +258,7 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
             />
           </div>
           <div>
-            <Label htmlFor="currency">Currency Symbol</Label>
+            <Label htmlFor="currency">{t('settings.currencySymbol')}</Label>
             <Input
               id="currency"
               type="text"

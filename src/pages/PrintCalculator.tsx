@@ -18,10 +18,12 @@ import {
 import PrintSummaryFooter from "@/components/PrintSummaryFooter";
 import { useSession } from "@/context/SessionContext";
 import AdBanner from "@/components/AdBanner";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const PrintCalculator = () => {
   const { session, loading, isGuest } = useSession();
   const { printCalculatorSettings, updatePrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES } = useSettings();
+  const { t } = useTranslation(); // Initialize useTranslation
 
   const [projectName, setProjectName] = useState<string>(printCalculatorSettings.projectName);
   const [objectValue, setObjectValue] = useState<number>(printCalculatorSettings.objectWeightGrams);
@@ -107,7 +109,7 @@ const PrintCalculator = () => {
   const filteredPrinterProfiles = PRINTER_PROFILES.filter(p => p.type === printCalculatorSettings.printType || p.type === 'both');
   const filteredMaterialProfiles = MATERIAL_PROFILES.filter(m => m.type === printCalculatorSettings.printType);
 
-  const objectValueLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
+  const objectValueLabel = printCalculatorSettings.printType === 'filament' ? t('calculator.objectWeightGrams') : t('calculator.objectVolumeMl');
   const materialUnitSymbol = printCalculatorSettings.printType === 'filament' ? 'kg' : 'L';
 
   const handleToggleBreakdown = useCallback((collapsed: boolean) => {
@@ -118,7 +120,7 @@ const PrintCalculator = () => {
   const paddingClass = isSummaryCollapsed ? "pb-[200px]" : "pb-[470px]"; // Increased padding for open state
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return <div className="min-h-screen flex items-center justify-center">{t('common.loading')}</div>;
   }
 
   if (!session && !isGuest) {
@@ -130,7 +132,7 @@ const PrintCalculator = () => {
       <Card className="w-full max-w-2xl shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between p-6">
           <div className="flex-grow"></div>
-          <CardTitle className="text-3xl font-bold text-center flex-grow-0">PrintWise Calculator</CardTitle>
+          <CardTitle className="text-3xl font-bold text-center flex-grow-0">{t('calculator.title')}</CardTitle>
           <div className="flex-grow flex justify-end">
             <Link to="/settings">
               <Button variant="outline" size="icon">
@@ -143,7 +145,7 @@ const PrintCalculator = () => {
           <AdBanner />
           <div className="space-y-4">
             <div>
-              <Label htmlFor="projectName">Project Name</Label>
+              <Label htmlFor="projectName">{t('calculator.projectName')}</Label>
               <Input
                 id="projectName"
                 type="text"
@@ -152,13 +154,13 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="materialProfile">Material Type</Label>
+              <Label htmlFor="materialProfile">{t('calculator.materialType')}</Label>
               <Select
                 value={printCalculatorSettings.selectedFilamentProfile}
                 onValueChange={handleMaterialProfileChange}
               >
                 <SelectTrigger id="materialProfile">
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue placeholder={t('calculator.selectType')} />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredMaterialProfiles.map((profile) => (
@@ -170,13 +172,13 @@ const PrintCalculator = () => {
               </Select>
             </div>
             <div>
-              <Label htmlFor="printerProfile">Printer Profile</Label>
+              <Label htmlFor="printerProfile">{t('calculator.printerProfile')}</Label>
               <Select
                 value={printCalculatorSettings.selectedPrinterProfile}
                 onValueChange={handlePrinterProfileChange}
               >
                 <SelectTrigger id="printerProfile">
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue placeholder={t('calculator.selectType')} />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredPrinterProfiles.map((profile) => (
@@ -198,7 +200,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="printTimeHours">Print Time (hours)</Label>
+              <Label htmlFor="printTimeHours">{t('calculator.printTimeHours')}</Label>
               <Input
                 id="printTimeHours"
                 type="number"
@@ -210,7 +212,7 @@ const PrintCalculator = () => {
           </div>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="postProcessingTimeHours">Post-processing Time (hours)</Label>
+              <Label htmlFor="postProcessingTimeHours">{t('calculator.postProcessingTimeHours')}</Label>
               <Input
                 id="postProcessingTimeHours"
                 type="number"
@@ -220,7 +222,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="designSetupFee">Design/Setup Fee ({currencySymbol})</Label>
+              <Label htmlFor="designSetupFee">{t('calculator.designSetupFee')} ({currencySymbol})</Label>
               <Input
                 id="designSetupFee"
                 type="number"
@@ -230,7 +232,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="supportMaterialPercentage">Support Material Overhead (%)</Label>
+              <Label htmlFor="supportMaterialPercentage">{t('calculator.supportMaterialOverhead')}</Label>
               <Input
                 id="supportMaterialPercentage"
                 type="number"
@@ -241,7 +243,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="postProcessingMaterialCost">Post-processing Material Cost ({currencySymbol})</Label>
+              <Label htmlFor="postProcessingMaterialCost">{t('calculator.postProcessingMaterialCost')} ({currencySymbol})</Label>
               <Input
                 id="postProcessingMaterialCost"
                 type="number"
@@ -251,7 +253,7 @@ const PrintCalculator = () => {
               />
             </div>
             <div>
-              <Label htmlFor="shippingCost">Shipping Cost ({currencySymbol})</Label>
+              <Label htmlFor="shippingCost">{t('calculator.shippingCost')} ({currencySymbol})</Label>
               <Input
                 id="shippingCost"
                 type="number"
@@ -293,7 +295,7 @@ const PrintCalculator = () => {
         postProcessingTimeHours={postProcessingTimeHours}
         selectedCountry={printCalculatorSettings.selectedCountry}
         projectName={projectName}
-        onToggleBreakdown={handleToggleBreakdown} // Pass the callback here
+        onToggleBreakdown={handleToggleBreakdown}
       />
     </div>
   );

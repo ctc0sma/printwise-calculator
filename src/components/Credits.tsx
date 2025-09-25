@@ -3,26 +3,25 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const Credits = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
+
   return (
     <Card className="w-full max-w-2xl shadow-lg mt-6">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">Credits</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">{t('credits.title')}</CardTitle>
       </CardHeader>
       <CardContent className="text-center space-y-4">
         <p className="text-gray-700 dark:text-gray-300">
-          This application was developed to help you calculate 3D print costs efficiently.
+          {t('credits.appDescription')}
         </p>
         <p className="text-gray-700 dark:text-gray-300">
-          Special thanks to the open-source community and libraries used in this project.
+          {t('credits.thanksMessage')}
         </p>
         <p className="text-gray-700 dark:text-gray-300">
-          Developed by Tokyo .
-
-          putankinamo 🌴 🇵🇭 🫰
-          
-          chikiamou 🫏 🇨🇾 ✌️
+          {t('credits.developedBy')}
         </p>
         <MadeWithDyad />
       </CardContent>

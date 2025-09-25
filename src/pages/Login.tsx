@@ -6,10 +6,12 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "@/context/SessionContext";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const Login = () => {
   const navigate = useNavigate();
   const { session } = useSession();
+  const { t } = useTranslation(); // Initialize useTranslation
 
   useEffect(() => {
     if (session) {
@@ -22,7 +24,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
       <div className="w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">
-          Sign In to Save Your Profiles
+          {t('common.loginToSave')}
         </h1>
         <Auth
           supabaseClient={supabase}

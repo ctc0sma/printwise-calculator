@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { jsPDF } from "jspdf"; // Import jsPDF
 import { ChevronDown, ChevronUp } from "lucide-react"; // Import icons
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"; // Import Collapsible components
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 interface PrintSummaryFooterProps {
   materialCost: number;
@@ -75,6 +76,7 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
   onToggleBreakdown, // Destructure new prop
 }) => {
   const [isBreakdownOpen, setIsBreakdownOpen] = useState(false); // State to manage collapsible section
+  const { t } = useTranslation(); // Initialize useTranslation
 
   // Call the prop function when the breakdown state changes
   React.useEffect(() => {
@@ -84,16 +86,16 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
   const generateSummaryText = () => {
     return `PrintWise Calculator:
 
-Material Cost: ${currencySymbol}${materialCost.toFixed(2)}
-Electricity Cost: ${currencySymbol}${electricityCost.toFixed(2)}
-Labor Cost: ${currencySymbol}${laborCost.toFixed(2)}
-Design/Setup Fee: ${currencySymbol}${designSetupFee.toFixed(2)}
-Printer Depreciation: ${currencySymbol}${printerDepreciationCost.toFixed(2)}
-Support Material Cost: ${currencySymbol}${supportMaterialCost.toFixed(2)}
-Post-processing Material Cost: ${currencySymbol}${postProcessingMaterialCost.toFixed(2)}
-Shipping Cost: ${currencySymbol}${shippingCost.toFixed(2)}
+${t('summary.materialCost')}: ${currencySymbol}${materialCost.toFixed(2)}
+${t('summary.electricityCost')}: ${currencySymbol}${electricityCost.toFixed(2)}
+${t('summary.laborCost')}: ${currencySymbol}${laborCost.toFixed(2)}
+${t('summary.designSetupFee')}: ${currencySymbol}${designSetupFee.toFixed(2)}
+${t('summary.printerDepreciation')}: ${currencySymbol}${printerDepreciationCost.toFixed(2)}
+${t('summary.supportMaterialCost')}: ${currencySymbol}${supportMaterialCost.toFixed(2)}
+${t('summary.postProcessingMaterialCost')}: ${currencySymbol}${postProcessingMaterialCost.toFixed(2)}
+${t('summary.shippingCost')}: ${currencySymbol}${shippingCost.toFixed(2)}
 
-Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
+${t('summary.totalEstimatedPrice')}: ${currencySymbol}${finalPrice.toFixed(2)}
 `;
   };
 
@@ -155,35 +157,35 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
 
     // Main Title
     doc.setFontSize(24);
-    doc.text("PrintWise Calculator", pageWidth / 2, yPos, { align: "center" });
+    doc.text(t('calculator.title'), pageWidth / 2, yPos, { align: "center" });
     yPos += 15;
 
     // Date of Generation
     doc.setFontSize(10);
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, pageWidth - margin, yPos, { align: "right" });
+    doc.text(`${t('summary.date')}: ${new Date().toLocaleDateString()}`, pageWidth - margin, yPos, { align: "right" });
     yPos += 10;
 
     // Print Details Section
     if (isProfessional) {
       doc.setFontSize(16);
       doc.setFont(undefined, 'bold');
-      doc.text("Project Details", margin, yPos);
+      doc.text(t('summary.projectDetails'), margin, yPos);
       doc.setFont(undefined, 'normal');
       yPos += 10;
 
       doc.setFontSize(12);
       const printDetails = [
-        { label: "Print Type:", value: printType === 'filament' ? "Filament Printing" : "Resin Printing" },
-        { label: "Printer Profile:", value: `${selectedPrinterProfile} (${printerPowerWatts}W)` },
-        { label: "Material Type:", value: `${selectedFilamentProfile} (${currencySymbol}${materialCostPerKg.toFixed(2)}/${printType === 'filament' ? 'kg' : 'L'})` },
-        { label: printType === 'filament' ? "Object Weight (grams):" : "Object Volume (ml):", value: `${objectWeightGrams.toFixed(2)} ${printType === 'filament' ? 'grams' : 'ml'}` },
-        { label: "Print Time:", value: `${printTimeHours.toFixed(2)} hours` },
-        { label: "Post-processing Time:", value: `${postProcessingTimeHours.toFixed(2)} hours` },
-        { label: "Country (Electricity):", value: `${selectedCountry} (${currencySymbol}${electricityCostPerKWh.toFixed(2)}/kWh)` },
-        { label: "Labor Hourly Rate:", value: `${currencySymbol}${laborHourlyRate.toFixed(2)}` },
-        { label: "Profit Margin:", value: `${profitMarginPercentage.toFixed(2)}%` },
-        { label: "Failed Print Rate:", value: `${failedPrintRatePercentage.toFixed(2)}%` },
-        { label: "Support Material Overhead:", value: `${supportMaterialPercentage.toFixed(2)}%` },
+        { label: t('summary.printType'), value: printType === 'filament' ? t('settings.filamentPrinting') : t('settings.resinPrinting') },
+        { label: t('summary.printerProfile'), value: `${selectedPrinterProfile} (${printerPowerWatts}W)` },
+        { label: t('summary.materialType'), value: `${selectedFilamentProfile} (${currencySymbol}${materialCostPerKg.toFixed(2)}/${printType === 'filament' ? 'kg' : 'L'})` },
+        { label: printType === 'filament' ? t('summary.objectWeightGrams') : t('summary.objectVolumeMl'), value: `${objectWeightGrams.toFixed(2)} ${printType === 'filament' ? 'grams' : 'ml'}` },
+        { label: t('summary.printTime'), value: `${printTimeHours.toFixed(2)} ${t('summary.hours')}` },
+        { label: t('summary.postProcessingTime'), value: `${postProcessingTimeHours.toFixed(2)} ${t('summary.hours')}` },
+        { label: t('summary.countryElectricity'), value: `${selectedCountry} (${currencySymbol}${electricityCostPerKWh.toFixed(2)}/kWh)` },
+        { label: t('summary.laborHourlyRate'), value: `${currencySymbol}${laborHourlyRate.toFixed(2)}` },
+        { label: t('summary.profitMargin'), value: `${profitMarginPercentage.toFixed(2)}%` },
+        { label: t('summary.failedPrintRate'), value: `${failedPrintRatePercentage.toFixed(2)}%` },
+        { label: t('summary.supportMaterialOverhead'), value: `${supportMaterialPercentage.toFixed(2)}%` },
       ];
 
       printDetails.forEach(item => {
@@ -201,20 +203,20 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
     // Cost Breakdown Section
     doc.setFontSize(16);
     doc.setFont(undefined, 'bold');
-    doc.text("Cost Breakdown Details", margin, yPos);
+    doc.text(t('summary.costBreakdownDetails'), margin, yPos);
     doc.setFont(undefined, 'normal');
     yPos += 10;
 
     doc.setFontSize(12);
     const summaryItems = [
-      { label: "Material Cost:", value: materialCost },
-      { label: "Electricity Cost:", value: electricityCost },
-      { label: "Labor Cost:", value: laborCost },
-      { label: "Design/Setup Fee:", value: designSetupFee },
-      { label: "Printer Depreciation:", value: printerDepreciationCost },
-      { label: "Support Material Cost:", value: supportMaterialCost },
-      { label: "Post-processing Material Cost:", value: postProcessingMaterialCost },
-      { label: "Shipping Cost:", value: shippingCost },
+      { label: t('summary.materialCost'), value: materialCost },
+      { label: t('summary.electricityCost'), value: electricityCost },
+      { label: t('summary.laborCost'), value: laborCost },
+      { label: t('summary.designSetupFee'), value: designSetupFee },
+      { label: t('summary.printerDepreciation'), value: printerDepreciationCost },
+      { label: t('summary.supportMaterialCost'), value: supportMaterialCost },
+      { label: t('summary.postProcessingMaterialCost'), value: postProcessingMaterialCost },
+      { label: t('summary.shippingCost'), value: shippingCost },
     ];
 
     summaryItems.forEach(item => {
@@ -232,21 +234,21 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
     // Total Estimated Price
     doc.setFontSize(18);
     doc.setFont(undefined, 'bold'); // Make total bold
-    doc.text("Total Estimated Price:", margin, yPos);
+    doc.text(`${t('summary.totalEstimatedPrice')}:`, margin, yPos);
     doc.text(`${currencySymbol}${finalPrice.toFixed(2)}`, pageWidth - margin, yPos, { align: "right" });
     doc.setFont(undefined, 'normal'); // Reset font style
     yPos += 15;
 
     // Footer
     doc.setFontSize(10);
-    doc.text("Developed by PrintWise Calculator", pageWidth / 2, pageHeight - 10, { align: "center" });
+    doc.text(t('summary.developedBy'), pageWidth / 2, pageHeight - 10, { align: "center" });
 
     doc.save("3d_print_summary.pdf");
   };
 
   const handleSendEmail = () => {
     const summaryText = generateSummaryText();
-    const subject = encodeURIComponent("PrintWise Calculator Cost Breakdown Details");
+    const subject = encodeURIComponent(t('summary.emailSubject'));
     const body = encodeURIComponent(summaryText);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   };
@@ -257,50 +259,50 @@ Total Estimated Price: ${currencySymbol}${finalPrice.toFixed(2)}
         <Collapsible open={isBreakdownOpen} onOpenChange={setIsBreakdownOpen}>
           <CollapsibleTrigger asChild>
             <Button variant="ghost" className="w-full justify-between text-base font-medium px-0">
-              <span>Cost Breakdown Details</span>
+              <span>{t('summary.costBreakdownDetails')}</span>
               {isBreakdownOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent>
             <Separator className="my-2" />
             <div className="w-full grid grid-cols-2 gap-2 text-base font-medium">
-              <div className="text-left">Material Cost:</div>
+              <div className="text-left">{t('summary.materialCost')}:</div>
               <div className="text-right">{currencySymbol}{materialCost.toFixed(2)}</div>
 
-              <div className="text-left">Electricity Cost:</div>
+              <div className="text-left">{t('summary.electricityCost')}:</div>
               <div className="text-right">{currencySymbol}{electricityCost.toFixed(2)}</div>
 
-              <div className="text-left">Labor Cost:</div>
+              <div className="text-left">{t('summary.laborCost')}:</div>
               <div className="text-right">{currencySymbol}{laborCost.toFixed(2)}</div>
 
-              <div className="text-left">Design/Setup Fee:</div>
+              <div className="text-left">{t('summary.designSetupFee')}:</div>
               <div className="text-right">{currencySymbol}{designSetupFee.toFixed(2)}</div>
 
-              <div className="text-left">Printer Depreciation:</div>
+              <div className="text-left">{t('summary.printerDepreciation')}:</div>
               <div className="text-right">{currencySymbol}{printerDepreciationCost.toFixed(2)}</div>
 
-              <div className="text-left">Support Material Cost:</div>
+              <div className="text-left">{t('summary.supportMaterialCost')}:</div>
               <div className="text-right">{currencySymbol}{supportMaterialCost.toFixed(2)}</div>
 
-              <div className="text-left">Post-processing Material Cost:</div>
+              <div className="text-left">{t('summary.postProcessingMaterialCost')}:</div>
               <div className="text-right">{currencySymbol}{postProcessingMaterialCost.toFixed(2)}</div>
 
-              <div className="text-left">Shipping Cost:</div>
+              <div className="text-left">{t('summary.shippingCost')}:</div>
               <div className="text-right">{currencySymbol}{shippingCost.toFixed(2)}</div>
             </div>
           </CollapsibleContent>
         </Collapsible>
         <Separator />
         <div className="w-full flex justify-between items-center text-xl font-bold mt-2">
-          <span>Total Estimated Price:</span>
+          <span>{t('summary.totalEstimatedPrice')}:</span>
           <span>{currencySymbol}{finalPrice.toFixed(2)}</span>
         </div>
         <div className="w-full flex justify-end space-x-2 mt-4">
           <Button variant="outline" onClick={handleExportSummary}>
-            Export Summary (PDF)
+            {t('summary.exportPdf')}
           </Button>
           <Button onClick={handleSendEmail}>
-            Send via Email
+            {t('summary.sendEmail')}
           </Button>
         </div>
       </div>

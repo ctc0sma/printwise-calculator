@@ -22,11 +22,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Trash2, Edit, PlusCircle } from "lucide-react";
-import { useSession } from "@/context/SessionContext"; // Re-import useSession
+import { useSession } from "@/context/SessionContext";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const MaterialProfileManager = () => {
   const { userMaterialProfiles, addMaterialProfile, updateMaterialProfile, deleteMaterialProfile } = useSettings();
-  const { isGuest } = useSession(); // Use isGuest for disabling
+  const { isGuest } = useSession();
+  const { t } = useTranslation(); // Initialize useTranslation
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -34,7 +36,7 @@ const MaterialProfileManager = () => {
 
   const handleAddProfile = async () => {
     if (!currentProfile.name || currentProfile.costPerKg <= 0) {
-      alert("Please fill in all fields correctly.");
+      alert(t('profileManager.fillAllFields'));
       return;
     }
     await addMaterialProfile({
@@ -48,7 +50,7 @@ const MaterialProfileManager = () => {
 
   const handleUpdateProfile = async () => {
     if (!currentProfile.name || currentProfile.costPerKg <= 0 || !currentProfile.id) {
-      alert("Please fill in all fields correctly.");
+      alert(t('profileManager.fillAllFields'));
       return;
     }
     await updateMaterialProfile(currentProfile.id, {
@@ -68,25 +70,25 @@ const MaterialProfileManager = () => {
   return (
     <Card className="w-full shadow-lg">
       <CardHeader>
-        <CardTitle className="text-xl font-bold">Manage Material Profiles</CardTitle>
+        <CardTitle className="text-xl font-bold">{t('materialProfileManager.title')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {userMaterialProfiles.length === 0 ? (
-          <p className="text-gray-500 dark:text-gray-400">No custom material profiles added yet.</p>
+          <p className="text-gray-500 dark:text-gray-400">{t('materialProfileManager.noProfiles')}</p>
         ) : (
           <div className="space-y-2">
             {userMaterialProfiles.map((profile) => (
               <div key={profile.id} className="flex items-center justify-between p-3 border rounded-md dark:border-gray-700">
                 <div>
                   <p className="font-medium">{profile.name}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{profile.costPerKg} ({profile.type === 'filament' ? '€/kg' : '€/L'})</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{profile.costPerKg} ({profile.type === 'filament' ? t('materialProfileManager.currencyPerKg') : t('materialProfileManager.currencyPerLiter')})</p>
                 </div>
                 <div className="flex space-x-2">
                   <Button
                     variant="outline"
                     size="icon"
                     onClick={() => openEditDialog(profile as typeof currentProfile)}
-                    disabled={isGuest} // Re-enabled guest restriction
+                    disabled={isGuest}
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -94,7 +96,7 @@ const MaterialProfileManager = () => {
                     variant="destructive"
                     size="icon"
                     onClick={() => deleteMaterialProfile(profile.id!)}
-                    disabled={isGuest} // Re-enabled guest restriction
+                    disabled={isGuest}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -106,17 +108,17 @@ const MaterialProfileManager = () => {
 
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full" disabled={isGuest}> {/* Re-enabled guest restriction */}
-              <PlusCircle className="mr-2 h-4 w-4" /> Add New Material Profile
+            <Button className="w-full" disabled={isGuest}>
+              <PlusCircle className="mr-2 h-4 w-4" /> {t('materialProfileManager.addNewProfile')}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add New Material Profile</DialogTitle>
+              <DialogTitle>{t('materialProfileManager.addNewProfile')}</DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="materialName">Material Name</Label>
+                <Label htmlFor="materialName">{t('materialProfileManager.materialName')}</Label>
                 <Input
                   id="materialName"
                   value={currentProfile.name}
@@ -124,7 +126,7 @@ const MaterialProfileManager = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="costPerKg">Cost per Kg/Liter</Label>
+                <Label htmlFor="costPerKg">{t('materialProfileManager.costPerKgLiter')}</Label>
                 <Input
                   id="costPerKg"
                   type="number"
@@ -134,24 +136,24 @@ const MaterialProfileManager = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="materialType">Type</Label>
+                <Label htmlFor="materialType">{t('materialProfileManager.type')}</Label>
                 <Select
                   value={currentProfile.type}
                   onValueChange={(value: "filament" | "resin") => setCurrentProfile({ ...currentProfile, type: value })}
                 >
                   <SelectTrigger id="materialType">
-                    <SelectValue placeholder="Select type" />
+                    <SelectValue placeholder={t('materialProfileManager.selectType')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="filament">Filament</SelectItem>
-                    <SelectItem value="resin">Resin</SelectItem>
+                    <SelectItem value="filament">{t('materialProfileManager.filament')}</SelectItem>
+                    <SelectItem value="resin">{t('materialProfileManager.resin')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleAddProfile}>Add Profile</Button>
+              <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>{t('common.cancel')}</Button>
+              <Button onClick={handleAddProfile}>{t('materialProfileManager.addProfile')}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -159,11 +161,11 @@ const MaterialProfileManager = () => {
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Material Profile</DialogTitle>
+              <DialogTitle>{t('materialProfileManager.editProfile')}</DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="editMaterialName">Material Name</Label>
+                <Label htmlFor="editMaterialName">{t('materialProfileManager.materialName')}</Label>
                 <Input
                   id="editMaterialName"
                   value={currentProfile.name}
@@ -171,7 +173,7 @@ const MaterialProfileManager = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="editCostPerKg">Cost per Kg/Liter</Label>
+                <Label htmlFor="editCostPerKg">{t('materialProfileManager.costPerKgLiter')}</Label>
                 <Input
                   id="editCostPerKg"
                   type="number"
@@ -181,24 +183,24 @@ const MaterialProfileManager = () => {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="editMaterialType">Type</Label>
+                <Label htmlFor="editMaterialType">{t('materialProfileManager.type')}</Label>
                 <Select
                   value={currentProfile.type}
                   onValueChange={(value: "filament" | "resin") => setCurrentProfile({ ...currentProfile, type: value })}
                 >
                   <SelectTrigger id="editMaterialType">
-                    <SelectValue placeholder="Select type" />
+                    <SelectValue placeholder={t('materialProfileManager.selectType')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="filament">Filament</SelectItem>
-                    <SelectItem value="resin">Resin</SelectItem>
+                    <SelectItem value="filament">{t('materialProfileManager.filament')}</SelectItem>
+                    <SelectItem value="resin">{t('materialProfileManager.resin')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleUpdateProfile}>Save Changes</Button>
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>{t('common.cancel')}</Button>
+              <Button onClick={handleUpdateProfile}>{t('materialProfileManager.saveChanges')}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
