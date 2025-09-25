@@ -59,7 +59,7 @@ const PrintCalculator = () => {
           adUnitId: "YOUR_BANNER_AD_UNIT_ID", // REPLACE WITH YOUR ACTUAL BANNER AD UNIT ID
           position: 'TOP_CENTER',
           margin: 0,
-          is  Testing: false, // Set to true for testing
+          isTesting: false, // Set to true for testing
           npa: false, // Non-personalized ads
         });
         console.log("AdMob banner shown.");
@@ -209,8 +209,6 @@ const PrintCalculator = () => {
           </div>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* AdMob banner will appear at the top of the app, so removing the placeholder AdBanner here */}
-          {/* <AdBanner /> */}
           <div className="space-y-4">
             <div>
               <Label htmlFor="projectName">{t('calculator.projectName')}</Label>
