@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,7 @@ const PrintCalculator = () => {
   const [supportMaterialPercentage, setSupportMaterialPercentage] = useState<number>(0);
   const [shippingCost, setShippingCost] = useState<number>(0);
   const [postProcessingMaterialCost, setPostProcessingMaterialCost] = useState<number>(printCalculatorSettings.postProcessingMaterialCost);
+  const [isSummaryCollapsed, setIsSummaryCollapsed] = useState(true); // New state for footer collapse
 
   useEffect(() => {
     setProjectName(printCalculatorSettings.projectName);
@@ -39,7 +40,6 @@ const PrintCalculator = () => {
     setDesignSetupFee(printCalculatorSettings.designSetupFee);
     setPostProcessingMaterialCost(printCalculatorSettings.postProcessingMaterialCost);
   }, [printCalculatorSettings.projectName, printCalculatorSettings.objectWeightGrams, printCalculatorSettings.printTimeHours, printCalculatorSettings.designSetupFee, printCalculatorSettings.printType, printCalculatorSettings.postProcessingMaterialCost]);
-
 
   const handlePrinterProfileChange = (profileName: string) => {
     const selectedProfile = PRINTER_PROFILES.find(p => p.name === profileName);
@@ -110,6 +110,13 @@ const PrintCalculator = () => {
   const objectValueLabel = printCalculatorSettings.printType === 'filament' ? "Object Weight (grams)" : "Object Volume (ml)";
   const materialUnitSymbol = printCalculatorSettings.printType === 'filament' ? 'kg' : 'L';
 
+  const handleToggleBreakdown = useCallback((collapsed: boolean) => {
+    setIsSummaryCollapsed(collapsed);
+  }, []);
+
+  // Define padding classes based on collapse state
+  const paddingClass = isSummaryCollapsed ? "pb-[200px]" : "pb-[420px]"; // Adjust these values as needed
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
@@ -119,7 +126,7 @@ const PrintCalculator = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 pb-[420px]">
+    <div className={`min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 ${paddingClass}`}>
       <Card className="w-full max-w-2xl shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between p-6">
           <div className="flex-grow"></div>
@@ -286,6 +293,7 @@ const PrintCalculator = () => {
         postProcessingTimeHours={postProcessingTimeHours}
         selectedCountry={printCalculatorSettings.selectedCountry}
         projectName={projectName}
+        onToggleBreakdown={handleToggleBreakdown} // Pass the callback here
       />
     </div>
   );

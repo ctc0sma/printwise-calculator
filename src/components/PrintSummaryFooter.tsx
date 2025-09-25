@@ -38,6 +38,7 @@ interface PrintSummaryFooterProps {
   postProcessingTimeHours: number;
   selectedCountry: string;
   projectName: string; // New: Project name for PDF export
+  onToggleBreakdown: (isCollapsed: boolean) => void; // New prop to communicate collapse state
 }
 
 const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
@@ -71,8 +72,14 @@ const PrintSummaryFooter: React.FC<PrintSummaryFooterProps> = ({
   postProcessingTimeHours,
   selectedCountry,
   projectName, // Use the project name
+  onToggleBreakdown, // Destructure new prop
 }) => {
   const [isBreakdownOpen, setIsBreakdownOpen] = useState(false); // State to manage collapsible section
+
+  // Call the prop function when the breakdown state changes
+  React.useEffect(() => {
+    onToggleBreakdown(!isBreakdownOpen); // Pass true if collapsed, false if open
+  }, [isBreakdownOpen, onToggleBreakdown]);
 
   const generateSummaryText = () => {
     return `PrintWise Calculator:
