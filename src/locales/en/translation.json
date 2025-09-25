@@ -122,7 +122,9 @@
     "designSetupFee": "Design/Setup Fee",
     "supportMaterialOverhead": "Support Material Overhead (%)",
     "postProcessingMaterialCost": "Post-processing Material Cost",
-    "shippingCost": "Shipping Cost"
+    "shippingCost": "Shipping Cost",
+    "loginToSave": "Please log in to save your calculations.",
+    "projectNameRequired": "Project Name is required to save a calculation."
   },
   "summary": {
     "costBreakdownDetails": "Cost Breakdown Details",
@@ -154,5 +156,13 @@
     "failedPrintRate": "Failed Print Rate",
     "supportMaterialOverhead": "Support Material Overhead",
     "developedBy": "Developed by PrintWise Calculator"
+  },
+  "history": {
+    "title": "Historical Calculations",
+    "noSavedCalculations": "No calculations saved yet. Log in and save your first calculation!",
+    "savedOn": "Saved on",
+    "load": "Load",
+    "loginToView": "Please log in to view your historical calculations.",
+    "calculationLoaded": "Calculation loaded to calculator."
   }
 }

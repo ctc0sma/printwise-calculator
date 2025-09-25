@@ -122,7 +122,9 @@
     "designSetupFee": "Bayad sa Disenyo/Setup",
     "supportMaterialOverhead": "Overhead ng Support Material (%)",
     "postProcessingMaterialCost": "Halaga ng Post-processing Material",
-    "shippingCost": "Halaga ng Pagpapadala"
+    "shippingCost": "Halaga ng Pagpapadala",
+    "loginToSave": "Mangyaring mag-log in upang i-save ang iyong mga kalkulasyon.",
+    "projectNameRequired": "Kinakailangan ang Pangalan ng Proyekto upang i-save ang isang kalkulasyon."
   },
   "summary": {
     "costBreakdownDetails": "Mga Detalye ng Pagkasira ng Gastos",
@@ -154,5 +156,13 @@
     "failedPrintRate": "Tasa ng Nabigong Pag-print",
     "supportMaterialOverhead": "Overhead ng Support Material",
     "developedBy": "Binuo ng PrintWise Calculator"
+  },
+  "history": {
+    "title": "Mga Kalkulasyon sa Kasaysayan",
+    "noSavedCalculations": "Wala pang na-save na kalkulasyon. Mag-log in at i-save ang iyong unang kalkulasyon!",
+    "savedOn": "Na-save noong",
+    "load": "I-load",
+    "loginToView": "Mangyaring mag-log in upang tingnan ang iyong mga kalkulasyon sa kasaysayan.",
+    "calculationLoaded": "Na-load ang kalkulasyon sa calculator."
   }
 }

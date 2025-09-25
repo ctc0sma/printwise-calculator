@@ -122,7 +122,9 @@
     "designSetupFee": "Design-/Einrichtungsgebühr",
     "supportMaterialOverhead": "Stützmaterial-Overhead (%)",
     "postProcessingMaterialCost": "Kosten für Nachbearbeitungsmaterial",
-    "shippingCost": "Versandkosten"
+    "shippingCost": "Versandkosten",
+    "loginToSave": "Bitte melden Sie sich an, um Ihre Berechnungen zu speichern.",
+    "projectNameRequired": "Der Projektname ist erforderlich, um eine Berechnung zu speichern."
   },
   "summary": {
     "costBreakdownDetails": "Kostenaufschlüsselung",
@@ -154,5 +156,13 @@
     "failedPrintRate": "Fehldruckrate",
     "supportMaterialOverhead": "Stützmaterial-Overhead",
     "developedBy": "Entwickelt von PrintWise Calculator"
+  },
+  "history": {
+    "title": "Historische Berechnungen",
+    "noSavedCalculations": "Noch keine Berechnungen gespeichert. Melden Sie sich an und speichern Sie Ihre erste Berechnung!",
+    "savedOn": "Gespeichert am",
+    "load": "Laden",
+    "loginToView": "Bitte melden Sie sich an, um Ihre historischen Berechnungen anzuzeigen.",
+    "calculationLoaded": "Berechnung in den Rechner geladen."
   }
 }

@@ -46,6 +46,26 @@ interface PrintCalculatorSettings {
   projectName: string; // New: Project name for PDF export
 }
 
+interface SavedCalculation {
+  id: string;
+  project_name: string;
+  calculation_data: PrintCalculatorSettings & {
+    materialCost: number;
+    electricityCost: number;
+    laborCost: number;
+    designSetupFee: number;
+    printerDepreciationCost: number;
+    shippingCost: number;
+    supportMaterialCost: number;
+    postProcessingMaterialCost: number;
+    finalPrice: number;
+    postProcessingTimeHours: number;
+    supportMaterialPercentage: number;
+    objectValue: number; // Renamed from objectWeightGrams for clarity in saved data
+  };
+  created_at: string;
+}
+
 // Predefined printer profiles for the dropdown
 const PREDEFINED_PRINTER_PROFILES: PrinterProfile[] = [
   { name: "Ender 3", powerWatts: 150, type: 'filament' },
@@ -136,6 +156,10 @@ interface SettingsContextType {
   deleteMaterialProfile: (id: string) => Promise<void>;
   PRINTER_PROFILES: PrinterProfile[]; // Combined list
   MATERIAL_PROFILES: MaterialProfile[]; // Combined list
+  savedCalculations: SavedCalculation[]; // New: List of saved calculations
+  saveCalculation: (projectName: string, calculationData: Omit<SavedCalculation['calculation_data'], 'objectWeightGrams'> & { objectWeightGrams: number }) => Promise<void>; // New: Function to save a calculation
+  fetchSavedCalculations: () => Promise<void>; // New: Function to fetch saved calculations
+  deleteCalculation: (id: string) => Promise<void>; // New: Function to delete a calculation
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -157,6 +181,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const [userPrinterProfiles, setUserPrinterProfiles] = useState<PrinterProfile[]>([]);
   const [userMaterialProfiles, setUserMaterialProfiles] = useState<MaterialProfile[]>([]);
+  const [savedCalculations, setSavedCalculations] = useState<SavedCalculation[]>([]); // New state for saved calculations
 
   const fetchUserProfiles = useCallback(async () => {
     if (!session) { // Only fetch if there's a session
@@ -194,9 +219,31 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [session]); // Depend on session, not isGuest
 
+  const fetchSavedCalculations = useCallback(async () => {
+    if (!session) {
+      setSavedCalculations([]);
+      return;
+    }
+
+    const userId = session.user.id;
+    const { data, error } = await supabase
+      .from('user_calculations')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error("Error fetching saved calculations:", error);
+      toast.error("Failed to load saved calculations.");
+    } else {
+      setSavedCalculations(data as SavedCalculation[]);
+    }
+  }, [session]);
+
   useEffect(() => {
     fetchUserProfiles();
-  }, [fetchUserProfiles]);
+    fetchSavedCalculations();
+  }, [fetchUserProfiles, fetchSavedCalculations]);
 
   // Combine predefined and user-defined profiles
   const combinedPrinterProfiles = [...PREDEFINED_PRINTER_PROFILES, ...userPrinterProfiles];
@@ -395,6 +442,48 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const saveCalculation = async (projectName: string, calculationData: Omit<SavedCalculation['calculation_data'], 'objectWeightGrams'> & { objectWeightGrams: number }) => {
+    if (!session) {
+      toast.error("You must be logged in to save calculations.");
+      return;
+    }
+    const { error } = await supabase
+      .from('user_calculations')
+      .insert({
+        user_id: session.user.id,
+        project_name: projectName,
+        calculation_data: { ...calculationData, objectValue: calculationData.objectWeightGrams }, // Store objectWeightGrams as objectValue for consistency
+      });
+
+    if (error) {
+      console.error("Error saving calculation:", error);
+      toast.error("Failed to save calculation.");
+    } else {
+      toast.success("Calculation saved successfully!");
+      fetchSavedCalculations(); // Refresh the list of saved calculations
+    }
+  };
+
+  const deleteCalculation = async (id: string) => {
+    if (!session) {
+      toast.error("You must be logged in to delete calculations.");
+      return;
+    }
+    const { error } = await supabase
+      .from('user_calculations')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', session.user.id);
+
+    if (error) {
+      console.error("Error deleting calculation:", error);
+      toast.error("Failed to delete calculation.");
+    } else {
+      toast.success("Calculation deleted successfully!");
+      fetchSavedCalculations(); // Refresh the list
+    }
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -411,6 +500,10 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
         deleteMaterialProfile,
         PRINTER_PROFILES: combinedPrinterProfiles, // Export combined list
         MATERIAL_PROFILES: combinedMaterialProfiles, // Export combined list
+        savedCalculations, // Provide saved calculations
+        saveCalculation, // Provide save function
+        fetchSavedCalculations, // Provide fetch function
+        deleteCalculation, // Provide delete function
       }}
     >
       {children}

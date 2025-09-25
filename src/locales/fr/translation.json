@@ -122,7 +122,9 @@
     "designSetupFee": "Frais de Conception/Configuration",
     "supportMaterialOverhead": "Surcoût du Matériau de Support (%)",
     "postProcessingMaterialCost": "Coût du Matériau de Post-traitement",
-    "shippingCost": "Frais d'Expédition"
+    "shippingCost": "Frais d'Expédition",
+    "loginToSave": "Veuillez vous connecter pour sauvegarder vos calculs.",
+    "projectNameRequired": "Le nom du projet est requis pour sauvegarder un calcul."
   },
   "summary": {
     "costBreakdownDetails": "Détails de la Répartition des Coûts",
@@ -154,5 +156,13 @@
     "failedPrintRate": "Taux d'Échec d'Impression",
     "supportMaterialOverhead": "Surcoût du Matériau de Support",
     "developedBy": "Développé par PrintWise Calculator"
+  },
+  "history": {
+    "title": "Calculs Historiques",
+    "noSavedCalculations": "Aucun calcul enregistré pour le moment. Connectez-vous et enregistrez votre premier calcul !",
+    "savedOn": "Enregistré le",
+    "load": "Charger",
+    "loginToView": "Veuillez vous connecter pour consulter vos calculs historiques.",
+    "calculationLoaded": "Calcul chargé dans la calculatrice."
   }
 }

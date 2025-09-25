@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import PrintCalculator from "./pages/PrintCalculator";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
+import HistoricalCalculations from "./pages/HistoricalCalculations"; // Import the new page
 import { SettingsProvider } from "./context/SettingsContext";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { SessionContextProvider } from "./context/SessionContext";
@@ -29,6 +30,7 @@ const App = () => (
                 <Route path="/home" element={<Index />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/history" element={<HistoricalCalculations />} /> {/* Add new route */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </SettingsProvider>

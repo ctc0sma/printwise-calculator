@@ -122,7 +122,9 @@
     "designSetupFee": "Costo Progettazione/Setup",
     "supportMaterialOverhead": "Sovraccarico Materiale di Supporto (%)",
     "postProcessingMaterialCost": "Costo Materiale Post-lavorazione",
-    "shippingCost": "Costo Spedizione"
+    "shippingCost": "Costo Spedizione",
+    "loginToSave": "Accedi per salvare i tuoi calcoli.",
+    "projectNameRequired": "Il nome del progetto è obbligatorio per salvare un calcolo."
   },
   "summary": {
     "costBreakdownDetails": "Dettagli Ripartizione Costi",
@@ -154,5 +156,13 @@
     "failedPrintRate": "Percentuale Stampa Fallita",
     "supportMaterialOverhead": "Sovraccarico Materiale di Supporto",
     "developedBy": "Sviluppato da PrintWise Calculator"
+  },
+  "history": {
+    "title": "Calcoli Storici",
+    "noSavedCalculations": "Nessun calcolo salvato. Accedi e salva il tuo primo calcolo!",
+    "savedOn": "Salvato il",
+    "load": "Carica",
+    "loginToView": "Accedi per visualizzare i tuoi calcoli storici.",
+    "calculationLoaded": "Calcolo caricato nel calcolatore."
   }
 }

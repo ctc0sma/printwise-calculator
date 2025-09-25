@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSettings } from "@/context/SettingsContext";
 import { Link } from "react-router-dom";
-import { Settings as SettingsIcon } from "lucide-react";
+import { Settings as SettingsIcon, Save, History } from "lucide-react"; // Import Save and History icons
 import {
   Select,
   SelectContent,
@@ -19,10 +19,11 @@ import PrintSummaryFooter from "@/components/PrintSummaryFooter";
 import { useSession } from "@/context/SessionContext";
 import AdBanner from "@/components/AdBanner";
 import { useTranslation } from "react-i18next"; // Import useTranslation
+import { toast } from "sonner"; // Import toast for notifications
 
 const PrintCalculator = () => {
   const { session, loading, isGuest } = useSession();
-  const { printCalculatorSettings, updatePrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES } = useSettings();
+  const { printCalculatorSettings, updatePrintCalculatorSettings, PRINTER_PROFILES, MATERIAL_PROFILES, saveCalculation } = useSettings();
   const { t } = useTranslation(); // Initialize useTranslation
 
   const [projectName, setProjectName] = useState<string>(printCalculatorSettings.projectName);
@@ -116,6 +117,35 @@ const PrintCalculator = () => {
     setIsSummaryCollapsed(collapsed);
   }, []);
 
+  const handleSaveCalculation = async () => {
+    if (isGuest) {
+      toast.error(t('calculator.loginToSave'));
+      return;
+    }
+    if (!projectName) {
+      toast.error(t('calculator.projectNameRequired'));
+      return;
+    }
+
+    const currentCalculationData = {
+      ...printCalculatorSettings, // Include all settings
+      materialCost,
+      electricityCost,
+      laborCost,
+      designSetupFee: calculatedDesignSetupFee,
+      printerDepreciationCost,
+      shippingCost: calculatedShippingCost,
+      supportMaterialCost: calculatedSupportMaterialCost,
+      postProcessingMaterialCost: calculatedPostProcessingMaterialCost,
+      finalPrice,
+      postProcessingTimeHours,
+      supportMaterialPercentage,
+      objectWeightGrams: objectValue, // Ensure this is saved as objectWeightGrams
+      objectValue: objectValue, // Also save as objectValue for consistency with historical data structure
+    };
+    await saveCalculation(projectName, currentCalculationData);
+  };
+
   // Define padding classes based on collapse state
   const paddingClass = isSummaryCollapsed ? "pb-[200px]" : "pb-[470px]"; // Increased padding for open state
 
@@ -131,9 +161,16 @@ const PrintCalculator = () => {
     <div className={`min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 ${paddingClass}`}>
       <Card className="w-full max-w-2xl shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between p-6">
-          <div className="flex-grow"></div>
+          <Link to="/history">
+            <Button variant="outline" size="icon">
+              <History className="h-4 w-4" />
+            </Button>
+          </Link>
           <CardTitle className="text-3xl font-bold text-center flex-grow-0">{t('calculator.title')}</CardTitle>
-          <div className="flex-grow flex justify-end">
+          <div className="flex space-x-2">
+            <Button variant="outline" size="icon" onClick={handleSaveCalculation} disabled={isGuest}>
+              <Save className="h-4 w-4" />
+            </Button>
             <Link to="/settings">
               <Button variant="outline" size="icon">
                 <SettingsIcon className="h-4 w-4" />
