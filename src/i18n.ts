@@ -9,6 +9,7 @@ import deTranslation from './locales/de/translation.json';
 import frTranslation from './locales/fr/translation.json';
 import itTranslation from './locales/it/translation.json';
 import ptTranslation from './locales/pt/translation.json';
+import elTranslation from './locales/el/translation.json'; // Import Greek translation
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -34,6 +35,9 @@ i18n
       },
       pt: {
         translation: ptTranslation,
+      },
+      el: { // Add Greek resources
+        translation: elTranslation,
       },
     },
     lng: 'en', // default language
