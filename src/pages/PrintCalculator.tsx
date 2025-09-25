@@ -20,7 +20,7 @@ import { useSession } from "@/context/SessionContext";
 // import AdBanner from "@/components/AdBanner"; // Removed placeholder AdBanner
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { AdMob } from '@capacitor-community/admob'; // Import AdMob
+import { AdMob, AdPosition } from '@capacitor-community/admob'; // Import AdMob and AdPosition
 
 const PrintCalculator = () => {
   const { session, loading, isGuest } = useSession();
@@ -57,7 +57,7 @@ const PrintCalculator = () => {
 
         await AdMob.showBanner({
           adUnitId: "YOUR_BANNER_AD_UNIT_ID", // REPLACE WITH YOUR ACTUAL BANNER AD UNIT ID
-          position: 'TOP_CENTER',
+          position: AdPosition.TOP_CENTER, // Corrected: Use AdPosition enum
           margin: 0,
           isTesting: false, // Set to true for testing
           npa: false, // Non-personalized ads
