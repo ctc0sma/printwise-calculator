@@ -115,7 +115,7 @@ const PrintCalculator = () => {
   }, []);
 
   // Define padding classes based on collapse state
-  const paddingClass = isSummaryCollapsed ? "pb-[200px]" : "pb-[480px]"; // Increased padding for open state
+  const paddingClass = isSummaryCollapsed ? "pb-[200px]" : "pb-[470px]"; // Increased padding for open state
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
