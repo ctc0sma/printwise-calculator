@@ -23,12 +23,13 @@ import {
 } from "@/components/ui/select";
 import { Trash2, Edit, PlusCircle } from "lucide-react";
 import { useSession } from "@/context/SessionContext";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner"; // Import toast
 
 const PrinterProfileManager = () => {
   const { userPrinterProfiles, addPrinterProfile, updatePrinterProfile, deletePrinterProfile } = useSettings();
   const { isGuest } = useSession();
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -36,7 +37,7 @@ const PrinterProfileManager = () => {
 
   const handleAddProfile = async () => {
     if (!currentProfile.name || currentProfile.powerWatts <= 0) {
-      alert(t('profileManager.fillAllFields'));
+      toast.error(t('profileManager.fillAllFields')); // Use toast.error
       return;
     }
     await addPrinterProfile({
@@ -50,7 +51,7 @@ const PrinterProfileManager = () => {
 
   const handleUpdateProfile = async () => {
     if (!currentProfile.name || currentProfile.powerWatts <= 0 || !currentProfile.id) {
-      alert(t('profileManager.fillAllFields'));
+      toast.error(t('profileManager.fillAllFields')); // Use toast.error
       return;
       }
     await updatePrinterProfile(currentProfile.id, {

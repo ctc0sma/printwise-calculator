@@ -17,10 +17,9 @@ import {
 } from "@/components/ui/select";
 import PrintSummaryFooter from "@/components/PrintSummaryFooter";
 import { useSession } from "@/context/SessionContext";
-// import AdBanner from "@/components/AdBanner"; // Removed placeholder AdBanner
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { AdMob } from '@capacitor-community/admob'; // Import AdMob only
+import { AdMob } from '@capacitor-community/admob';
 
 const PrintCalculator = () => {
   const { session, loading, isGuest } = useSession();
@@ -49,6 +48,8 @@ const PrintCalculator = () => {
   useEffect(() => {
     const initializeAdMob = async () => {
       try {
+        // IMPORTANT: Replace "YOUR_ADMOB_APP_ID" with your actual AdMob App ID in capacitor.config.ts and AndroidManifest.xml
+        // and "YOUR_BANNER_AD_UNIT_ID" with your actual banner ad unit ID here.
         await AdMob.initialize({
           testingDevices: [], // Add your test device IDs here for testing ads
           initializeForTesting: false,
@@ -57,10 +58,10 @@ const PrintCalculator = () => {
 
         await AdMob.showBanner({
           adUnitId: "YOUR_BANNER_AD_UNIT_ID", // REPLACE WITH YOUR ACTUAL BANNER AD UNIT ID
-          position: AdMob.AdPosition.TOP_CENTER, // Corrected: Use AdMob.AdPosition enum
+          position: AdMob.AdPosition.TOP_CENTER,
           margin: 0,
-          isTesting: false, // Set to true for testing
-          npa: false, // Non-personalized ads
+          isTesting: false,
+          npa: false,
         });
         console.log("AdMob banner shown.");
       } catch (e) {

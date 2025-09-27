@@ -1,4 +1,3 @@
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -8,7 +7,7 @@ import NotFound from "./pages/NotFound";
 import PrintCalculator from "./pages/PrintCalculator";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
-import HistoricalCalculations from "./pages/HistoricalCalculations"; // Import the new page
+import HistoricalCalculations from "./pages/HistoricalCalculations";
 import { SettingsProvider } from "./context/SettingsContext";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { SessionContextProvider } from "./context/SessionContext";
@@ -20,7 +19,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="system" enableSystem attribute="class">
       <TooltipProvider>
-        <Toaster />
+        {/* Removed <Toaster /> as sonner is used */}
         <Sonner />
         <BrowserRouter>
           <SessionContextProvider>
@@ -30,7 +29,7 @@ const App = () => (
                 <Route path="/home" element={<Index />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/history" element={<HistoricalCalculations />} /> {/* Add new route */}
+                <Route path="/history" element={<HistoricalCalculations />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </SettingsProvider>
