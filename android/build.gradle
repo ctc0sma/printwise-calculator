@@ -24,6 +24,19 @@ allprojects {
     }
 }
 
+// Load keystore properties
+def keystorePropertiesFile = rootProject.file("key.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    ext.keyStore = keystoreProperties['storeFile']
+    ext.keyStorePassword = keystoreProperties['storePassword']
+    ext.keyAlias = keystoreProperties['keyAlias']
+    ext.keyAliasPassword = keystoreProperties['keyPassword']
+} else {
+    logger.warn("key.properties not found. Release builds will fail without signing config.")
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

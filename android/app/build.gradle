@@ -20,6 +20,19 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release // Apply the release signing config
+        }
+    }
+
+    // Add signing configurations
+    signingConfigs {
+        release {
+            if (project.hasProperty('keyStore')) {
+                storeFile file(project.property('keyStore'))
+                storePassword project.property('keyStorePassword')
+                keyAlias project.property('keyAlias')
+                keyPassword project.property('keyAliasPassword')
+            }
         }
     }
 }
