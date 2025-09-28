@@ -17,14 +17,14 @@ android {
         }
     }
 
-    // Move signing configurations here, before buildTypes
     signingConfigs {
         release {
-            if (project.hasProperty('keyStore')) {
-                storeFile file(project.property('keyStore'))
-                storePassword project.property('keyStorePassword')
-                keyAlias project.property('keyAlias')
-                keyPassword project.property('keyPassword')
+            // Access properties from rootProject.ext
+            if (rootProject.hasProperty('keyStore')) {
+                storeFile file(rootProject.ext.keyStore)
+                storePassword rootProject.ext.keyStorePassword
+                keyAlias rootProject.ext.keyAlias
+                keyPassword rootProject.ext.keyAliasPassword
             }
         }
     }
