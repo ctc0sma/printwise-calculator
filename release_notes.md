@@ -2,17 +2,8 @@
 
 ## Version 1.0.1
 
-This update focuses on foundational improvements for localization and Android deployment.
-
-### ✨ New Features
-
-*   **Internationalization (i18n) Support**:
-    *   The app now supports multiple languages! You can switch between English, Spanish, Filipino, German, French, Italian, Portuguese, and Greek.
-    *   Added a language switcher dropdown in the header on both the main calculator page and the settings page.
-*   **Donation & Credits Sections**: Added new sections in the settings page to support the project and give credit to the tools used.
-
-### 🛠️ Improvements & Fixes
-
-*   **Android Package Name Updated**: The Android application ID has been updated to `com.printwise.calculator` for better branding and store compliance.
-*   **UI Adjustments**: The headers have been updated to cleanly incorporate the new language switcher and theme toggles.
-*   **Code Refactoring**: Translated all static text throughout the application using the new i18n system.
+- **Multi-Language Support**: Now available in 8 languages including English, Spanish, German, French, Italian, Portuguese, Greek, and Filipino!
+- **New Features**: Added "Donation" and "Credits" sections in Settings.
+- **UI Improvements**: Refined headers to include the new language switcher.
+- **Android Update**: Updated the app's package name for better store compatibility.
+- General bug fixes and performance improvements.
