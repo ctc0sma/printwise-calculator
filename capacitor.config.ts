@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.example.snugglykookaburraclimb',
+  appId: 'com.printwise.calculator',
   appName: 'PrintWise Calculator',
   webDir: 'dist',
   bundledWebRuntime: false, // Add this line
