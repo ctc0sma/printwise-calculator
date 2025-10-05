@@ -10,14 +10,17 @@ Name: BUNDLE-METADATA/com.android.tools.build.libraries/dependencies.p
  b
 SHA-256-Digest: Dt3deGBmDZ2lONsSLp/uor6P3R+L7mF9jFbbPl94ZPM=
 
+Name: BUNDLE-METADATA/com.android.tools.build.obfuscation/proguard.map
+SHA-256-Digest: B8bo9BhL/25JRIqp5NemYOejy4GQKQ/k3s09vCQ8KzA=
+
 Name: BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
-SHA-256-Digest: 6uYRriJdKFUF5Phpm0Vkhk8uRK0wYdbVaoTGBrfpIs4=
+SHA-256-Digest: agR0WVIqNX61DkThi3wqX5AHixezGO6qsgjd7GFdWKI=
 
 Name: BUNDLE-METADATA/com.android.tools.build.profiles/baseline.profm
-SHA-256-Digest: iHHdMpc8wkwZKBsSHuxjL76FZxWpl4pihKYnsFXBXDE=
+SHA-256-Digest: Hv2eJH59x1RR+iimHDX29JJGbdR1bY1vESFGBEu1gqs=
 
-Name: BUNDLE-METADATA/com.android.tools/d8.json
-SHA-256-Digest: lZQSsV0dDoHkNMD53iVKhpDjjwT4zYNofaLlk8owLnI=
+Name: BUNDLE-METADATA/com.android.tools/r8.json
+SHA-256-Digest: VB32FM6fNc7ZIcJONRQVH196rwrAecjQcC7Y+OmyiY4=
 
 Name: BundleConfig.pb
 SHA-256-Digest: K/fGH80xwxxQoIbwkfgDJl07JP+QIEpQ9aOZTIZeEis=
@@ -71,13 +74,7 @@ Name: base/assets/public/robots.txt
 SHA-256-Digest: o9J7PKXOMjQfqflvARabUhsWV8BdGGDEXR5TpiWOnos=
 
 Name: base/dex/classes.dex
-SHA-256-Digest: Hah8MGqgjYiTvcILJV8r1AxTffSDfWa/b166O20sT2I=
-
-Name: base/dex/classes2.dex
-SHA-256-Digest: /gH0Urz/H9a2Clz/YK4Tm/ZPd5E3jwX8+s8tbi4lw3s=
-
-Name: base/dex/classes3.dex
-SHA-256-Digest: qCSUNqI97rM8Tvx8xlfSsc+WXyuUE9l5IXH35Evm8Y4=
+SHA-256-Digest: 4Mk2jfVEdI6uTKcRAet0l9XZbJS6SGb7N+c5Loj2kFQ=
 
 Name: base/manifest/AndroidManifest.xml
 SHA-256-Digest: WbEMw4lD3DrwKuKUoqasLGhIWuSOobJ/1C1+SB7OLUg=
@@ -1632,13 +1629,11 @@ SHA-256-Digest: GLo805azBMO/br10Plrb2bm1sqQvVT5/dOC8+1SVoh8=
 Name: base/root/META-INF/kotlinx_coroutines_core.version
 SHA-256-Digest: GLo805azBMO/br10Plrb2bm1sqQvVT5/dOC8+1SVoh8=
 
-Name: base/root/META-INF/services/kotlinx.coroutines.CoroutineExceptio
- nHandler
-SHA-256-Digest: MSm47fbbB95vj/R2leIXfIu6Tu0pYtMIXHGeWsu1ijM=
+Name: base/root/META-INF/services/u4.z
+SHA-256-Digest: 1qjq6wooHJnIW81qRNgeuuULD04wTY7ul0BbrivQT9U=
 
-Name: base/root/META-INF/services/kotlinx.coroutines.internal.MainDisp
- atcherFactory
-SHA-256-Digest: oep36o+T9Bkla25m8pcT+VDY1ukEQrYI2ICkgAO163I=
+Name: base/root/META-INF/services/w4.p
+SHA-256-Digest: JwEgR7k4Ua2z1HchimcqMGrnZwE4eqjDpN2BlwRjts4=
 
 Name: base/root/META-INF/version-control-info.textproto
 SHA-256-Digest: ONN3r6drY2Tlv1Uc9P/sGogaRhAqAEf1I/vxSODfaSg=

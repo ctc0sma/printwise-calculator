@@ -1,6 +1,6 @@
 Signature-Version: 1.0
 Created-By: Signflinger
-SHA-256-Digest-Manifest: GGNrPA7oKIeyQVC7Tq0/GPMHtjNA3ojv8zSnBIPj6ck=
+SHA-256-Digest-Manifest: 8LVJFyP5MwOiUchzFyGK1CRxlSf0K50aGQITcMgrM3g=
 
 Name: BUNDLE-METADATA/com.android.tools.build.gradle/app-metadata.prop
  erties
@@ -10,14 +10,17 @@ Name: BUNDLE-METADATA/com.android.tools.build.libraries/dependencies.p
  b
 SHA-256-Digest: ZJWmq1VT7QTTBEBul93XNHFPrFr5ZUQT/orFMv0G/8U=
 
+Name: BUNDLE-METADATA/com.android.tools.build.obfuscation/proguard.map
+SHA-256-Digest: s03FpV4BelNXT5RWIhjGhalhiQA/wHdG+ivmPcAbbwo=
+
 Name: BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
-SHA-256-Digest: tCJSCWaiGArRQIW6cqtTu2Eg3+pu0eNR4PNnOMVWFvY=
+SHA-256-Digest: GVZOA/x6ZacoOxqYPEIODfsSCbbHqlwa1wIE7YS+UYE=
 
 Name: BUNDLE-METADATA/com.android.tools.build.profiles/baseline.profm
-SHA-256-Digest: n1Y3HZyWe8XDoXTBgabVKERaZNvw5/+7r2qFDHAroAg=
+SHA-256-Digest: OHjwRkGHy0F9aeh46yWgNZr8vsinQK0U7C9XfmeGoYE=
 
-Name: BUNDLE-METADATA/com.android.tools/d8.json
-SHA-256-Digest: u8/2Q0ufZBL3btb86lTcHYI7j9LJy3Ahn6QGfgEJu1Q=
+Name: BUNDLE-METADATA/com.android.tools/r8.json
+SHA-256-Digest: +cevVfng0MqJTYkbYenp5XG6dkeLcCS9V18+BWHRcjs=
 
 Name: BundleConfig.pb
 SHA-256-Digest: +r9xC2EEHNH7bsjGk/BlTpOi7NQhRvhTWbAnrLOuTV4=
@@ -71,13 +74,7 @@ Name: base/assets/public/robots.txt
 SHA-256-Digest: rLqzf5qbBuxGYVLPQVXHY/wqfTYbQRW6/Fmn73daY2M=
 
 Name: base/dex/classes.dex
-SHA-256-Digest: 2igiZs3S0odpVueIYBTo6DpDNphTiG1P7XAllkwHL7o=
-
-Name: base/dex/classes2.dex
-SHA-256-Digest: 6fLmv7rryGHg2pvcSiDscg5dZurJ2KH7VKrGxRo6e6c=
-
-Name: base/dex/classes3.dex
-SHA-256-Digest: 0v56Tq5d1jNF+cuI1w5IcOsNsqcgq0yMexcI+BBVVJE=
+SHA-256-Digest: i44CbGDSIJRV+HV/i2HCmJRF11q4o1Qlqq/EfkoxQKc=
 
 Name: base/manifest/AndroidManifest.xml
 SHA-256-Digest: dIOmVvOT9GuCWDA+U+8CvOB1TfNqSZueTJGj5B+nqAQ=
@@ -1632,13 +1629,11 @@ SHA-256-Digest: 8k4ngh9KXOxzUzGnf0NzJa2J03BIut7qJdjRY6npOWU=
 Name: base/root/META-INF/kotlinx_coroutines_core.version
 SHA-256-Digest: 7yALR9lt4bEWwiyEDNKpBgPnUOPc3YFrD/pzvUmizFE=
 
-Name: base/root/META-INF/services/kotlinx.coroutines.CoroutineExceptio
- nHandler
-SHA-256-Digest: gEIQQc4Bl+ATk1qvoDuPIijXG0R4QXYF+NaSlY6Eems=
+Name: base/root/META-INF/services/u4.z
+SHA-256-Digest: O5DeMAMbIc5T+C6j1/xCp/seVkxWy/4SnEYgsjEV9Vs=
 
-Name: base/root/META-INF/services/kotlinx.coroutines.internal.MainDisp
- atcherFactory
-SHA-256-Digest: c2XawPIZW8/CQqOa3kePO9D32XjpIm5CTUsgetWsq0Q=
+Name: base/root/META-INF/services/w4.p
+SHA-256-Digest: ejCE5iBThJuWKGVC1e3cPxDnDuMGblUWNTfzpxGBGfA=
 
 Name: base/root/META-INF/version-control-info.textproto
 SHA-256-Digest: LIHtuTNR3CoycRviudU8sPo4Cu/JgZEN+GHtB8wIqsI=
