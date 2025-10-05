@@ -1,6 +1,6 @@
 Signature-Version: 1.0
 Created-By: Signflinger
-SHA-256-Digest-Manifest: 8LVJFyP5MwOiUchzFyGK1CRxlSf0K50aGQITcMgrM3g=
+SHA-256-Digest-Manifest: n/uNTaoQynX62TFOZYwO7DFX0VtAgLaCo3CYMzzPsnc=
 
 Name: BUNDLE-METADATA/com.android.tools.build.gradle/app-metadata.prop
  erties
@@ -29,7 +29,7 @@ Name: base/assets.pb
 SHA-256-Digest: QCByRl0OmbjmTMXNefBMXWfgDTE5LRbSbVtwgmRRo9U=
 
 Name: base/assets/capacitor.config.json
-SHA-256-Digest: 3WfWeZqOy5eg4dxd8iKVW2OeMGoP0PC5QCIflgCjX3E=
+SHA-256-Digest: HhL8+5plsWijsPTVL3ElQ/BaNCOmt4JlT5Kw+co+3+k=
 
 Name: base/assets/capacitor.plugins.json
 SHA-256-Digest: 7BG7MsovPvRDbiFNmrLSuSKf3wm6+UUkRWq41ykAJUc=
@@ -77,7 +77,7 @@ Name: base/dex/classes.dex
 SHA-256-Digest: i44CbGDSIJRV+HV/i2HCmJRF11q4o1Qlqq/EfkoxQKc=
 
 Name: base/manifest/AndroidManifest.xml
-SHA-256-Digest: dIOmVvOT9GuCWDA+U+8CvOB1TfNqSZueTJGj5B+nqAQ=
+SHA-256-Digest: MHCib39cnqpu4o898ast7/5R17xmb6t7ZDHo+QbGTf0=
 
 Name: base/res/anim-v21/fragment_fast_out_extra_slow_in.xml
 SHA-256-Digest: jS4uyqNlbcrZhNtn8U31F2m/lpBVY3ruQE7hUwExG/U=

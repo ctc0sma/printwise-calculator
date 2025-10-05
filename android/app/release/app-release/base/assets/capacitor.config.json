@@ -3,7 +3,7 @@
 	"appName": "PrintWise Calculator",
 	"webDir": "dist",
 	"bundledWebRuntime": false,
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"plugins": {
 		"AdMob": {
 			"appId": "YOUR_ADMOB_APP_ID"

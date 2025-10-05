@@ -29,7 +29,7 @@ Name: base/assets.pb
 SHA-256-Digest: BN+d7LnEn75MWS1WdYOh2nPeDeHYh6SZK/im0fhfk6M=
 
 Name: base/assets/capacitor.config.json
-SHA-256-Digest: 75n9EqylbAIsPwPQwxqNlT3RISvdmFR+0BdLX3SmYk4=
+SHA-256-Digest: eN4oKdK5AU+NuRp8/VF6HALC93GYkRbModcIXNy2C5o=
 
 Name: base/assets/capacitor.plugins.json
 SHA-256-Digest: t+eKWOUJjhJAqsle8Vu9ivlCcH2AiK/T24r+uSdITFM=
@@ -77,7 +77,7 @@ Name: base/dex/classes.dex
 SHA-256-Digest: 4Mk2jfVEdI6uTKcRAet0l9XZbJS6SGb7N+c5Loj2kFQ=
 
 Name: base/manifest/AndroidManifest.xml
-SHA-256-Digest: WbEMw4lD3DrwKuKUoqasLGhIWuSOobJ/1C1+SB7OLUg=
+SHA-256-Digest: J0GbVJqykn8lxw2xzFbvlpPby9RVs3tykY+X/KexFqM=
 
 Name: base/res/anim-v21/fragment_fast_out_extra_slow_in.xml
 SHA-256-Digest: mMWWmImvmwVyS8dM8vkjlQs3c3/cqLaEXfDdJ0ALabw=
