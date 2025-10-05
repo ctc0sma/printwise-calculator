@@ -1,6 +1,6 @@
 # Privacy Policy for PrintWise Calculator
 
-**Effective Date:** July 27, 2024
+**Effective Date:** October 5, 2025
 
 Thank you for using PrintWise Calculator ("we," "us," "our"). This Privacy Policy explains how we collect, use, and share information about you when you use our mobile application (the "App").
 
