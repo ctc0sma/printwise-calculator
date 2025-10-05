@@ -1,5 +1,5 @@
 {
-	"appId": "com.example.snugglykookaburraclimb",
+	"appId": "com.printwise.calculator",
 	"appName": "PrintWise Calculator",
 	"webDir": "dist",
 	"bundledWebRuntime": false,

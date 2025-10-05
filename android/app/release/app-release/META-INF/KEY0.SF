@@ -1,6 +1,6 @@
 Signature-Version: 1.0
 Created-By: Signflinger
-SHA-256-Digest-Manifest: rbibkGI3hXWGVckVxJl3LqJXah3HU1NcyJ+uL8nIVhQ=
+SHA-256-Digest-Manifest: GGNrPA7oKIeyQVC7Tq0/GPMHtjNA3ojv8zSnBIPj6ck=
 
 Name: BUNDLE-METADATA/com.android.tools.build.gradle/app-metadata.prop
  erties
@@ -11,10 +11,10 @@ Name: BUNDLE-METADATA/com.android.tools.build.libraries/dependencies.p
 SHA-256-Digest: ZJWmq1VT7QTTBEBul93XNHFPrFr5ZUQT/orFMv0G/8U=
 
 Name: BUNDLE-METADATA/com.android.tools.build.profiles/baseline.prof
-SHA-256-Digest: PvZHbu1HiZc7rsLy+pjA4dZ77GxWAJlHDQAuAl/nQLE=
+SHA-256-Digest: tCJSCWaiGArRQIW6cqtTu2Eg3+pu0eNR4PNnOMVWFvY=
 
 Name: BUNDLE-METADATA/com.android.tools.build.profiles/baseline.profm
-SHA-256-Digest: VWY8RngMkgdNonTmDNi/8HvJU6dP52XjQbtJWvv+SSk=
+SHA-256-Digest: n1Y3HZyWe8XDoXTBgabVKERaZNvw5/+7r2qFDHAroAg=
 
 Name: BUNDLE-METADATA/com.android.tools/d8.json
 SHA-256-Digest: u8/2Q0ufZBL3btb86lTcHYI7j9LJy3Ahn6QGfgEJu1Q=
@@ -26,7 +26,7 @@ Name: base/assets.pb
 SHA-256-Digest: QCByRl0OmbjmTMXNefBMXWfgDTE5LRbSbVtwgmRRo9U=
 
 Name: base/assets/capacitor.config.json
-SHA-256-Digest: 3FRozzFaZqlL9I3a8DrUETVFx0T0goyo6JhkHWUUI90=
+SHA-256-Digest: 3WfWeZqOy5eg4dxd8iKVW2OeMGoP0PC5QCIflgCjX3E=
 
 Name: base/assets/capacitor.plugins.json
 SHA-256-Digest: 7BG7MsovPvRDbiFNmrLSuSKf3wm6+UUkRWq41ykAJUc=
@@ -71,16 +71,16 @@ Name: base/assets/public/robots.txt
 SHA-256-Digest: rLqzf5qbBuxGYVLPQVXHY/wqfTYbQRW6/Fmn73daY2M=
 
 Name: base/dex/classes.dex
-SHA-256-Digest: FiXpT8/awOh4oHuo5UtWiiEA3S273uk/xnUz9QUGyHs=
+SHA-256-Digest: 2igiZs3S0odpVueIYBTo6DpDNphTiG1P7XAllkwHL7o=
 
 Name: base/dex/classes2.dex
 SHA-256-Digest: 6fLmv7rryGHg2pvcSiDscg5dZurJ2KH7VKrGxRo6e6c=
 
 Name: base/dex/classes3.dex
-SHA-256-Digest: ZIES1vQJyB+rTkbEU3QgVYv2PIC037ryXULz+6js13U=
+SHA-256-Digest: 0v56Tq5d1jNF+cuI1w5IcOsNsqcgq0yMexcI+BBVVJE=
 
 Name: base/manifest/AndroidManifest.xml
-SHA-256-Digest: xDJP9wqoABeWp3jVSczyx/6wVav+hUjb/LEvpJ+n2+Y=
+SHA-256-Digest: dIOmVvOT9GuCWDA+U+8CvOB1TfNqSZueTJGj5B+nqAQ=
 
 Name: base/res/anim-v21/fragment_fast_out_extra_slow_in.xml
 SHA-256-Digest: jS4uyqNlbcrZhNtn8U31F2m/lpBVY3ruQE7hUwExG/U=
@@ -1485,7 +1485,7 @@ Name: base/res/xml/image_share_filepaths.xml
 SHA-256-Digest: 0+PYMzWkF9P74ASmHnQJ3nsU/HPY73jmvmkO1bJvAU0=
 
 Name: base/resources.pb
-SHA-256-Digest: LpVEQpgmBnT+8G6AyVqxX5oggX0ft0VsZtZ1Um1m/ik=
+SHA-256-Digest: pLnB3PX4DUQJGQwYa7+zH06dnnmOZLobFRHk/E/yGHM=
 
 Name: base/root/DebugProbesKt.bin
 SHA-256-Digest: Q6OhGjSxLz7EjpZ6kaHJZ9VbLzKvNgLhsSDyH28mrr4=
