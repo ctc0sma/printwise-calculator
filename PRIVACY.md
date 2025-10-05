@@ -1,6 +1,6 @@
 # Privacy Policy for PrintWise Calculator
 
-**Effective Date:** [Date, e.g., July 26, 2024]
+**Effective Date:** July 27, 2024
 
 Thank you for using PrintWise Calculator ("we," "us," "our"). This Privacy Policy explains how we collect, use, and share information about you when you use our mobile application (the "App").
 
@@ -48,7 +48,7 @@ We do not sell your personal data. We may share your information only in the fol
 You have rights over your data:
 
 *   **Access and Update:** You can access and update your custom profiles directly within the App's settings.
-*   **Deletion:** You can delete your custom profiles and saved calculations from within the App. To delete your entire account and all associated data, please contact us at **[Your Contact Email]**.
+*   **Deletion:** You can delete your custom profiles and saved calculations from within the App. To delete your entire account and all associated data, please contact us at **printwisecalculator@gmail.com**.
 *   **Opting Out of Personalized Ads:** You can opt out of personalized advertising by adjusting the settings on your mobile device. For Android, you can usually find this under "Settings" > "Google" > "Ads".
 
 ### 5. Data Security
@@ -65,4 +65,4 @@ We may update our Privacy Policy from time to time. We will notify you of any ch
 
 ### 8. Contact Us
 
-If you have any questions about this Privacy Policy, please contact us at: **[Your Contact Email]**
+If you have any questions about this Privacy Policy, please contact us at: **printwisecalculator@gmail.com**
