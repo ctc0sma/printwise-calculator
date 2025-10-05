@@ -1,6 +1,6 @@
 # Release Notes - PrintWise Calculator
 
-## Version 1.0.1
+## Version 1.0.0
 
 - **Multi-Language Support**: Now available in 8 languages including English, Spanish, German, French, Italian, Portuguese, Greek, and Filipino!
 - **New Features**: Added "Donation" and "Credits" sections in Settings.
