@@ -57,7 +57,7 @@ We use Supabase's built-in security features to help protect your information. H
 
 ### 6. Children's Privacy
 
-Our App is not intended for use by children under the age of 13. We do not knowingly collect personally identifiable information from children under 13.
+Our App is not directed to anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13. If you are a parent or guardian and you are aware that your child has provided us with personal information without your consent, please contact us at **printwisecalculator@gmail.com**. If we become aware that we have collected personal information from a child under the age of 13 without verification of parental consent, we will take steps to remove that information from our servers.
 
 ### 7. Changes to This Privacy Policy
 
