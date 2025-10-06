@@ -20,8 +20,6 @@ Whether you're printing with filament or resin, PrintWise breaks down every aspe
   - Use our extensive list of predefined profiles for popular printers and materials.
   - **Log in to create and save unlimited custom profiles** for your specific setup, ensuring quick and consistent calculations every time.
 
-- **Detailed Cost Breakdown:** Understand exactly where your costs are coming from. See a clear summary of material, power, labor, depreciation, and other expenses.
-
 - **Professional PDF Exports:**
   - Generate clean, professional PDF summaries of your cost breakdowns.
   - Add your company name, address, and logo for branded quotes to send directly to clients.
