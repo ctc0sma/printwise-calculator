@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
   version: "1.0.2",
   plugins: {
     AdMob: {
-      appId: "YOUR_ADMOB_APP_ID", // REPLACE WITH YOUR ACTUAL ADMOB APP ID
+      appId: "ca-app-pub-9180540137514108~4312780214", // REPLACE WITH YOUR ACTUAL ADMOB APP ID
     },
   },
   server: {
