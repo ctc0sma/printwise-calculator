@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 
 const Credits = () => {
   const { t } = useTranslation();
-  const appVersion = "2025.10.05";
+  const appVersion = "1.0.2";
 
   return (
     <Card className="w-full max-w-2xl shadow-lg mt-6">
