@@ -84,8 +84,8 @@ const Settings = () => {
         <MaterialProfileManager />
       </div>
 
-      <Credits />
       <DonationSection />
+      <Credits />
     </div>
   );
 };

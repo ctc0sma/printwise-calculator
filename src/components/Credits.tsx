@@ -3,10 +3,11 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
 
 const Credits = () => {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
+  const appVersion = "2025.10.05";
 
   return (
     <Card className="w-full max-w-2xl shadow-lg mt-6">
@@ -22,6 +23,9 @@ const Credits = () => {
         </p>
         <p className="text-gray-700 dark:text-gray-300">
           {t('credits.developedBy')}
+        </p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Version {appVersion}
         </p>
         <MadeWithDyad />
       </CardContent>
