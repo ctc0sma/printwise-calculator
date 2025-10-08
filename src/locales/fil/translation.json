@@ -106,7 +106,7 @@
     "title": "Mga Kredito",
     "appDescription": "Ang application na ito ay binuo upang matulungan kang kalkulahin ang mga gastos sa 3D print nang mahusay.",
     "thanksMessage": "Espesyal na pasasalamat sa open-source community at mga library na ginamit sa proyektong ito.",
-    "developedBy": "Binuo ng PrintWise Calculator"
+    "developedBy": "Binuo ni Tokyo"
   },
   "calculator": {
     "title": "PrintWise Calculator",
@@ -154,7 +154,7 @@
     "profitMargin": "Margen ng Kita",
     "failedPrintRate": "Tasa ng Nabigong Pag-print",
     "supportMaterialOverhead": "Overhead ng Support Material",
-    "developedBy": "Binuo ng PrintWise Calculator"
+    "developedBy": "Binuo ni Tokyo"
   },
   "history": {
     "title": "Mga Kalkulasyon sa Kasaysayan",

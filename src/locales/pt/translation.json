@@ -106,7 +106,7 @@
     "title": "Créditos",
     "appDescription": "Este aplicativo foi desenvolvido para ajudá-lo a calcular os custos de impressão 3D de forma eficiente.",
     "thanksMessage": "Agradecimentos especiais à comunidade de código aberto e às bibliotecas usadas neste projeto.",
-    "developedBy": "Desenvolvido por PrintWise Calculator"
+    "developedBy": "Desenvolvido por Tokyo"
   },
   "calculator": {
     "title": "PrintWise Calculator",
@@ -154,7 +154,7 @@
     "profitMargin": "Margem de Lucro",
     "failedPrintRate": "Taxa de Impressão Falha",
     "supportMaterialOverhead": "Sobrecarga de Material de Suporte",
-    "developedBy": "Desenvolvido por PrintWise Calculator"
+    "developedBy": "Desenvolvido por Tokyo"
   },
   "history": {
     "title": "Cálculos Históricos",
