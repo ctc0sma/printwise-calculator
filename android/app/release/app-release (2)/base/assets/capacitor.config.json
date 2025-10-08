@@ -1,0 +1,15 @@
+{
+	"appId": "com.printwise.calculator",
+	"appName": "PrintWise Calculator",
+	"webDir": "dist",
+	"bundledWebRuntime": false,
+	"version": "1.0.2",
+	"plugins": {
+		"AdMob": {
+			"appId": "ca-app-pub-9180540137514108~4312780214"
+		}
+	},
+	"server": {
+		"androidScheme": "https"
+	}
+}
