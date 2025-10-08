@@ -90,9 +90,10 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
 
   const handleCustomElectricityCostChange = (value: string) => {
     const numValue = parseFloat(value);
-    setCustomElectricityCost(isNaN(numValue) ? 0 : numValue);
+    const newCost = isNaN(numValue) ? 0 : numValue;
+    setCustomElectricityCost(newCost);
     if (printCalculatorSettings.selectedCountry === "Custom Country") {
-      updatePrintCalculatorSettings({ electricityCostPerKWh: isNaN(numValue) ? 0 : numValue });
+      updatePrintCalculatorSettings({ electricityCostPerKWh: newCost });
     }
   };
 
@@ -224,7 +225,7 @@ const PrintCalculatorDefaultsSection: React.FC<PrintCalculatorDefaultsSectionPro
       {isCustomCountry ? (
         <>
           <div>
-            <Label htmlFor="customElectricityCostPerKWh">{t('settings.customElectricityCostPerKWh')} ({printCalculatorSettings.currency})</Label>
+            <Label htmlFor="customElectricityCostPerKWh">{t('settings.customElectricityCostPerKWh')} ({customCurrency})</Label>
             <Input
               id="customElectricityCostPerKWh"
               type="number"

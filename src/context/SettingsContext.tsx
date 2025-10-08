@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from "react";
 import { toast } from "sonner"; // Import toast for notifications
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/context/SessionContext";
@@ -157,9 +157,13 @@ interface SettingsContextType {
   PRINTER_PROFILES: PrinterProfile[]; // Combined list
   MATERIAL_PROFILES: MaterialProfile[]; // Combined list
   savedCalculations: SavedCalculation[]; // New: List of saved calculations
-  saveCalculation: (projectName: string, calculationData: Omit<SavedCalculation['calculation_data'], 'objectWeightGrams'> & { objectWeightGrams: number }) => Promise<void>; // New: Function to save a calculation
+  saveCalculation: (projectName: string, calculationData: Omit<SavedCalculation['calculation_data'], 'objectValue' | 'created_at' | 'id'>) => Promise<void>;
   fetchSavedCalculations: () => Promise<void>; // New: Function to fetch saved calculations
   deleteCalculation: (id: string) => Promise<void>; // New: Function to delete a calculation
+  customElectricityCost: number;
+  setCustomElectricityCost: (value: number) => void;
+  customCurrency: string;
+  setCustomCurrency: (value: string) => void;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -167,7 +171,7 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 const LOCAL_STORAGE_KEY = "printCalculatorSettings";
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
-  const { session, isGuest } = useSession();
+  const { session } = useSession();
   const [printCalculatorSettings, setPrintCalculatorSettings] = useState<PrintCalculatorSettings>(() => {
     if (typeof window !== "undefined") {
       const savedSettings = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -181,10 +185,20 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const [userPrinterProfiles, setUserPrinterProfiles] = useState<PrinterProfile[]>([]);
   const [userMaterialProfiles, setUserMaterialProfiles] = useState<MaterialProfile[]>([]);
-  const [savedCalculations, setSavedCalculations] = useState<SavedCalculation[]>([]); // New state for saved calculations
+  const [savedCalculations, setSavedCalculations] = useState<SavedCalculation[]>([]);
+  const [customElectricityCost, setCustomElectricityCost] = useState<number>(
+    printCalculatorSettings.selectedCountry === "Custom Country"
+      ? printCalculatorSettings.electricityCostPerKWh
+      : 0.15
+  );
+  const [customCurrency, setCustomCurrency] = useState<string>(
+    printCalculatorSettings.selectedCountry === "Custom Country"
+      ? printCalculatorSettings.currency
+      : "$"
+  );
 
   const fetchUserProfiles = useCallback(async () => {
-    if (!session) { // Only fetch if there's a session
+    if (!session) {
       setUserPrinterProfiles([]);
       setUserMaterialProfiles([]);
       return;
@@ -192,7 +206,6 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
     const userId = session.user.id;
 
-    // Fetch printer profiles
     const { data: printerData, error: printerError } = await supabase
       .from('user_printer_profiles')
       .select('*')
@@ -205,7 +218,6 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       setUserPrinterProfiles(printerData.map(p => ({ ...p, isCustom: true })));
     }
 
-    // Fetch material profiles
     const { data: materialData, error: materialError } = await supabase
       .from('user_material_profiles')
       .select('*')
@@ -217,7 +229,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setUserMaterialProfiles(materialData.map(m => ({ ...m, isCustom: true })));
     }
-  }, [session]); // Depend on session, not isGuest
+  }, [session]);
 
   const fetchSavedCalculations = useCallback(async () => {
     if (!session) {
@@ -245,11 +257,9 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     fetchSavedCalculations();
   }, [fetchUserProfiles, fetchSavedCalculations]);
 
-  // Combine predefined and user-defined profiles
-  const combinedPrinterProfiles = [...PREDEFINED_PRINTER_PROFILES, ...userPrinterProfiles];
-  const combinedMaterialProfiles = [...PREDEFINED_MATERIAL_PROFILES, ...userMaterialProfiles];
+  const PRINTER_PROFILES = useMemo(() => [...PREDEFINED_PRINTER_PROFILES, ...userPrinterProfiles], [userPrinterProfiles]);
+  const MATERIAL_PROFILES = useMemo(() => [...PREDEFINED_MATERIAL_PROFILES, ...userMaterialProfiles], [userMaterialProfiles]);
 
-  // Save settings to localStorage whenever they change
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(printCalculatorSettings));
@@ -260,58 +270,42 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     setPrintCalculatorSettings((prevSettings) => {
       let updatedSettings = { ...prevSettings, ...newSettings };
 
-      // Handle printType change
       if (newSettings.printType !== undefined && newSettings.printType !== prevSettings.printType) {
         const newPrintType = newSettings.printType;
-
-        // Reset printer profile to a default compatible with the new print type
-        const defaultPrinterForType = combinedPrinterProfiles.find(p => p.type === newPrintType || p.type === 'both');
+        const defaultPrinterForType = PRINTER_PROFILES.find(p => p.type === newPrintType || p.type === 'both');
         if (defaultPrinterForType) {
           updatedSettings.selectedPrinterProfile = defaultPrinterForType.name;
           updatedSettings.printerPowerWatts = defaultPrinterForType.powerWatts;
-        } else {
-          // Fallback if no compatible printer is found (shouldn't happen with predefined)
-          updatedSettings.selectedPrinterProfile = combinedPrinterProfiles[0]?.name || "";
-          updatedSettings.printerPowerWatts = combinedPrinterProfiles[0]?.powerWatts || 0;
         }
-
-        // Reset material profile to a default compatible with the new print type
-        const defaultMaterialForType = combinedMaterialProfiles.find(m => m.type === newPrintType);
+        const defaultMaterialForType = MATERIAL_PROFILES.find(m => m.type === newPrintType);
         if (defaultMaterialForType) {
           updatedSettings.selectedFilamentProfile = defaultMaterialForType.name;
           updatedSettings.materialCostPerKg = defaultMaterialForType.costPerKg;
-        } else {
-          // Fallback if no compatible material is found (shouldn't happen with predefined)
-          updatedSettings.selectedFilamentProfile = combinedMaterialProfiles[0]?.name || "";
-          updatedSettings.materialCostPerKg = combinedMaterialProfiles[0]?.costPerKg || 0;
         }
       }
 
-      // Handle printer profile change (if not already handled by printType change)
       if (newSettings.selectedPrinterProfile !== undefined && newSettings.selectedPrinterProfile !== prevSettings.selectedPrinterProfile) {
-        const selectedProfile = combinedPrinterProfiles.find(p => p.name === newSettings.selectedPrinterProfile);
+        const selectedProfile = PRINTER_PROFILES.find(p => p.name === newSettings.selectedPrinterProfile);
         if (selectedProfile) {
           updatedSettings.printerPowerWatts = selectedProfile.powerWatts;
         }
       }
 
-      // Handle material profile change (if not already handled by printType change)
       if (newSettings.selectedFilamentProfile !== undefined && newSettings.selectedFilamentProfile !== prevSettings.selectedFilamentProfile) {
-        const selectedMaterial = combinedMaterialProfiles.find(f => f.name === newSettings.selectedFilamentProfile);
+        const selectedMaterial = MATERIAL_PROFILES.find(f => f.name === newSettings.selectedFilamentProfile);
         if (selectedMaterial) {
           updatedSettings.materialCostPerKg = selectedMaterial.costPerKg;
         }
       }
 
-      // Handle country change
       if (newSettings.selectedCountry !== undefined && newSettings.selectedCountry !== prevSettings.selectedCountry) {
         const selectedCountryData = COUNTRY_ELECTRICITY_COSTS.find(c => c.name === newSettings.selectedCountry);
-        if (selectedCountryData) {
+        if (selectedCountryData && selectedCountryData.name !== "Custom Country") {
           updatedSettings.electricityCostPerKWh = selectedCountryData.costPerKWh;
           updatedSettings.currency = selectedCountryData.currency;
         } else {
-          updatedSettings.electricityCostPerKWh = 0.15;
-          updatedSettings.currency = "$";
+          updatedSettings.electricityCostPerKWh = customElectricityCost;
+          updatedSettings.currency = customCurrency;
         }
       }
       
@@ -325,11 +319,11 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addPrinterProfile = async (profile: Omit<PrinterProfile, 'id' | 'isCustom'>) => {
-    if (!session) { // Re-enabled session check
+    if (!session) {
       toast.error("You must be logged in to add custom profiles.");
       return;
     }
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('user_printer_profiles')
       .insert({ ...profile, user_id: session.user.id })
       .select();
@@ -344,7 +338,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updatePrinterProfile = async (id: string, profile: Omit<Partial<PrinterProfile>, 'id' | 'isCustom'>) => {
-    if (!session) { // Re-enabled session check
+    if (!session) {
       toast.error("You must be logged in to update custom profiles.");
       return;
     }
@@ -364,7 +358,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deletePrinterProfile = async (id: string) => {
-    if (!session) { // Re-enabled session check
+    if (!session) {
       toast.error("You must be logged in to delete custom profiles.");
       return;
     }
@@ -384,11 +378,11 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addMaterialProfile = async (profile: Omit<MaterialProfile, 'id' | 'isCustom'>) => {
-    if (!session) { // Re-enabled session check
+    if (!session) {
       toast.error("You must be logged in to add custom profiles.");
       return;
     }
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('user_material_profiles')
       .insert({ ...profile, user_id: session.user.id })
       .select();
@@ -403,7 +397,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateMaterialProfile = async (id: string, profile: Omit<Partial<MaterialProfile>, 'id' | 'isCustom'>) => {
-    if (!session) { // Re-enabled session check
+    if (!session) {
       toast.error("You must be logged in to update custom profiles.");
       return;
     }
@@ -423,7 +417,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteMaterialProfile = async (id: string) => {
-    if (!session) { // Re-enabled session check
+    if (!session) {
       toast.error("You must be logged in to delete custom profiles.");
       return;
     }
@@ -442,7 +436,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const saveCalculation = async (projectName: string, calculationData: Omit<SavedCalculation['calculation_data'], 'objectWeightGrams'> & { objectWeightGrams: number }) => {
+  const saveCalculation = async (projectName: string, calculationData: Omit<SavedCalculation['calculation_data'], 'objectValue' | 'created_at' | 'id'>) => {
     if (!session) {
       toast.error("You must be logged in to save calculations.");
       return;
@@ -452,7 +446,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       .insert({
         user_id: session.user.id,
         project_name: projectName,
-        calculation_data: { ...calculationData, objectValue: calculationData.objectWeightGrams }, // Store objectWeightGrams as objectValue for consistency
+        calculation_data: { ...calculationData, objectValue: calculationData.objectWeightGrams },
       });
 
     if (error) {
@@ -460,7 +454,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       toast.error("Failed to save calculation.");
     } else {
       toast.success("Calculation saved successfully!");
-      fetchSavedCalculations(); // Refresh the list of saved calculations
+      fetchSavedCalculations();
     }
   };
 
@@ -480,7 +474,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
       toast.error("Failed to delete calculation.");
     } else {
       toast.success("Calculation deleted successfully!");
-      fetchSavedCalculations(); // Refresh the list
+      fetchSavedCalculations();
     }
   };
 
@@ -498,12 +492,16 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
         addMaterialProfile,
         updateMaterialProfile,
         deleteMaterialProfile,
-        PRINTER_PROFILES: combinedPrinterProfiles, // Export combined list
-        MATERIAL_PROFILES: combinedMaterialProfiles, // Export combined list
-        savedCalculations, // Provide saved calculations
-        saveCalculation, // Provide save function
-        fetchSavedCalculations, // Provide fetch function
-        deleteCalculation, // Provide delete function
+        PRINTER_PROFILES,
+        MATERIAL_PROFILES,
+        savedCalculations,
+        saveCalculation,
+        fetchSavedCalculations,
+        deleteCalculation,
+        customElectricityCost,
+        setCustomElectricityCost,
+        customCurrency,
+        setCustomCurrency,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -96,7 +96,7 @@ const PrintCalculator = () => {
     }
   };
 
-  const calculatePrice = () => {
+  const calculationResult = useMemo(() => {
     const isFilament = printCalculatorSettings.printType === 'filament';
     const unitConversionFactor = isFilament ? 1000 : 1000;
 
@@ -134,9 +134,9 @@ const PrintCalculator = () => {
       totalBaseCost,
       finalPrice,
     };
-  };
+  }, [printCalculatorSettings, objectValue, printTimeHours, postProcessingTimeHours, designSetupFee, supportMaterialPercentage, shippingCost, postProcessingMaterialCost]);
 
-  const { materialCost, electricityCost, laborCost, designSetupFee: calculatedDesignSetupFee, printerDepreciationCost, shippingCost: calculatedShippingCost, supportMaterialCost: calculatedSupportMaterialCost, postProcessingMaterialCost: calculatedPostProcessingMaterialCost, totalBaseCost, finalPrice } = calculatePrice();
+  const { materialCost, electricityCost, laborCost, designSetupFee: calculatedDesignSetupFee, printerDepreciationCost, shippingCost: calculatedShippingCost, supportMaterialCost: calculatedSupportMaterialCost, postProcessingMaterialCost: calculatedPostProcessingMaterialCost, finalPrice } = calculationResult;
   const currencySymbol = printCalculatorSettings.currency;
 
   const filteredPrinterProfiles = PRINTER_PROFILES.filter(p => p.type === printCalculatorSettings.printType || p.type === 'both');
@@ -161,20 +161,13 @@ const PrintCalculator = () => {
 
     const currentCalculationData = {
       ...printCalculatorSettings,
-      materialCost,
-      electricityCost,
-      laborCost,
-      designSetupFee: calculatedDesignSetupFee,
-      printerDepreciationCost,
-      shippingCost: calculatedShippingCost,
-      supportMaterialCost: calculatedSupportMaterialCost,
-      postProcessingMaterialCost: calculatedPostProcessingMaterialCost,
-      finalPrice,
+      ...calculationResult,
+      objectWeightGrams: objectValue,
       postProcessingTimeHours,
       supportMaterialPercentage,
-      objectWeightGrams: objectValue,
-      objectValue: objectValue,
+      projectName,
     };
+    
     await saveCalculation(projectName, currentCalculationData);
   };
 

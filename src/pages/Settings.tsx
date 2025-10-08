@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useSettings, COUNTRY_ELECTRICITY_COSTS } from "@/context/SettingsContext";
+import React from "react";
+import { useSettings } from "@/context/SettingsContext";
 import { Card, CardContent } from "@/components/ui/card";
 import PrinterProfileManager from "@/components/PrinterProfileManager";
 import MaterialProfileManager from "@/components/MaterialProfileManager";
@@ -11,44 +11,22 @@ import PrintCalculatorDefaultsSection from "@/components/settings/PrintCalculato
 import AdvancedSettingsSection from "@/components/settings/AdvancedSettingsSection";
 import SettingsFooter from "@/components/settings/SettingsFooter";
 import { useSession } from "@/context/SessionContext";
-import { Link } from "react-router-dom";
 import DonationSection from "@/components/DonationSection";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
 
 const Settings = () => {
   const {
     printCalculatorSettings,
     updatePrintCalculatorSettings,
-    resetPrintCalculatorSettings,
     PRINTER_PROFILES,
     MATERIAL_PROFILES,
+    customElectricityCost,
+    setCustomElectricityCost,
+    customCurrency,
+    setCustomCurrency,
   } = useSettings();
   const { isGuest } = useSession();
-  const { t } = useTranslation(); // Initialize useTranslation
-
-  // Local states for custom electricity cost and currency, managed here and passed down
-  const [customElectricityCost, setCustomElectricityCost] = useState<number>(
-    printCalculatorSettings.selectedCountry === "Custom Country"
-      ? printCalculatorSettings.electricityCostPerKWh
-      : 0
-  );
-  const [customCurrency, setCustomCurrency] = useState<string>(
-    printCalculatorSettings.selectedCountry === "Custom Country"
-      ? printCalculatorSettings.currency
-      : "$"
-  );
-
-  // Update local states when context defaults change (e.g., after reset)
-  useEffect(() => {
-    if (printCalculatorSettings.selectedCountry === "Custom Country") {
-      setCustomElectricityCost(printCalculatorSettings.electricityCostPerKWh);
-      setCustomCurrency(printCalculatorSettings.currency);
-    }
-  }, [
-    printCalculatorSettings.electricityCostPerKWh,
-    printCalculatorSettings.currency,
-    printCalculatorSettings.selectedCountry,
-  ]);
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
