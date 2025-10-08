@@ -33,7 +33,7 @@
 
         <text x="400" y="280" font-size="28" fill="#4b5563">Print Time (hours)</text>
         <rect x="400" y="300" width="380" height="80" rx="8" fill="#f9fafb" stroke="#e5e7eb"/>
-        <text x="20" y="355" font-size="32" fill="#111827" transform="translate(400, 0)">6.25</text>
+        <text x="420" y="355" font-size="32" fill="#111827">6.25</text>
       </g>
     </g>
 
