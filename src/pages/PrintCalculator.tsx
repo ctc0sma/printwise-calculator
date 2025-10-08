@@ -57,10 +57,10 @@ const PrintCalculator = () => {
         console.log("AdMob initialized successfully.");
 
         await AdMob.showBanner({
-          adId: "ca-app-pub-9180540137514108/4187886627", // REPLACE WITH YOUR ACTUAL BANNER AD UNIT ID
+          adId: "ca-app-pub-3940256098642544/6300978111", // Example Test ID
           position: BannerAdPosition.TOP_CENTER,
           margin: 0,
-          isTesting: false,
+          isTesting: true, // Use isTesting: true for development
           npa: false,
         });
         console.log("AdMob banner shown.");
