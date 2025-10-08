@@ -1,0 +1,58 @@
+<svg width="2560" height="1440" viewBox="0 0 2560 1440" xmlns="http://www.w3.org/2000/svg" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <!-- Background -->
+  <rect width="2560" height="1440" fill="#f3f4f6"/>
+
+  <!-- Tablet Mockup -->
+  <rect x="100" y="80" width="2360" height="1280" rx="50" fill="white" stroke="#e5e7eb" stroke-width="2"/>
+
+  <!-- Headline -->
+  <text x="1280" y="200" font-size="80" font-weight="bold" text-anchor="middle" fill="#111827">Manage All Your Gear & Materials</text>
+
+  <!-- App UI -->
+  <g transform="translate(160, 300)">
+    <!-- Header -->
+    <text x="1120" y="0" font-size="64" font-weight="bold" text-anchor="middle" fill="#111827">Advanced Profile Management</text>
+
+    <!-- Left Card: Printer Profiles -->
+    <g transform="translate(40, 120)">
+      <rect x="0" y="0" width="1020" height="800" rx="16" fill="white" stroke="#e5e7eb"/>
+      <text x="50" y="80" font-size="40" font-weight="bold" fill="#111827">Manage Printer Profiles</text>
+      
+      <rect x="50" y="150" width="920" height="120" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+      <text x="80" y="205" font-size="32" font-weight="500" fill="#111827">My Custom Ender 3</text>
+      <text x="80" y="245" font-size="28" fill="#6b7280">160W - filament</text>
+
+      <rect x="50" y="290" width="920" height="120" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+      <text x="80" y="345" font-size="32" font-weight="500" fill="#111827">Workshop Prusa MK4</text>
+      <text x="80" y="385" font-size="28" fill="#6b7280">250W - filament</text>
+
+      <rect x="50" y="430" width="920" height="120" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+      <text x="80" y="485" font-size="32" font-weight="500" fill="#111827">Resin Station - Saturn 2</text>
+      <text x="80" y="525" font-size="28" fill="#6b7280">150W - resin</text>
+
+      <rect x="50" y="660" width="920" height="90" rx="12" fill="#111827"/>
+      <text x="510" y="715" font-size="32" font-weight="500" fill="white" text-anchor="middle">Add New Printer Profile</text>
+    </g>
+
+    <!-- Right Card: Material Profiles -->
+    <g transform="translate(1100, 120)">
+      <rect x="0" y="0" width="1020" height="800" rx="16" fill="white" stroke="#e5e7eb"/>
+      <text x="50" y="80" font-size="40" font-weight="bold" fill="#111827">Manage Material Profiles</text>
+
+      <rect x="50" y="150" width="920" height="120" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+      <text x="80" y="205" font-size="32" font-weight="500" fill="#111827">eSun PLA+</text>
+      <text x="80" y="245" font-size="28" fill="#6b7280">€22.50/kg - filament</text>
+
+      <rect x="50" y="290" width="920" height="120" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+      <text x="80" y="345" font-size="32" font-weight="500" fill="#111827">Siraya Tech Fast (Grey)</text>
+      <text x="80" y="385" font-size="28" fill="#6b7280">€45.00/L - resin</text>
+
+      <rect x="50" y="430" width="920" height="120" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+      <text x="80" y="485" font-size="32" font-weight="500" fill="#111827">Polymaker PolyLite PETG</text>
+      <text x="80" y="525" font-size="28" fill="#6b7280">€28.00/kg - filament</text>
+
+      <rect x="50" y="660" width="920" height="90" rx="12" fill="#111827"/>
+      <text x="510" y="715" font-size="32" font-weight="500" fill="white" text-anchor="middle">Add New Material Profile</text>
+    </g>
+  </g>
+</svg>

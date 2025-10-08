@@ -1,0 +1,73 @@
+<svg width="2560" height="1440" viewBox="0 0 2560 1440" xmlns="http://www.w3.org/2000/svg" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <!-- Background -->
+  <rect width="2560" height="1440" fill="#f3f4f6"/>
+
+  <!-- Tablet Mockup -->
+  <rect x="100" y="80" width="2360" height="1280" rx="50" fill="white" stroke="#e5e7eb" stroke-width="2"/>
+
+  <!-- Headline -->
+  <text x="1280" y="200" font-size="80" font-weight="bold" text-anchor="middle" fill="#111827">Keep Track of Every Project</text>
+
+  <!-- App UI -->
+  <g transform="translate(160, 300)">
+    <!-- Header -->
+    <text x="1120" y="0" font-size="64" font-weight="bold" text-anchor="middle" fill="#111827">Historical Calculations</text>
+
+    <!-- History Table -->
+    <g transform="translate(40, 120)">
+      <!-- Header Row -->
+      <g font-size="28" font-weight="600" fill="#6b7280">
+        <text x="0" y="0">PROJECT NAME</text>
+        <text x="800" y="0">DATE</text>
+        <text x="1100" y="0">MATERIAL</text>
+        <text x="1500" y="0">TOTAL PRICE</text>
+        <text x="1900" y="0">ACTIONS</text>
+      </g>
+      <line x1="0" y1="40" x2="2280" y2="40" stroke="#e5e7eb" stroke-width="2"/>
+
+      <!-- Row 1 -->
+      <g transform="translate(0, 80)" font-size="32" fill="#111827">
+        <text x="0" y="35" font-weight="500">Client A - Prototype</text>
+        <text x="800" y="35">10/04/2025</text>
+        <text x="1100" y="35">PETG</text>
+        <text x="1500" y="35" font-weight="bold">€45.50</text>
+        <rect x="1900" y="0" width="150" height="70" rx="10" fill="#f3f4f6" stroke="#e5e7eb"/>
+        <text x="1975" y="48" text-anchor="middle" font-size="28" font-weight="500">Load</text>
+      </g>
+      <line x1="0" y1="180" x2="2280" y2="180" stroke="#e5e7eb" stroke-width="1"/>
+
+      <!-- Row 2 -->
+      <g transform="translate(0, 200)" font-size="32" fill="#111827">
+        <text x="0" y="35" font-weight="500">Personal - Lithophane</text>
+        <text x="800" y="35">10/02/2025</text>
+        <text x="1100" y="35">PLA</text>
+        <text x="1500" y="35" font-weight="bold">€12.30</text>
+        <rect x="1900" y="0" width="150" height="70" rx="10" fill="#f3f4f6" stroke="#e5e7eb"/>
+        <text x="1975" y="48" text-anchor="middle" font-size="28" font-weight="500">Load</text>
+      </g>
+      <line x1="0" y1="300" x2="2280" y2="300" stroke="#e5e7eb" stroke-width="1"/>
+
+      <!-- Row 3 -->
+      <g transform="translate(0, 320)" font-size="32" fill="#111827">
+        <text x="0" y="35" font-weight="500">Batch Job - 50 Units</text>
+        <text x="800" y="35">09/28/2025</text>
+        <text x="1100" y="35">ABS</text>
+        <text x="1500" y="35" font-weight="bold">€875.00</text>
+        <rect x="1900" y="0" width="150" height="70" rx="10" fill="#f3f4f6" stroke="#e5e7eb"/>
+        <text x="1975" y="48" text-anchor="middle" font-size="28" font-weight="500">Load</text>
+      </g>
+      <line x1="0" y1="420" x2="2280" y2="420" stroke="#e5e7eb" stroke-width="1"/>
+      
+      <!-- Row 4 -->
+      <g transform="translate(0, 440)" font-size="32" fill="#111827">
+        <text x="0" y="35" font-weight="500">Resin Miniatures</text>
+        <text x="800" y="35">09/25/2025</text>
+        <text x="1100" y="35">Standard Resin</text>
+        <text x="1500" y="35" font-weight="bold">€8.75</text>
+        <rect x="1900" y="0" width="150" height="70" rx="10" fill="#f3f4f6" stroke="#e5e7eb"/>
+        <text x="1975" y="48" text-anchor="middle" font-size="28" font-weight="500">Load</text>
+      </g>
+      <line x1="0" y1="540" x2="2280" y2="540" stroke="#e5e7eb" stroke-width="1"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,64 @@
+<svg width="2560" height="1440" viewBox="0 0 2560 1440" xmlns="http://www.w3.org/2000/svg" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <!-- Background -->
+  <rect width="2560" height="1440" fill="#f3f4f6"/>
+
+  <!-- Tablet Mockup -->
+  <rect x="100" y="80" width="2360" height="1280" rx="50" fill="white" stroke="#e5e7eb" stroke-width="2"/>
+
+  <!-- Headline -->
+  <text x="1280" y="200" font-size="80" font-weight="bold" text-anchor="middle" fill="#111827">Comprehensive Costing, Crystal Clear.</text>
+
+  <!-- App UI -->
+  <g transform="translate(160, 300)">
+    <!-- Left Panel: Inputs -->
+    <g>
+      <text x="0" y="0" font-size="64" font-weight="bold" fill="#111827">PrintWise Calculator</text>
+      
+      <g transform="translate(0, 100)">
+        <text x="0" y="0" font-size="32" fill="#4b5563">Project Name</text>
+        <rect x="0" y="30" width="1000" height="90" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+        <text x="25" y="90" font-size="36" fill="#111827">Client Prototype - Large Assembly</text>
+
+        <g transform="translate(0, 140)">
+          <text x="0" y="0" font-size="32" fill="#4b5563">Material Type</text>
+          <rect x="0" y="30" width="490" height="90" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+          <text x="25" y="90" font-size="36" fill="#111827">PETG</text>
+
+          <text x="510" y="0" font-size="32" fill="#4b5563">Printer Profile</text>
+          <rect x="510" y="30" width="490" height="90" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+          <text x="535" y="90" font-size="36" fill="#111827">Prusa XL</text>
+        </g>
+
+        <g transform="translate(0, 280)">
+          <text x="0" y="0" font-size="32" fill="#4b5563">Object Weight (grams)</text>
+          <rect x="0" y="30" width="490" height="90" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+          <text x="25" y="90" font-size="36" fill="#111827">850</text>
+
+          <text x="510" y="0" font-size="32" fill="#4b5563">Print Time (hours)</text>
+          <rect x="510" y="30" width="490" height="90" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+          <text x="535" y="90" font-size="36" fill="#111827">22.5</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Right Panel: Summary -->
+    <g transform="translate(1200, 100)">
+      <rect x="0" y="0" width="1000" height="800" rx="16" fill="#f9fafb" stroke="#e5e7eb"/>
+      <text x="500" y="80" font-size="48" font-weight="bold" text-anchor="middle" fill="#111827">Cost Breakdown</text>
+      
+      <g transform="translate(50, 160)" font-size="32" fill="#4b5563">
+        <text x="0" y="0">Material Cost:</text><text x="900" y="0" text-anchor="end">€21.25</text>
+        <text x="0" y="60">Electricity Cost:</text><text x="900" y="60" text-anchor="end">€6.30</text>
+        <text x="0" y="120">Labor Cost:</text><text x="900" y="120" text-anchor="end">€25.00</text>
+        <text x="0" y="180">Printer Depreciation:</text><text x="900" y="180" text-anchor="end">€33.75</text>
+        <text x="0" y="240">Design/Setup Fee:</text><text x="900" y="240" text-anchor="end">€20.00</text>
+        <line x1="0" y1="320" x2="900" y2="320" stroke="#e5e7eb" stroke-width="2"/>
+        <text x="0" y="390" font-size="56" font-weight="bold" fill="#111827">Total Price:</text>
+        <text x="900" y="390" font-size="56" font-weight="bold" fill="#111827" text-anchor="end">€132.94</text>
+      </g>
+
+      <rect x="600" y="680" width="350" height="90" rx="12" fill="#111827"/>
+      <text x="775" y="735" font-size="36" font-weight="500" fill="white" text-anchor="middle">Export PDF</text>
+    </g>
+  </g>
+</svg>
