@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'PrintWise Calculator',
   webDir: 'dist',
   bundledWebRuntime: false,
-  version: "1.0.2",
+  version: "1.0.3",
   plugins: {
     AdMob: {
       appId: "ca-app-pub-9180540137514108~4312780214", // REPLACE WITH YOUR ACTUAL ADMOB APP ID

@@ -1,5 +1,9 @@
 # Release Notes - PrintWise Calculator
 
+## Version 1.0.3
+
+- **Optimization**: Refactored and optimized code for better performance and maintainability.
+
 ## Version 1.0.2
 
 - **Bug Fixes**: Resolved Android build issues related to Gradle caching and SDK versions.
