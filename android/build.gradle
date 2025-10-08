@@ -22,6 +22,9 @@ allprojects {
         google()
         mavenCentral()
     }
+    tasks.withType(JavaCompile) {
+        options.incremental = false
+    }
 }
 
 // Load keystore properties
