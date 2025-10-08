@@ -57,7 +57,7 @@ const PrintCalculator = () => {
         console.log("AdMob initialized successfully.");
 
         await AdMob.showBanner({
-          adId: "YOUR_BANNER_AD_UNIT_ID", // REPLACE WITH YOUR ACTUAL BANNER AD UNIT ID
+          adId: "ca-app-pub-9180540137514108/4187886627", // REPLACE WITH YOUR ACTUAL BANNER AD UNIT ID
           position: BannerAdPosition.TOP_CENTER,
           margin: 0,
           isTesting: false,
