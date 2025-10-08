@@ -1,0 +1,62 @@
+<svg width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <!-- Background -->
+  <rect width="1080" height="1920" fill="#f9fafb"/>
+
+  <!-- Phone Screen Mockup -->
+  <rect x="40" y="80" width="1000" height="1760" rx="60" fill="white" stroke="#e5e7eb" stroke-width="2"/>
+
+  <!-- Headline -->
+  <text x="540" y="200" font-size="64" font-weight="bold" text-anchor="middle" fill="#111827">Calculate Costs Instantly</text>
+
+  <!-- App UI -->
+  <g transform="translate(80, 300)">
+    <!-- Header -->
+    <text x="460" y="50" font-size="48" font-weight="bold" text-anchor="middle" fill="#111827">PrintWise Calculator</text>
+
+    <!-- Form Content -->
+    <g transform="translate(40, 120)">
+      <!-- Left Column -->
+      <g>
+        <text x="0" y="0" font-size="28" fill="#4b5563">Project Name</text>
+        <rect x="0" y="20" width="420" height="80" rx="8" fill="#f3f4f6" stroke="#e5e7eb"/>
+        <text x="20" y="75" font-size="32" fill="#111827">Client Prototype</text>
+
+        <text x="0" y="140" font-size="28" fill="#4b5563">Material Type</text>
+        <rect x="0" y="160" width="420" height="80" rx="8" fill="#f3f4f6" stroke="#e5e7eb"/>
+        <text x="20" y="215" font-size="32" fill="#111827">PLA</text>
+
+        <text x="0" y="280" font-size="28" fill="#4b5563">Object Weight (grams)</text>
+        <rect x="0" y="300" width="420" height="80" rx="8" fill="#f3f4f6" stroke="#e5e7eb"/>
+        <text x="20" y="355" font-size="32" fill="#111827">150</text>
+      </g>
+
+      <!-- Right Column -->
+      <g transform="translate(460, 0)">
+        <text x="0" y="0" font-size="28" fill="#4b5563">Printer Profile</text>
+        <rect x="0" y="20" width="420" height="80" rx="8" fill="#f3f4f6" stroke="#e5e7eb"/>
+        <text x="20" y="75" font-size="32" fill="#111827">Ender 3</text>
+
+        <text x="0" y="140" font-size="28" fill="#4b5563">Print Time (hours)</text>
+        <rect x="0" y="160" width="420" height="80" rx="8" fill="#f3f4f6" stroke="#e5e7eb"/>
+        <text x="20" y="215" font-size="32" fill="#111827">8.5</text>
+
+        <text x="0" y="280" font-size="28" fill="#4b5563">Profit Margin (%)</text>
+        <rect x="0" y="300" width="420" height="80" rx="8" fill="#f3f4f6" stroke="#e5e7eb"/>
+        <text x="20" y="355" font-size="32" fill="#111827">25</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Summary Footer -->
+  <g transform="translate(40, 1450)">
+    <rect x="0" y="0" width="1000" height="310" fill="white" stroke-t="#e5e7eb" stroke-width="2"/>
+    <g transform="translate(40, 40)">
+      <text x="0" y="0" font-size="32" font-weight="500" fill="#111827">Cost Breakdown Details</text>
+      <line x1="0" y1="40" x2="920" y2="40" stroke="#e5e7eb" stroke-width="2"/>
+      <text x="0" y="90" font-size="48" font-weight="bold" fill="#111827">Total Estimated Price:</text>
+      <text x="920" y="90" font-size="48" font-weight="bold" fill="#111827" text-anchor="end">€24.75</text>
+      <rect x="620" y="150" width="300" height="80" rx="12" fill="#111827"/>
+      <text x="770" y="205" font-size="32" font-weight="500" fill="white" text-anchor="middle">Export PDF</text>
+    </g>
+  </g>
+</svg>
