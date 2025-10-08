@@ -19,7 +19,7 @@ import PrintSummaryFooter from "@/components/PrintSummaryFooter";
 import { useSession } from "@/context/SessionContext";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { AdMob } from '@capacitor-community/admob';
+import { AdMob, BannerAdPosition } from '@capacitor-community/admob';
 
 const PrintCalculator = () => {
   const { session, loading, isGuest } = useSession();
@@ -57,8 +57,8 @@ const PrintCalculator = () => {
         console.log("AdMob initialized successfully.");
 
         await AdMob.showBanner({
-          adUnitId: "YOUR_BANNER_AD_UNIT_ID", // REPLACE WITH YOUR ACTUAL BANNER AD UNIT ID
-          position: AdMob.AdPosition.TOP_CENTER,
+          adId: "YOUR_BANNER_AD_UNIT_ID", // REPLACE WITH YOUR ACTUAL BANNER AD UNIT ID
+          position: BannerAdPosition.TOP_CENTER,
           margin: 0,
           isTesting: false,
           npa: false,
