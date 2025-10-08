@@ -5,6 +5,12 @@
 - **Bug Fixes**: Resolved Android build issues related to Gradle caching and SDK versions.
 - **Enhancement**: Updated donation link and removed placeholder text.
 
+## Version 1.0.1
+
+- **Feature**: Integrated Google AdMob to display a banner ad.
+- **Feature**: Added the ability for logged-in users to save, view, and manage historical calculations.
+- **Enhancement**: Implemented PDF and Email export functionality for calculation summaries.
+
 ## Version 1.0.0
 
 - **Multi-Language Support**: Now available in 8 languages including English, Spanish, German, French, Italian, Portuguese, Greek, and Filipino!
