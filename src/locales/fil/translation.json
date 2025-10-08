@@ -100,8 +100,7 @@
   "donation": {
     "title": "Suportahan ang Aming Trabaho",
     "description": "Kung nakita mong kapaki-pakinabang ang PrintWise Calculator, mangyaring isaalang-alang ang pagbibigay ng maliit na donasyon upang matulungan kaming ipagpatuloy ang pagbuo at pagpapabuti ng app. Lubos na pinahahalagahan ang iyong suporta!",
-    "donateNow": "Mag-donate Ngayon",
-    "note": "(Tandaan: Ito ay isang placeholder na link. Mangyaring palitan ang \"YOUR_ACTUAL_DONATION_LINK_HERE\" ng iyong aktwal na link ng donasyon.)"
+    "donateNow": "Mag-donate Ngayon"
   },
   "credits": {
     "title": "Mga Kredito",

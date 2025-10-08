@@ -21,9 +21,6 @@ const DonationSection = () => {
         <Button className="w-full md:w-auto" onClick={() => window.open("https://www.buymeacoffee.com/ctcosma", "_blank")}>
           <Heart className="mr-2 h-4 w-4" /> {t('donation.donateNow')}
         </Button>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {t('donation.note')}
-        </p>
       </CardContent>
     </Card>
   );

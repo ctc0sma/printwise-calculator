@@ -100,8 +100,7 @@
   "donation": {
     "title": "Soutenez Notre Travail",
     "description": "Si vous trouvez la PrintWise Calculator utile, veuillez envisager de faire un petit don pour nous aider à continuer à développer et à améliorer l'application. Votre soutien est très apprécié !",
-    "donateNow": "Faire un Don Maintenant",
-    "note": "(Remarque : Ceci est un lien de substitution. Veuillez remplacer \"YOUR_ACTUAL_DONATION_LINK_HERE\" par votre lien de don réel.)"
+    "donateNow": "Faire un Don Maintenant"
   },
   "credits": {
     "title": "Crédits",
