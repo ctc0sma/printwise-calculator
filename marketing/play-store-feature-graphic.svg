@@ -1,0 +1,32 @@
+<svg width="1024" height="500" viewBox="0 0 1024 500" xmlns="http://www.w3.org/2000/svg" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2EC4B6;" />
+      <stop offset="100%" style="stop-color:#26A69A;" />
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="500" fill="url(#backgroundGradient)" />
+
+  <!-- App Icon (Simplified) -->
+  <g transform="translate(80, 125) scale(2.5)">
+    <path d="M54 20 L24 40 L54 60 L84 40 Z" fill="#FFFFFF" opacity="0.8"/>
+    <path d="M54 60 L54 75 L60 75 L60 62" stroke="#FFFFFF" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M76,64H32c0-7.39,3.56-13.89,8.98-17.94l-4.8-4.87c-0.73-0.74-0.73-1.89,0-2.63s1.87-0.74,2.6,0l5.47,5.49C45.08,42.57,49.38,41.71,54,41.71s8.92,0.86,11.82,2.34l5.47-5.49c0.73-0.74,1.87-0.74,2.6,0s0.73,1.89,0,2.63l-4.8,4.87C72.44,50.11,76,56.61,76,64z" fill="#FFFFFF"/>
+    <circle cx="62.94" cy="54.88" r="2.5" fill="#26A69A"/>
+    <circle cx="45.06" cy="54.88" r="2.5" fill="#26A69A"/>
+  </g>
+
+  <!-- Text -->
+  <text x="350" y="200" font-size="64" font-weight="bold" fill="white">PrintWise Calculator</text>
+  <text x="350" y="255" font-size="28" fill="white" opacity="0.9">Price Your 3D Prints Perfectly</text>
+
+  <!-- Stylized UI Element -->
+  <g transform="translate(350, 300)">
+    <rect width="580" height="120" rx="12" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1"/>
+    <text x="30" y="50" font-size="20" fill="white" opacity="0.8">Total Estimated Price:</text>
+    <text x="30" y="100" font-size="48" font-weight="bold" fill="white">€24.75</text>
+    <rect x="420" y="40" width="130" height="50" rx="8" fill="#FFFFFF"/>
+    <text x="485" y="72" font-size="20" font-weight="bold" fill="#26A69A" text-anchor="middle">Export PDF</text>
+  </g>
+</svg>
